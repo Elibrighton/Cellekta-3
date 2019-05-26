@@ -5,8 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Cellekta_3.View"
         mc:Ignorable="d"
-        Title="Cellekta" Height="412" Width="1316" WindowStartupLocation="CenterScreen">
+        Title="Cellekta" 
+        Height="412" Width="1316" 
+        WindowStartupLocation="CenterScreen">
     <Grid>
-        
+        <ListView ItemsSource="{Binding Songs}">
+            <ListView.View>
+                <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
+                    <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Tempo}" Header="Tempo" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding HarmonicKey}" Header="Key" Width="Auto"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>
