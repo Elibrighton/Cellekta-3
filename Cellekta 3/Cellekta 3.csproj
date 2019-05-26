@@ -67,6 +67,8 @@
     <Compile Include="Base\RelayCommand.cs" />
     <Compile Include="Model\ISongListModel.cs" />
     <Compile Include="Model\SongListModel.cs" />
+    <Compile Include="Services\ISong.cs" />
+    <Compile Include="Services\Song.cs" />
     <Compile Include="ViewModel\ISongListViewModel.cs" />
     <Compile Include="ViewModel\SongListViewModel.cs" />
     <Compile Include="View\SongListView.xaml.cs">

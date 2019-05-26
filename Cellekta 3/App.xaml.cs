@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Unity;
+using Cellekta_3.Services;
 
 namespace Cellekta_3
 {
@@ -23,6 +24,7 @@ namespace Cellekta_3
             IUnityContainer container = new UnityContainer();
             container.RegisterType<ISongListViewModel, SongListViewModel>();
             container.RegisterType<ISongListModel, SongListModel>();
+            container.RegisterType<ISong, Song>();
 
             var window = container.Resolve<SongListView>();
             window.Show();
