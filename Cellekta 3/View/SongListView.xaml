@@ -8,16 +8,30 @@
         Title="Cellekta" 
         Height="412" Width="1316" 
         WindowStartupLocation="CenterScreen">
-    <Grid>
-        <ListView ItemsSource="{Binding Songs}">
-            <ListView.View>
-                <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
-                    <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Tempo}" Header="Tempo" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding HarmonicKey}" Header="Key" Width="Auto"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-    </Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" Command="{Binding NewMenuCommand}" />
+                <MenuItem Header="_Open" Command="{Binding OpenMenuCommand}" />
+                <MenuItem Header="_Save" />
+                <Separator />
+                <MenuItem Header="_Exit" Command="{Binding ExitMenuCommand}" />
+            </MenuItem>
+        </Menu>
+        <Grid DockPanel.Dock="Bottom">
+            <StackPanel>
+                <ListView ItemsSource="{Binding Songs}">
+                    <ListView.View>
+                        <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
+                            <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="Auto"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="Auto"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Tempo}" Header="Tempo" Width="Auto"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding HarmonicKey}" Header="Key" Width="Auto"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <TextBlock Text="{Binding StatusMessage, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Bottom" />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
 </Window>
