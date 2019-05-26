@@ -1,15 +1,14 @@
 ﻿using Cellekta_3.Model;
 using Cellekta_3.ViewModel;
 using Cellekta_3.View;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using Unity;
-using Cellekta_3.Services;
+using SongInterface;
+using XmlWrapperInterface;
+using TraktorLibraryInterface;
+using TraktorLibraryImplementation;
+using XmlWrapperImplementation;
+using SongImplementation;
 
 namespace Cellekta_3
 {
@@ -24,6 +23,8 @@ namespace Cellekta_3
             IUnityContainer container = new UnityContainer();
             container.RegisterType<ISongListViewModel, SongListViewModel>();
             container.RegisterType<ISongListModel, SongListModel>();
+            container.RegisterType<ITraktorLibrary, TraktorLibrary>();
+            container.RegisterType<IXmlWrapper, XmlWrapper>();
             container.RegisterType<ISong, Song>();
 
             var window = container.Resolve<SongListView>();

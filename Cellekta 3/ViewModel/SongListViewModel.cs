@@ -1,9 +1,5 @@
 ﻿using Cellekta_3.Base;
 using Cellekta_3.Model;
-using Cellekta_3.Services;
-using Microsoft.Win32;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 
@@ -25,16 +21,6 @@ namespace Cellekta_3.ViewModel
             ExitMenuCommand = new RelayCommand(OnExitMenuCommand);
         }
 
-        public ObservableCollection<ISong> Songs
-        {
-            get { return _songListModel.Songs; }
-            set
-            {
-                _songListModel.Songs = value;
-                NotifyPropertyChanged("Songs");
-            }
-        }
-
         public string StatusMessage
         {
             get { return _songListModel.StatusMessage; }
@@ -47,14 +33,14 @@ namespace Cellekta_3.ViewModel
 
         internal void OnNewMenuCommand(object param)
         {
-            Songs.Clear();
+            _songListModel.TraktorLibrary.Songs.Clear();
         }
 
         internal void OnOpenMenuCommand(object param)
         {
-            if (_songListModel.IsTraktorLibraryFound())
+            if (_songListModel.TraktorLibrary.IsCollectionFound())
             {
-                _songListModel.ImportTraktorLibrary();
+                _songListModel.TraktorLibrary.ImportCollection();
             }
             else
             {

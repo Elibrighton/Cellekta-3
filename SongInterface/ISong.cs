@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Cellekta_3.Services.Song;
-
-namespace Cellekta_3.Services
+﻿namespace SongInterface
 {
     public interface ISong
     {

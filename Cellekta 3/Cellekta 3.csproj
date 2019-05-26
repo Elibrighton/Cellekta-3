@@ -35,7 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
@@ -68,10 +67,6 @@
     <Compile Include="Base\RelayCommand.cs" />
     <Compile Include="Model\ISongListModel.cs" />
     <Compile Include="Model\SongListModel.cs" />
-    <Compile Include="Services\HarmonicKey.cs" />
-    <Compile Include="Services\IHarmonicKey.cs" />
-    <Compile Include="Services\ISong.cs" />
-    <Compile Include="Services\Song.cs" />
     <Compile Include="ViewModel\ISongListViewModel.cs" />
     <Compile Include="ViewModel\SongListViewModel.cs" />
     <Compile Include="View\SongListView.xaml.cs">
@@ -113,6 +108,39 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\HarmonicKeyInterface\HarmonicKeyInterface.csproj">
+      <Project>{4d29532b-16d4-40bc-8766-959fa7019b65}</Project>
+      <Name>HarmonicKeyInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HarmonicKey\HarmonicKeyImplementation.csproj">
+      <Project>{1bfd9033-e412-4b19-ab1b-db14e64c34ea}</Project>
+      <Name>HarmonicKeyImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SongInterface\SongInterface.csproj">
+      <Project>{bff769fd-4a79-41df-bea1-3471f9222428}</Project>
+      <Name>SongInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Song\SongImplementation.csproj">
+      <Project>{61ca78db-e751-4000-83d1-fb60d3ec002c}</Project>
+      <Name>SongImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TraktorLibraryInterface\TraktorLibraryInterface.csproj">
+      <Project>{cfe99427-a916-471d-8b68-b9dd675476bf}</Project>
+      <Name>TraktorLibraryInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TraktorLibrary\TraktorLibraryImplementation.csproj">
+      <Project>{da5e6a7a-91d4-4b8a-8cd8-cb7cebaf3001}</Project>
+      <Name>TraktorLibraryImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XmlWrapperInterface\XmlWrapperInterface.csproj">
+      <Project>{d9feaaec-32b5-4e1d-aabc-832fd294a85a}</Project>
+      <Name>XmlWrapperInterface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XmlWrapper\XmlWrapperImplementation.csproj">
+      <Project>{7ccab160-9e77-4a0d-8694-47c7c631d05a}</Project>
+      <Name>XmlWrapperImplementation</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

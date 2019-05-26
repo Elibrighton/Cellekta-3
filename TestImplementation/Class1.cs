@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Cellekta_3.Services
+namespace TestImplementation
 {
-    public interface IHarmonicKey
+    public class Class1
     {
-        Dictionary<int, string> HarmonicKeys { get; set; }
     }
 }

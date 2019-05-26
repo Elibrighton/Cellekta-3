@@ -1,10 +1,7 @@
-﻿using System;
+﻿using HarmonicKeyInterface;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Cellekta_3.Services
+namespace HarmonicKeyImplementation
 {
     public class HarmonicKey : IHarmonicKey
     {
