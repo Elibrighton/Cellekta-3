@@ -8,46 +8,46 @@ namespace XmlWrapperImplementation
 {
     public class XmlWrapper : IXmlWrapper
     {
-        private string _xmlPath;
-        private XmlDocument _xmlDocument;
-        private ISong _song;
+        public XmlDocument XmlDocument { get; set; }
 
-        public XmlWrapper(string xmlPath, ISong song)
+        private string _xmlPath;
+
+        public XmlWrapper()
+        {
+            XmlDocument = new XmlDocument();
+        }
+
+        public XmlWrapper(string xmlPath)
         {
             _xmlPath = xmlPath;
-            _song = song;
-            _xmlDocument = new XmlDocument();
+            XmlDocument = new XmlDocument();
         }
 
         public void Load()
         {
             try
             {
-                _xmlDocument.Load(_xmlPath);
+                XmlDocument.Load(_xmlPath);
             }
-            catch (Exception) { }
-
-            foreach (XmlNode node in _xmlDocument.DocumentElement.SelectNodes("/NML/COLLECTION"))
+            catch (Exception)
             {
-                foreach (XmlNode entryNode in node.SelectNodes("ENTRY"))
-                {
-                    LoadSong(entryNode);
-                }
+                throw;
             }
         }
 
-        internal void LoadSong(XmlNode entryNode)
+        public string GetAttribute(XmlAttribute xmlAttributes)
         {
-            _song = new Song();
-            //song.Populate(entryNode);
-            //song.GetRating();
+            var attribute = string.Empty;
 
-            //if (song.Artist != "Loopmasters"
-            //    && song.Artist != "Native Instruments"
-            //    && song.Artist != "Subb-an")
-            //{
-            //    _music.Add(song);
-            //}
+            if (xmlAttributes != null)
+            {
+                if (xmlAttributes.Value != null)
+                {
+                    attribute = xmlAttributes.Value;
+                }
+            }
+
+            return attribute;
         }
     }
 }

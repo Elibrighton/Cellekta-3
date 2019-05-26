@@ -25,7 +25,7 @@
                         <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
                             <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="Auto"/>
                             <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="Auto"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Tempo}" Header="Tempo" Width="Auto"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="Auto"/>
                             <GridViewColumn DisplayMemberBinding="{Binding HarmonicKey}" Header="Key" Width="Auto"/>
                         </GridView>
                     </ListView.View>

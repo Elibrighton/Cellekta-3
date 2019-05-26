@@ -5,6 +5,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
+using System.Xml;
 using TraktorLibraryInterface;
 using XmlWrapperInterface;
 
@@ -24,16 +25,15 @@ namespace TraktorLibraryImplementation
         public TraktorLibrary(IXmlWrapper xmlWrapper)
         {
             _xmlWrapper = xmlWrapper;
-            WorkingCollectionPath = GetWorkingPath();
-            _workingCollection = string.Empty;
 
+            WorkingCollectionPath = GetWorkingPath();
             Songs = new ObservableCollection<ISong>();
 
             // Dummy data for testing
-            Songs.Add(new Song { Artist = "Acusmouse", Title = "Little Helper 344-1 (Original Mix)", Tempo = 125.0, HarmonicKey = "10A" });
-            Songs.Add(new Song { Artist = "Block & Crown", Title = "Betty Never Sleeps (Original Mix)", Tempo = 124.0, HarmonicKey = "10A" });
-            Songs.Add(new Song { Artist = "Chicks Luv Us", Title = "Qu'est Ce Qu'il Veut Lui-! (Original Mix)", Tempo = 125.0, HarmonicKey = "10A" });
-            Songs.Add(new Song { Artist = "Mambo Brothers", Title = "Slow [Original Mix] 10A 124", Tempo = 124.0, HarmonicKey = "10A" });
+            Songs.Add(new Song { Artist = "Acusmouse", Title = "Little Helper 344-1 (Original Mix)", LeadingTempo = 125.0, TrailingTempo = 125.0, HarmonicKey = "10A" });
+            Songs.Add(new Song { Artist = "Block & Crown", Title = "Betty Never Sleeps (Original Mix)", LeadingTempo = 124.0, TrailingTempo = 125.0, HarmonicKey = "10A" });
+            Songs.Add(new Song { Artist = "Chicks Luv Us", Title = "Qu'est Ce Qu'il Veut Lui-! (Original Mix)", LeadingTempo = 125.0, TrailingTempo = 125.0, HarmonicKey = "10A" });
+            Songs.Add(new Song { Artist = "Mambo Brothers", Title = "Slow [Original Mix] 10A 124", LeadingTempo = 124.0, TrailingTempo = 125.0, HarmonicKey = "10A" });
         }
 
         internal string GetWorkingPath()
@@ -90,6 +90,25 @@ namespace TraktorLibraryImplementation
             if (!string.IsNullOrEmpty(_workingCollection))
             {
                 _xmlWrapper.Load();
+
+                foreach (XmlNode collectionNode in _xmlWrapper.XmlDocument.DocumentElement.SelectNodes("/NML/COLLECTION"))
+                {
+                    foreach (XmlNode entryNode in collectionNode.SelectNodes("ENTRY"))
+                    {
+                        ISong song = new Song(_xmlWrapper, entryNode);
+                        song.Load();
+
+                        //song.Populate(entryNode);
+                        //song.GetRating();
+
+                        //if (song.Artist != "Loopmasters"
+                        //    && song.Artist != "Native Instruments"
+                        //    && song.Artist != "Subb-an")
+                        //{
+                        //    _music.Add(song);
+                        //}
+                    }
+                }
             }
         }
 

@@ -9,6 +9,10 @@ using TraktorLibraryInterface;
 using TraktorLibraryImplementation;
 using XmlWrapperImplementation;
 using SongImplementation;
+using TagInterface;
+using TagImplementation;
+using HarmonicKeyInterface;
+using HarmonicKeyImplementation;
 
 namespace Cellekta_3
 {
@@ -26,6 +30,8 @@ namespace Cellekta_3
             container.RegisterType<ITraktorLibrary, TraktorLibrary>();
             container.RegisterType<IXmlWrapper, XmlWrapper>();
             container.RegisterType<ISong, Song>();
+            container.RegisterType<ITag, Tag>();
+            container.RegisterType<IHarmonicKey, HarmonicKey>();
 
             var window = container.Resolve<SongListView>();
             window.Show();

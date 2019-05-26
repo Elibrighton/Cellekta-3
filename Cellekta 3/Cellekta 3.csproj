@@ -125,6 +125,14 @@
       <Project>{61ca78db-e751-4000-83d1-fb60d3ec002c}</Project>
       <Name>SongImplementation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TagImplementation\TagImplementation.csproj">
+      <Project>{7997553C-EDE6-429E-A363-6009734B086B}</Project>
+      <Name>TagImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TagInterface\TagInterface.csproj">
+      <Project>{16DD99E6-2CBA-40F9-969A-E06878698BDC}</Project>
+      <Name>TagInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TraktorLibraryInterface\TraktorLibraryInterface.csproj">
       <Project>{cfe99427-a916-471d-8b68-b9dd675476bf}</Project>
       <Name>TraktorLibraryInterface</Name>
