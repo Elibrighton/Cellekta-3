@@ -52,15 +52,13 @@ namespace Cellekta_3.ViewModel
 
         internal void OnOpenMenuCommand(object param)
         {
-            _songListModel.SetTraktorLibraryPath();
-
             if (_songListModel.IsTraktorLibraryFound())
             {
-
+                _songListModel.ImportTraktorLibrary();
             }
             else
             {
-                StatusMessage = "No Traktor library found.";
+                StatusMessage = "No Traktor library found. Locate the collection.nml file.";
             }
         }
 

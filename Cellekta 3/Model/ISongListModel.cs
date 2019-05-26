@@ -15,6 +15,6 @@ namespace Cellekta_3.Model
         string StatusMessage { get; set; }
 
         bool IsTraktorLibraryFound();
-        void SetTraktorLibraryPath();
+        void ImportTraktorLibrary();
     }
 }
