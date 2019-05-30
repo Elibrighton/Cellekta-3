@@ -30,15 +30,15 @@ namespace TraktorLibraryImplementation
             Songs = new ObservableCollection<ISong>();
 
             // Dummy data for testing
-            Songs.Add(new Song { Artist = "Acusmouse", Title = "Little Helper 344-1 (Original Mix)", LeadingTempo = 125.0, TrailingTempo = 125.0, HarmonicKey = "10A" });
-            Songs.Add(new Song { Artist = "Block & Crown", Title = "Betty Never Sleeps (Original Mix)", LeadingTempo = 124.0, TrailingTempo = 125.0, HarmonicKey = "10A" });
-            Songs.Add(new Song { Artist = "Chicks Luv Us", Title = "Qu'est Ce Qu'il Veut Lui-! (Original Mix)", LeadingTempo = 125.0, TrailingTempo = 125.0, HarmonicKey = "10A" });
-            Songs.Add(new Song { Artist = "Mambo Brothers", Title = "Slow [Original Mix] 10A 124", LeadingTempo = 124.0, TrailingTempo = 125.0, HarmonicKey = "10A" });
+            Songs.Add(new Song { Artist = "Acusmouse", Title = "Little Helper 344-1 (Original Mix)", LeadingTempo = 125.0, TrailingTempo = 125.0, LeadingHarmonicKey = "10A" });
+            Songs.Add(new Song { Artist = "Block & Crown", Title = "Betty Never Sleeps (Original Mix)", LeadingTempo = 124.0, TrailingTempo = 125.0, LeadingHarmonicKey = "10A" });
+            Songs.Add(new Song { Artist = "Chicks Luv Us", Title = "Qu'est Ce Qu'il Veut Lui-! (Original Mix)", LeadingTempo = 125.0, TrailingTempo = 125.0, LeadingHarmonicKey = "10A" });
+            Songs.Add(new Song { Artist = "Mambo Brothers", Title = "Slow [Original Mix] 10A 124", LeadingTempo = 124.0, TrailingTempo = 125.0, LeadingHarmonicKey = "10A" });
         }
 
         internal string GetWorkingPath()
         {
-            return string.Concat(Path.GetTempPath(), CollectionFileName);
+            return Path.Combine(Path.GetTempPath(), CollectionFileName);
         }
 
         internal void SetCollectionPath()
@@ -62,7 +62,7 @@ namespace TraktorLibraryImplementation
 
         internal void CreateWorkingCollection()
         {
-            var traktorLibraryPath = string.Concat(ConfigurationManager.AppSettings["LibraryPath"], CollectionFileName);
+            var traktorLibraryPath = Path.Combine(ConfigurationManager.AppSettings["LibraryPath"], CollectionFileName);
             File.Copy(traktorLibraryPath, WorkingCollectionPath, true);
         }
 
@@ -78,13 +78,14 @@ namespace TraktorLibraryImplementation
         {
             SetCollectionPath();
 
-            return File.Exists(WorkingCollectionPath);
+            return File.Exists(CollectionPath);
         }
 
         public void ImportCollection()
         {
             DeleteWorkingCollection();
             CreateWorkingCollection();
+            // call async
             LoadWorkingCollection();
 
             if (!string.IsNullOrEmpty(_workingCollection))
@@ -97,16 +98,8 @@ namespace TraktorLibraryImplementation
                     {
                         ISong song = new Song(_xmlWrapper, entryNode);
                         song.Load();
-
-                        //song.Populate(entryNode);
                         //song.GetRating();
-
-                        //if (song.Artist != "Loopmasters"
-                        //    && song.Artist != "Native Instruments"
-                        //    && song.Artist != "Subb-an")
-                        //{
-                        //    _music.Add(song);
-                        //}
+                        Songs.Add(song);
                     }
                 }
             }
