@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:Cellekta_3.View"
         mc:Ignorable="d"
         Title="Cellekta" 
-        Height="412" Width="1316" 
+        Height="{Binding WindowHeight, Mode=TwoWay}"
+        Width="{Binding WindowWidth, Mode=TwoWay}" 
         WindowStartupLocation="CenterScreen">
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top">
+        <Grid DockPanel.Dock="Top">
             <Menu>
                 <MenuItem Header="_File">
                     <MenuItem Header="_New" Command="{Binding NewMenuCommand}" />
@@ -19,56 +20,40 @@
                     <MenuItem Header="_Exit" Command="{Binding ExitMenuCommand}" />
                 </MenuItem>
             </Menu>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <ListView Grid.Column="0" 
-                          Grid.Row="1" 
-                          Margin="10" 
-                          ItemsSource="{Binding SongCollection}" 
-                          MinHeight="280"
-                          MaxHeight="280"
-                          SelectionMode="Single">
-                    <ListView.View>
-                        <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
-                            <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="200"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="400"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="100"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding HarmonicKeyText}" Header="Key" Width="100"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Intensity}" Header="Intensity" Width="100"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Playlist}" Header="Playlist" Width="100"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding IsChartingText}" Header="Charting" Width="100"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Rating}" Header="Rating" Width="100"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-                <DockPanel Margin="10" Grid.Row="2" Grid.Column="0">
-                    <TextBlock Text="{Binding ProgressMessage, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Left" />
-                </DockPanel>
-            </Grid>
+        </Grid>
+        <StackPanel VerticalAlignment="Top">
+            <ListView ItemsSource="{Binding SongCollection}" 
+                      SelectionMode="Single"
+                      Height="{Binding ListViewHeight, Mode=TwoWay}"
+                      Width="{Binding ListViewWidth, Mode=TwoWay}">
+                <ListView.View>
+                    <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
+                        <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="200"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="400"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="100"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding HarmonicKeyText}" Header="Key" Width="100"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Intensity}" Header="Intensity" Width="100"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Playlist}" Header="Playlist" Width="100"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding IsChartingText}" Header="Charting" Width="100"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Rating}" Header="Rating" Width="100"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <StatusBar VerticalAlignment="Bottom">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel></StackPanel>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+                <StatusBarItem>
+                    <ProgressBar Height="20" 
+                                 Width="{Binding ProgressBarWidth}"
+                                 Minimum="0"
+                                 Value="{Binding ProgressBarValue, UpdateSourceTrigger=PropertyChanged}"
+                                 IsIndeterminate="{Binding ProgressBarIsIndeterminate, UpdateSourceTrigger=PropertyChanged}"
+                                 Maximum="{Binding ProgressBarMax, UpdateSourceTrigger=PropertyChanged}" />
+                </StatusBarItem>
+            </StatusBar>
         </StackPanel>
-
-        <StatusBar DockPanel.Dock="Bottom">
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel></StackPanel>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
-            <StatusBarItem>
-                <ProgressBar Width="1300"
-                    Height="15"
-                    Minimum="0"
-                    Value="{Binding ProgressBarValue, UpdateSourceTrigger=PropertyChanged}"
-                    IsIndeterminate="{Binding ProgressBarIsIndeterminate, UpdateSourceTrigger=PropertyChanged}"
-                    Maximum="{Binding ProgressBarMax, UpdateSourceTrigger=PropertyChanged}" />
-            </StatusBarItem>
-        </StatusBar>
     </DockPanel>
 </Window>

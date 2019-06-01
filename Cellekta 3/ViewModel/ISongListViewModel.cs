@@ -14,5 +14,10 @@ namespace Cellekta_3.ViewModel
         int ProgressBarValue { get; set; }
         bool ProgressBarIsIndeterminate { get; set; }
         string ProgressMessage { get; set; }
+        int WindowHeight { get; set; }
+        int WindowWidth { get; set; }
+        int ListViewHeight { get; set; }
+        int ListViewWidth { get; set; }
+        int ProgressBarWidth { get; set; }
     }
 }

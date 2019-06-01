@@ -81,6 +81,80 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public int WindowHeight
+        {
+            get { return _songListModel.WindowHeight; }
+            set
+            {
+                if (_songListModel.WindowHeight != value)
+                {
+                    _songListModel.WindowHeight = value;
+                    NotifyPropertyChanged("WindowHeight");
+
+                    ListViewHeight = (value - 83);
+                    NotifyPropertyChanged("ListViewHeight");
+                }
+            }
+        }
+
+        public int WindowWidth
+        {
+            get { return _songListModel.WindowWidth; }
+            set
+            {
+                if (_songListModel.WindowWidth != value)
+                {
+                    _songListModel.WindowWidth = value;
+                    NotifyPropertyChanged("WindowWidth");
+
+                    ListViewWidth = (value - 18);
+                    NotifyPropertyChanged("ListViewWidth");
+
+                    ProgressBarWidth = (value - 22);
+                    NotifyPropertyChanged("ProgressBarWidth");
+                }
+            }
+        }
+
+        public int ListViewHeight
+        {
+            get { return _songListModel.ListViewHeight; }
+            set
+            {
+                if (_songListModel.ListViewHeight != value)
+                {
+                    _songListModel.ListViewHeight = value;
+                    NotifyPropertyChanged("ListViewHeight");
+                }
+            }
+        }
+
+        public int ListViewWidth
+        {
+            get { return _songListModel.ListViewWidth; }
+            set
+            {
+                if (_songListModel.ListViewWidth != value)
+                {
+                    _songListModel.ListViewWidth = value;
+                    NotifyPropertyChanged("ListViewHeight");
+                }
+            }
+        }
+
+        public int ProgressBarWidth
+        {
+            get { return _songListModel.ProgressBarWidth; }
+            set
+            {
+                if (_songListModel.ProgressBarWidth != value)
+                {
+                    _songListModel.ProgressBarWidth = value;
+                    NotifyPropertyChanged("ProgressBarWidth");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
