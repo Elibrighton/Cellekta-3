@@ -15,11 +15,12 @@ namespace SongImplementation
         public string Title { get; set; }
         public double LeadingTempo { get; set; }
         public double TrailingTempo { get; set; }
+        public string TempoText { get; private set; }
         public string LeadingHarmonicKey { get; set; }
         public string TrailingHarmonicKey { get; set; }
+        public string HarmonicKeyText { get; private set; }
         public string Path { get; set; }
         public string Playlist { get; set; }
-        public string TempoText { get; private set; }
         public int PlayTime { get; set; }
         public int Intensity { get; set; }
         public XmlNode EntryNode { get; set; }
@@ -47,7 +48,8 @@ namespace SongImplementation
             var comment = _xmlWrapper.GetAttribute(infoNode.Attributes["COMMENT"]);
             Intensity = GetIntensity(comment);
             LeadingHarmonicKey = GetLeadingHarmonicKey(comment);
-            TrailingHarmonicKey = GetTrailingHarmonicKey(comment);
+            TrailingHarmonicKey = GetTrailingHarmonicKey(comment, LeadingHarmonicKey);
+            HarmonicKeyText = GetHarmonicKeyText(LeadingHarmonicKey, TrailingHarmonicKey);
             //IsCharting = GetChartingFlag();
         }
 
@@ -129,7 +131,7 @@ namespace SongImplementation
 
             if (leadingTempo != trailingTempo)
             {
-                tempoText = string.Concat(leadingTempo.ToString("0.000"), "-", trailingTempo.ToString("0.000"));
+                tempoText = string.Concat(leadingTempo.ToString("0.000"), "/", trailingTempo.ToString("0.000"));
             }
             else
             {
@@ -176,13 +178,17 @@ namespace SongImplementation
             return leadingHarmonicKey;
         }
 
-        internal string GetTrailingHarmonicKey(string comment)
+        internal string GetTrailingHarmonicKey(string comment, string leadingHarmonicKey)
         {
             var trailingHarmonicKey = string.Empty;
 
             if (IsRegexMatch(comment, @"^\d\d?[AB]/\d\d?[AB]\s-\sEnergy\s\d"))
             {
                 trailingHarmonicKey = GetRegexMatchValue(comment, @"/\d\d?[AB]").Replace("/", "");
+            }
+            else
+            {
+                trailingHarmonicKey = leadingHarmonicKey;
             }
 
             return trailingHarmonicKey;
@@ -220,6 +226,25 @@ namespace SongImplementation
             }
 
             return matchValue;
+        }
+
+        internal string GetHarmonicKeyText(string leadingHarmonicKey, string trailingHarmonicKey)
+        {
+            if (leadingHarmonicKey == null) throw new ArgumentNullException("leadingHarmonicKey is null");
+            if (trailingHarmonicKey == null) throw new ArgumentNullException("trailingHarmonicKey is null");
+
+            var harmonicKeyText = string.Empty;
+
+            if (leadingHarmonicKey != trailingHarmonicKey)
+            {
+                harmonicKeyText = string.Concat(leadingHarmonicKey.ToString(), "/", trailingHarmonicKey.ToString());
+            }
+            else
+            {
+                harmonicKeyText = leadingHarmonicKey.ToString();
+            }
+
+            return harmonicKeyText;
         }
 
         internal bool GetChartingFlag()

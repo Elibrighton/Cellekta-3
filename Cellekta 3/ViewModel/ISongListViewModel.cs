@@ -1,16 +1,15 @@
-﻿using Cellekta_3.Model;
-using SongInterface;
-using System;
-using System.Collections.Generic;
+﻿using SongInterface;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Cellekta_3.ViewModel
 {
     public interface ISongListViewModel
     {
+        ICommand NewMenuCommand { get; set; }
+        ICommand ImportMenuCommand { get; set; }
+        ICommand ExitMenuCommand { get; set; }
+        ObservableCollection<ISong> SongCollection { get; set; }
         int ProgressBarMax { get; set; }
         int ProgressBarValue { get; set; }
         bool ProgressBarIsIndeterminate { get; set; }

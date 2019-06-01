@@ -38,10 +38,10 @@
                           SelectionMode="Single">
                     <ListView.View>
                         <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
-                            <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="Auto"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="Auto"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="Auto"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding HarmonicKey}" Header="Key" Width="Auto"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="200"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="400"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="100"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding HarmonicKeyText}" Header="Key" Width="100"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

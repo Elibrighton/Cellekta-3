@@ -22,17 +22,6 @@ namespace Cellekta_3.ViewModel
         public ICommand ImportMenuCommand { get; set; }
         public ICommand ExitMenuCommand { get; set; }
 
-        public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
-        {
-            _songListModel = songListModel;
-            _xmlWrapper = xmlWrapper;
-            NewMenuCommand = new RelayCommand(OnNewMenuCommand);
-            ImportMenuCommand = new RelayCommand(OnImportMenuCommand);
-            ExitMenuCommand = new RelayCommand(OnExitMenuCommand);
-            ResetProgressBar();
-            ProgressMessage = "Ready to import";
-        }
-
         public ObservableCollection<ISong> SongCollection
         {
             get { return _songListModel.SongCollection; }
@@ -90,6 +79,17 @@ namespace Cellekta_3.ViewModel
                 _songListModel.ProgressMessage = value;
                 NotifyPropertyChanged("ProgressMessage");
             }
+        }
+
+        public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
+        {
+            _songListModel = songListModel;
+            _xmlWrapper = xmlWrapper;
+            NewMenuCommand = new RelayCommand(OnNewMenuCommand);
+            ImportMenuCommand = new RelayCommand(OnImportMenuCommand);
+            ExitMenuCommand = new RelayCommand(OnExitMenuCommand);
+            ResetProgressBar();
+            ProgressMessage = "Ready to import";
         }
 
         internal void OnNewMenuCommand(object param)
