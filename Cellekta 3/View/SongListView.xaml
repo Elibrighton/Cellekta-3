@@ -42,6 +42,7 @@
                             <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="400"/>
                             <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="100"/>
                             <GridViewColumn DisplayMemberBinding="{Binding HarmonicKeyText}" Header="Key" Width="100"/>
+                            <GridViewColumn DisplayMemberBinding="{Binding Intensity}" Header="Intensity" Width="100"/>
                         </GridView>
                     </ListView.View>
                 </ListView>
