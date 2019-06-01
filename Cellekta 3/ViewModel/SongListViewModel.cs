@@ -22,13 +22,23 @@ namespace Cellekta_3.ViewModel
         public ICommand ImportMenuCommand { get; set; }
         public ICommand ExitMenuCommand { get; set; }
 
-        public ObservableCollection<ISong> SongCollection
+        public ObservableCollection<ISong> TrackCollection
         {
-            get { return _songListModel.SongCollection; }
+            get { return _songListModel.TrackCollection; }
             set
             {
-                _songListModel.SongCollection = value;
-                NotifyPropertyChanged("SongCollection");
+                _songListModel.TrackCollection = value;
+                NotifyPropertyChanged("TrackCollection");
+            }
+        }
+
+        public ObservableCollection<ISong> Preparation
+        {
+            get { return _songListModel.Preparation; }
+            set
+            {
+                _songListModel.Preparation = value;
+                NotifyPropertyChanged("Preparation");
             }
         }
 
@@ -91,7 +101,7 @@ namespace Cellekta_3.ViewModel
                     _songListModel.WindowHeight = value;
                     NotifyPropertyChanged("WindowHeight");
 
-                    ListViewHeight = (value - 83);
+                    ListViewHeight = (value - 111);
                     NotifyPropertyChanged("ListViewHeight");
                 }
             }
@@ -107,7 +117,7 @@ namespace Cellekta_3.ViewModel
                     _songListModel.WindowWidth = value;
                     NotifyPropertyChanged("WindowWidth");
 
-                    ListViewWidth = (value - 18);
+                    ListViewWidth = (value - 24);
                     NotifyPropertyChanged("ListViewWidth");
 
                     ProgressBarWidth = (value - 22);
@@ -168,7 +178,8 @@ namespace Cellekta_3.ViewModel
 
         internal void OnNewMenuCommand(object param)
         {
-            _songListModel.SongCollection.Clear();
+            _songListModel.TrackCollection.Clear();
+            ProgressBarMessage = "Ready to import";
         }
 
         internal async void OnImportMenuCommand(object param)
@@ -192,7 +203,7 @@ namespace Cellekta_3.ViewModel
                         foreach (XmlNode entryNode in collectionNode.SelectNodes("ENTRY"))
                         {
                             ISong song = await Task.Run(() => GetSong(entryNode));
-                            SongCollection.Add(song);
+                            TrackCollection.Add(song);
                             ProgressBarValue++;
                         }
                     }

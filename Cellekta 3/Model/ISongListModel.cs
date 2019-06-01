@@ -7,7 +7,8 @@ namespace Cellekta_3.Model
     public interface ISongListModel
     {
         ITraktorLibrary TraktorLibrary { get; set; }
-        ObservableCollection<ISong> SongCollection { get; set; }
+        ObservableCollection<ISong> TrackCollection { get; set; }
+        ObservableCollection<ISong> Preparation { get; set; }
         int ProgressBarMax { get; set; }
         int ProgressBarValue { get; set; }
         bool ProgressBarIsIndeterminate { get; set; }

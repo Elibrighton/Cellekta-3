@@ -22,23 +22,46 @@
             </Menu>
         </Grid>
         <StackPanel VerticalAlignment="Top">
-            <ListView ItemsSource="{Binding SongCollection}" 
+            <TabControl>
+                <TabItem Header="Track collection">
+                    <ListView ItemsSource="{Binding TrackCollection}" 
                       SelectionMode="Single"
                       Height="{Binding ListViewHeight, Mode=TwoWay}"
                       Width="{Binding ListViewWidth, Mode=TwoWay}">
-                <ListView.View>
-                    <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
-                        <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="200"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="400"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="100"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding HarmonicKeyText}" Header="Key" Width="100"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Intensity}" Header="Intensity" Width="100"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Playlist}" Header="Playlist" Width="100"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding IsChartingText}" Header="Charting" Width="100"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Rating}" Header="Rating" Width="100"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
+                                <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="200"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="400"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="100"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding HarmonicKeyText}" Header="Key" Width="100"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Intensity}" Header="Intensity" Width="100"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Playlist}" Header="Playlist" Width="100"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding IsChartingText}" Header="Charting" Width="100"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Rating}" Header="Rating" Width="100"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </TabItem>
+                <TabItem Header="Preparation">
+                    <ListView ItemsSource="{Binding Preparation}" 
+                      SelectionMode="Single"
+                      Height="{Binding ListViewHeight, Mode=TwoWay}"
+                      Width="{Binding ListViewWidth, Mode=TwoWay}">
+                        <ListView.View>
+                            <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
+                                <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="200"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="400"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="100"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding HarmonicKeyText}" Header="Key" Width="100"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Intensity}" Header="Intensity" Width="100"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Playlist}" Header="Playlist" Width="100"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding IsChartingText}" Header="Charting" Width="100"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Rating}" Header="Rating" Width="100"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </TabItem>
+            </TabControl>
             <StatusBar VerticalAlignment="Bottom">
                 <StatusBar.ItemsPanel>
                     <ItemsPanelTemplate>

@@ -10,7 +10,8 @@ namespace Cellekta_3.Model
         private IXmlWrapper _xmlWrapper;
 
         public ITraktorLibrary TraktorLibrary { get; set; }
-        public ObservableCollection<ISong> SongCollection { get; set; }
+        public ObservableCollection<ISong> TrackCollection { get; set; }
+        public ObservableCollection<ISong> Preparation { get; set; }
         public int ProgressBarMax { get; set; }
         public int ProgressBarValue { get; set; }
         public bool ProgressBarIsIndeterminate { get; set; }
@@ -25,11 +26,12 @@ namespace Cellekta_3.Model
         {
             TraktorLibrary = traktorLibrary;
             _xmlWrapper = xmlWrapper;
-            SongCollection = new ObservableCollection<ISong>();
+            TrackCollection = new ObservableCollection<ISong>();
+            Preparation = new ObservableCollection<ISong>();
             WindowHeight = 412;
             WindowWidth = 1316;
-            ListViewHeight = 329;
-            ListViewWidth = 1298;
+            ListViewHeight = 301;
+            ListViewWidth = 1292;
             ProgressBarWidth = 1294;
         }
     }
