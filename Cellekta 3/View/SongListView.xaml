@@ -46,12 +46,18 @@
                     </ItemsPanelTemplate>
                 </StatusBar.ItemsPanel>
                 <StatusBarItem>
-                    <ProgressBar Height="20" 
+                    <Grid>
+                        <ProgressBar Height="20" 
                                  Width="{Binding ProgressBarWidth}"
                                  Minimum="0"
                                  Value="{Binding ProgressBarValue, UpdateSourceTrigger=PropertyChanged}"
                                  IsIndeterminate="{Binding ProgressBarIsIndeterminate, UpdateSourceTrigger=PropertyChanged}"
-                                 Maximum="{Binding ProgressBarMax, UpdateSourceTrigger=PropertyChanged}" />
+                                 Maximum="{Binding ProgressBarMax, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Text="{Binding ProgressBarMessage}" 
+                                   HorizontalAlignment="Left" 
+                                   VerticalAlignment="Center"
+                                   Margin="5,0,0,0"/>
+                    </Grid>
                 </StatusBarItem>
             </StatusBar>
         </StackPanel>

@@ -71,13 +71,13 @@ namespace Cellekta_3.ViewModel
             }
         }
 
-        public string ProgressMessage
+        public string ProgressBarMessage
         {
-            get { return _songListModel.ProgressMessage; }
+            get { return _songListModel.ProgressBarMessage; }
             set
             {
-                _songListModel.ProgressMessage = value;
-                NotifyPropertyChanged("ProgressMessage");
+                _songListModel.ProgressBarMessage = value;
+                NotifyPropertyChanged("ProgressBarMessage");
             }
         }
 
@@ -163,7 +163,7 @@ namespace Cellekta_3.ViewModel
             ImportMenuCommand = new RelayCommand(OnImportMenuCommand);
             ExitMenuCommand = new RelayCommand(OnExitMenuCommand);
             ResetProgressBar();
-            ProgressMessage = "Ready to import";
+            ProgressBarMessage = "Ready to import";
         }
 
         internal void OnNewMenuCommand(object param)
@@ -198,11 +198,11 @@ namespace Cellekta_3.ViewModel
                     }
                 }
 
-                ProgressMessage = "Song collection imported";
+                ProgressBarMessage = "Song collection imported";
             }
             else
             {
-                ProgressMessage = "No Traktor library found";
+                ProgressBarMessage = "No Traktor library found";
             }
 
             MessageBox.Show("Song collection imported.");
@@ -218,13 +218,13 @@ namespace Cellekta_3.ViewModel
         {
             ProgressBarValue = InitialProgressBarValue;
             ProgressBarMax = InitialProgressBarMax;
-            ProgressMessage = "";
+            ProgressBarMessage = "";
         }
 
         internal ISong GetSong(XmlNode entryNode)
         {
             ISong song = _songListModel.TraktorLibrary.GetSong(entryNode);
-            ProgressMessage = song.Path;
+            ProgressBarMessage = song.Path;
 
             return song;
         }

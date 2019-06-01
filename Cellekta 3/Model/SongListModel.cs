@@ -14,7 +14,7 @@ namespace Cellekta_3.Model
         public int ProgressBarMax { get; set; }
         public int ProgressBarValue { get; set; }
         public bool ProgressBarIsIndeterminate { get; set; }
-        public string ProgressMessage { get; set; }
+        public string ProgressBarMessage { get; set; }
         public int WindowHeight { get; set; }
         public int WindowWidth { get; set; }
         public int ListViewHeight { get; set; }
