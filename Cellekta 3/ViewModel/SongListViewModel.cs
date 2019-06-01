@@ -198,14 +198,14 @@ namespace Cellekta_3.ViewModel
                     }
                 }
 
-                ProgressBarMessage = "Song collection imported";
+                ProgressBarMessage = "Traktor collection imported";
             }
             else
             {
-                ProgressBarMessage = "No Traktor library found";
+                ProgressBarMessage = "No Traktor collection found";
             }
 
-            MessageBox.Show("Song collection imported.");
+            MessageBox.Show("Traktor collection imported.");
             ResetProgressBar();
         }
 
