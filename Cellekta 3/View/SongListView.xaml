@@ -9,18 +9,33 @@
         Height="412" Width="1316" 
         WindowStartupLocation="CenterScreen">
     <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="_New" Command="{Binding NewMenuCommand}" />
-                <MenuItem Header="_Open" Command="{Binding OpenMenuCommand}" />
-                <MenuItem Header="_Save" />
-                <Separator />
-                <MenuItem Header="_Exit" Command="{Binding ExitMenuCommand}" />
-            </MenuItem>
-        </Menu>
-        <Grid DockPanel.Dock="Bottom">
-            <StackPanel>
-                <ListView ItemsSource="{Binding Songs}">
+        <StackPanel DockPanel.Dock="Top">
+            <Menu>
+                <MenuItem Header="_File">
+                    <MenuItem Header="_New" Command="{Binding NewMenuCommand}" />
+                    <MenuItem Header="_Import" Command="{Binding ImportMenuCommand}" />
+                    <MenuItem Header="_Save" />
+                    <Separator />
+                    <MenuItem Header="_Exit" Command="{Binding ExitMenuCommand}" />
+                </MenuItem>
+            </Menu>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <ListView Grid.Column="0" 
+                          Grid.Row="1" 
+                          Margin="10" 
+                          ItemsSource="{Binding SongCollection}" 
+                          MinHeight="280"
+                          MaxHeight="280"
+                          SelectionMode="Single">
                     <ListView.View>
                         <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
                             <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="Auto"/>
@@ -30,8 +45,26 @@
                         </GridView>
                     </ListView.View>
                 </ListView>
-                <TextBlock Text="{Binding StatusMessage, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Bottom" />
-            </StackPanel>
-        </Grid>
+                <DockPanel Margin="10" Grid.Row="2" Grid.Column="0">
+                    <TextBlock Text="{Binding ProgressMessage, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Left" />
+                </DockPanel>
+            </Grid>
+        </StackPanel>
+
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel></StackPanel>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem>
+                <ProgressBar Width="1300"
+                    Height="15"
+                    Minimum="0"
+                    Value="{Binding ProgressBarValue, UpdateSourceTrigger=PropertyChanged}"
+                    IsIndeterminate="{Binding ProgressBarIsIndeterminate, UpdateSourceTrigger=PropertyChanged}"
+                    Maximum="{Binding ProgressBarMax, UpdateSourceTrigger=PropertyChanged}" />
+            </StatusBarItem>
+        </StatusBar>
     </DockPanel>
 </Window>

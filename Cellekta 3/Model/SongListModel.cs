@@ -1,16 +1,26 @@
-﻿using TraktorLibraryInterface;
+﻿using SongInterface;
+using System.Collections.ObjectModel;
+using TraktorLibraryInterface;
+using XmlWrapperInterface;
 
 namespace Cellekta_3.Model
 {
     public class SongListModel : ISongListModel
     {
-        public string StatusMessage { get; set; }
-        public ITraktorLibrary TraktorLibrary { get; set; }
+        private IXmlWrapper _xmlWrapper;
 
-        public SongListModel(ITraktorLibrary traktorLibrary)
+        public ITraktorLibrary TraktorLibrary { get; set; }
+        public ObservableCollection<ISong> SongCollection { get; set; }
+        public int ProgressBarMax { get; set; }
+        public int ProgressBarValue { get; set; }
+        public bool ProgressBarIsIndeterminate { get; set; }
+        public string ProgressMessage { get; set; }
+
+        public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper)
         {
             TraktorLibrary = traktorLibrary;
-            StatusMessage = "Ready..";
+            _xmlWrapper = xmlWrapper;
+            SongCollection = new ObservableCollection<ISong>();
         }
     }
 }

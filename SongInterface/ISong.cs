@@ -10,11 +10,13 @@ namespace SongInterface
         double TrailingTempo { get; set; }
         string LeadingHarmonicKey { get; set; }
         string TrailingHarmonicKey { get; set; }
-        string FullName { get; set; }
+        string Path { get; set; }
         string Playlist { get; set; }
         string TempoText { get; }
         int PlayTime { get; set; }
         int Intensity { get; set; }
+        XmlNode EntryNode { get; set; }
+        bool IsCharting { get; set; }
 
         void Load();
     }

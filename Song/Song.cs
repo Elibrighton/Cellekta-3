@@ -17,53 +17,49 @@ namespace SongImplementation
         public double TrailingTempo { get; set; }
         public string LeadingHarmonicKey { get; set; }
         public string TrailingHarmonicKey { get; set; }
-        public string FullName { get; set; }
+        public string Path { get; set; }
         public string Playlist { get; set; }
         public string TempoText { get; private set; }
         public int PlayTime { get; set; }
         public int Intensity { get; set; }
+        public XmlNode EntryNode { get; set; }
+        public bool IsCharting { get; set; }
 
         private IXmlWrapper _xmlWrapper;
-        private XmlNode _entryNode;
 
-        public Song()
-        {
-
-        }
-
-        public Song(IXmlWrapper xmlWrapper, XmlNode entryNode)
+        public Song(IXmlWrapper xmlWrapper)
         {
             _xmlWrapper = xmlWrapper;
-            _entryNode = entryNode;
         }
 
         public void Load()
         {
-            Artist = _xmlWrapper.GetAttribute(_entryNode.Attributes["ARTIST"]);
-            Title = _xmlWrapper.GetAttribute(_entryNode.Attributes["TITLE"]);
-            var locationNode = _entryNode.SelectSingleNode("LOCATION");
+            Artist = _xmlWrapper.GetAttribute(EntryNode.Attributes["ARTIST"]);
+            Title = _xmlWrapper.GetAttribute(EntryNode.Attributes["TITLE"]);
+            var locationNode = EntryNode.SelectSingleNode("LOCATION");
             Playlist = GetPlayList(locationNode);
-            FullName = GetFullName(locationNode);
-            var infoNode = _entryNode.SelectSingleNode("INFO");
+            Path = GetPath(locationNode);
+            var infoNode = EntryNode.SelectSingleNode("INFO");
             PlayTime = GetPlayTime(_xmlWrapper.GetAttribute(infoNode.Attributes["PLAYTIME"]));
-            LeadingTempo = GetTempo(_entryNode.SelectSingleNode("TEMPO"), FullName);
-            TrailingTempo = GetTempo(_entryNode.SelectSingleNode("TEMPO"), FullName, false);
+            LeadingTempo = GetTempo(EntryNode.SelectSingleNode("TEMPO"), Path);
+            TrailingTempo = GetTempo(EntryNode.SelectSingleNode("TEMPO"), Path, false);
             TempoText = GetTempoText(LeadingTempo, TrailingTempo);
             var comment = _xmlWrapper.GetAttribute(infoNode.Attributes["COMMENT"]);
             Intensity = GetIntensity(comment);
             LeadingHarmonicKey = GetLeadingHarmonicKey(comment);
             TrailingHarmonicKey = GetTrailingHarmonicKey(comment);
+            //IsCharting = GetChartingFlag();
         }
 
-        internal double GetTempo(XmlNode tempoNode, string fullName, bool isLeadingTempo = true)
+        internal double GetTempo(XmlNode tempoNode, string path, bool isLeadingTempo = true)
         {
             var tempo = 0.0;
 
             try
             {
-                if (IsTransitionPlaylist(fullName))
+                if (IsTransitionPlaylist(path))
                 {
-                    ITag tag = new Tag(fullName);
+                    ITag tag = new Tag(path);
                     tempo = isLeadingTempo ? tag.LeadingTempo : tag.TrailingTempo;
                 }
 
@@ -97,7 +93,7 @@ namespace SongImplementation
             return new DirectoryInfo(directory).Name;
         }
 
-        internal string GetFullName(XmlNode locationNode)
+        internal string GetPath(XmlNode locationNode)
         {
             if (locationNode == null) throw new ArgumentNullException("locationNode is null");
 
@@ -115,25 +111,29 @@ namespace SongImplementation
             return _xmlWrapper.GetAttribute(locationNode.Attributes["DIR"]).Replace("/:", "\\");
         }
 
-        internal bool IsTransitionPlaylist(string fullName)
+        internal bool IsTransitionPlaylist(string path)
         {
             // should this explicitly check a playlist path?
-            return (fullName.Contains(@"Tranny") || fullName.Contains(@"Transition"));
+            return (path.Contains(@"Tranny") || path.Contains(@"Transition"));
         }
 
         internal string GetTempoText(double leadingTempo, double trailingTempo)
         {
-            if (leadingTempo == 0.0) throw new ArgumentOutOfRangeException("playTimeAttribute is 0.0");
+            if (leadingTempo == 0.0) throw new ArgumentOutOfRangeException("leadingTempo is 0.0");
+            if (trailingTempo == 0.0) throw new ArgumentOutOfRangeException("trailingTempo is 0.0");
+
+            leadingTempo = Math.Round(leadingTempo, 3);
+            trailingTempo = Math.Round(trailingTempo, 3);
 
             var tempoText = string.Empty;
 
             if (leadingTempo != trailingTempo)
             {
-                tempoText = string.Concat(leadingTempo, "-", trailingTempo);
+                tempoText = string.Concat(leadingTempo.ToString("0.000"), "-", trailingTempo.ToString("0.000"));
             }
             else
             {
-                tempoText = leadingTempo.ToString();
+                tempoText = leadingTempo.ToString("0.000");
             }
 
             return tempoText;
@@ -220,6 +220,12 @@ namespace SongImplementation
             }
 
             return matchValue;
+        }
+
+        internal bool GetChartingFlag()
+        {
+            // to be implemented from GetRating();
+            return false;
         }
     }
 }

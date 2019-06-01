@@ -9,17 +9,10 @@ namespace XmlWrapperImplementation
     public class XmlWrapper : IXmlWrapper
     {
         public XmlDocument XmlDocument { get; set; }
-
-        private string _xmlPath;
+        public string XmlPath { get; set; }
 
         public XmlWrapper()
         {
-            XmlDocument = new XmlDocument();
-        }
-
-        public XmlWrapper(string xmlPath)
-        {
-            _xmlPath = xmlPath;
             XmlDocument = new XmlDocument();
         }
 
@@ -27,7 +20,7 @@ namespace XmlWrapperImplementation
         {
             try
             {
-                XmlDocument.Load(_xmlPath);
+                XmlDocument.Load(XmlPath);
             }
             catch (Exception)
             {

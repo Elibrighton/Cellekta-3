@@ -1,8 +1,6 @@
 ﻿using Microsoft.Win32;
 using SongImplementation;
 using SongInterface;
-using System;
-using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
 using System.Xml;
@@ -11,15 +9,14 @@ using XmlWrapperInterface;
 
 namespace TraktorLibraryImplementation
 {
-    public class TraktorLibrary : ITraktorLibrary, IDisposable
+    public class TraktorLibrary : ITraktorLibrary
     {
         const string CollectionFileName = "collection.nml";
 
-        public ObservableCollection<ISong> Songs { get; set; }
         public string CollectionPath { get; set; }
         public string WorkingCollectionPath { get; set; }
+        public string WorkingCollection { get; set; }
 
-        private string _workingCollection;
         private IXmlWrapper _xmlWrapper;
 
         public TraktorLibrary(IXmlWrapper xmlWrapper)
@@ -27,13 +24,6 @@ namespace TraktorLibraryImplementation
             _xmlWrapper = xmlWrapper;
 
             WorkingCollectionPath = GetWorkingPath();
-            Songs = new ObservableCollection<ISong>();
-
-            // Dummy data for testing
-            Songs.Add(new Song { Artist = "Acusmouse", Title = "Little Helper 344-1 (Original Mix)", LeadingTempo = 125.0, TrailingTempo = 125.0, LeadingHarmonicKey = "10A" });
-            Songs.Add(new Song { Artist = "Block & Crown", Title = "Betty Never Sleeps (Original Mix)", LeadingTempo = 124.0, TrailingTempo = 125.0, LeadingHarmonicKey = "10A" });
-            Songs.Add(new Song { Artist = "Chicks Luv Us", Title = "Qu'est Ce Qu'il Veut Lui-! (Original Mix)", LeadingTempo = 125.0, TrailingTempo = 125.0, LeadingHarmonicKey = "10A" });
-            Songs.Add(new Song { Artist = "Mambo Brothers", Title = "Slow [Original Mix] 10A 124", LeadingTempo = 124.0, TrailingTempo = 125.0, LeadingHarmonicKey = "10A" });
         }
 
         internal string GetWorkingPath()
@@ -52,7 +42,7 @@ namespace TraktorLibraryImplementation
             }
         }
 
-        internal void DeleteWorkingCollection()
+        public void DeleteWorkingCollection()
         {
             if (File.Exists(WorkingCollectionPath))
             {
@@ -60,17 +50,17 @@ namespace TraktorLibraryImplementation
             }
         }
 
-        internal void CreateWorkingCollection()
+        public void CreateWorkingCollection()
         {
             var traktorLibraryPath = Path.Combine(ConfigurationManager.AppSettings["LibraryPath"], CollectionFileName);
             File.Copy(traktorLibraryPath, WorkingCollectionPath, true);
         }
 
-        internal void LoadWorkingCollection()
+        public void LoadWorkingCollection()
         {
             if (File.Exists(WorkingCollectionPath))
             {
-                _workingCollection = File.ReadAllText(WorkingCollectionPath);
+                WorkingCollection = File.ReadAllText(WorkingCollectionPath);
             }
         }
 
@@ -81,33 +71,35 @@ namespace TraktorLibraryImplementation
             return File.Exists(CollectionPath);
         }
 
-        public void ImportCollection()
+        public int GetSongCount()
         {
-            DeleteWorkingCollection();
-            CreateWorkingCollection();
-            // call async
-            LoadWorkingCollection();
+            var songCount = 0;
 
-            if (!string.IsNullOrEmpty(_workingCollection))
+            if (!string.IsNullOrEmpty(WorkingCollection))
             {
+                _xmlWrapper.XmlPath = WorkingCollectionPath;
                 _xmlWrapper.Load();
 
                 foreach (XmlNode collectionNode in _xmlWrapper.XmlDocument.DocumentElement.SelectNodes("/NML/COLLECTION"))
                 {
                     foreach (XmlNode entryNode in collectionNode.SelectNodes("ENTRY"))
                     {
-                        ISong song = new Song(_xmlWrapper, entryNode);
-                        song.Load();
-                        //song.GetRating();
-                        Songs.Add(song);
+                        songCount++;
                     }
                 }
             }
+            return songCount;
         }
 
-        public void Dispose()
+        public ISong GetSong(XmlNode entryNode)
         {
-            DeleteWorkingCollection();
+            ISong song = new Song(_xmlWrapper)
+            {
+                EntryNode = entryNode
+            };
+            song.Load();
+
+            return song;
         }
     }
 }
