@@ -262,6 +262,10 @@ namespace Cellekta_3.ViewModel
                 Preparation.Add(SelectedTrackCollectionItem);
                 ProgressBarMessage = string.Concat("Loaded ", SelectedTrackCollectionItem.Artist, " ", SelectedTrackCollectionItem.Title);
             }
+            else
+            {
+                MessageBox.Show("No track selected to load.");
+            }
         }
 
 
