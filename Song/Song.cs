@@ -25,6 +25,7 @@ namespace SongImplementation
         public int Intensity { get; set; }
         public XmlNode EntryNode { get; set; }
         public bool IsCharting { get; set; }
+        public string IsChartingText { get; private set; }
 
         private IXmlWrapper _xmlWrapper;
 
@@ -50,7 +51,8 @@ namespace SongImplementation
             LeadingHarmonicKey = GetLeadingHarmonicKey(comment);
             TrailingHarmonicKey = GetTrailingHarmonicKey(comment, LeadingHarmonicKey);
             HarmonicKeyText = GetHarmonicKeyText(LeadingHarmonicKey, TrailingHarmonicKey);
-            //IsCharting = GetChartingFlag();
+            IsCharting = GetIsCharting();
+            IsChartingText = GetIsChartingText(IsCharting);
         }
 
         internal double GetTempo(XmlNode tempoNode, string path, bool isLeadingTempo = true)
@@ -247,10 +249,22 @@ namespace SongImplementation
             return harmonicKeyText;
         }
 
-        internal bool GetChartingFlag()
+        internal bool GetIsCharting()
         {
             // to be implemented from GetRating();
             return false;
+        }
+
+        internal string GetIsChartingText(bool isCharting)
+        {
+            var isChartingText = string.Empty;
+
+            if (isCharting)
+            {
+                isChartingText = "Yes";
+            }
+
+            return isChartingText;
         }
     }
 }

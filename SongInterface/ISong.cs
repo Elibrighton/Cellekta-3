@@ -18,6 +18,7 @@ namespace SongInterface
         int Intensity { get; set; }
         XmlNode EntryNode { get; set; }
         bool IsCharting { get; set; }
+        string IsChartingText { get; }
 
         void Load();
     }
