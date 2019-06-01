@@ -24,23 +24,27 @@
         <StackPanel VerticalAlignment="Top">
             <TabControl>
                 <TabItem Header="Track collection">
-                    <ListView ItemsSource="{Binding TrackCollection}" 
-                      SelectionMode="Single"
-                      Height="{Binding ListViewHeight, Mode=TwoWay}"
-                      Width="{Binding ListViewWidth, Mode=TwoWay}">
-                        <ListView.View>
-                            <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
-                                <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="200"/>
-                                <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="400"/>
-                                <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="100"/>
-                                <GridViewColumn DisplayMemberBinding="{Binding HarmonicKeyText}" Header="Key" Width="100"/>
-                                <GridViewColumn DisplayMemberBinding="{Binding Intensity}" Header="Intensity" Width="100"/>
-                                <GridViewColumn DisplayMemberBinding="{Binding Playlist}" Header="Playlist" Width="100"/>
-                                <GridViewColumn DisplayMemberBinding="{Binding IsChartingText}" Header="Charting" Width="100"/>
-                                <GridViewColumn DisplayMemberBinding="{Binding Rating}" Header="Rating" Width="100"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                    <StackPanel>
+                        <ListView ItemsSource="{Binding TrackCollection}" 
+                                  SelectionMode="Single"
+                                  Height="{Binding ListViewHeight, Mode=TwoWay}"
+                                  Width="{Binding ListViewWidth, Mode=TwoWay}"
+                                  SelectedItem="{Binding SelectedTrackCollectionItem, Mode=TwoWay}">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
+                                    <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="200"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="400"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding HarmonicKeyText}" Header="Key" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Intensity}" Header="Intensity" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Playlist}" Header="Playlist" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding IsChartingText}" Header="Charting" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Rating}" Header="Rating" Width="100"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <Button Command="{Binding LoadButtonCommand}" IsEnabled="{Binding IsLoadButtonEnabled}">Load</Button>
+                    </StackPanel>
                 </TabItem>
                 <TabItem Header="Preparation">
                     <ListView ItemsSource="{Binding Preparation}" 
@@ -74,7 +78,7 @@
                                  Width="{Binding ProgressBarWidth}"
                                  Minimum="0"
                                  Value="{Binding ProgressBarValue, UpdateSourceTrigger=PropertyChanged}"
-                                 IsIndeterminate="{Binding ProgressBarIsIndeterminate, UpdateSourceTrigger=PropertyChanged}"
+                                 IsIndeterminate="{Binding IsProgressBarIndeterminate, UpdateSourceTrigger=PropertyChanged}"
                                  Maximum="{Binding ProgressBarMax, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Text="{Binding ProgressBarMessage}" 
                                    HorizontalAlignment="Left" 

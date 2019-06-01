@@ -21,6 +21,7 @@ namespace Cellekta_3.ViewModel
         public ICommand NewMenuCommand { get; set; }
         public ICommand ImportMenuCommand { get; set; }
         public ICommand ExitMenuCommand { get; set; }
+        public ICommand LoadButtonCommand { get; set; }
 
         public ObservableCollection<ISong> TrackCollection
         {
@@ -68,15 +69,15 @@ namespace Cellekta_3.ViewModel
             }
         }
 
-        public bool ProgressBarIsIndeterminate
+        public bool IsProgressBarIndeterminate
         {
-            get { return _songListModel.ProgressBarIsIndeterminate; }
+            get { return _songListModel.IsProgressBarIndeterminate; }
             set
             {
-                if (_songListModel.ProgressBarIsIndeterminate != value)
+                if (_songListModel.IsProgressBarIndeterminate != value)
                 {
-                    _songListModel.ProgressBarIsIndeterminate = value;
-                    NotifyPropertyChanged("ProgressBarIsIndeterminate");
+                    _songListModel.IsProgressBarIndeterminate = value;
+                    NotifyPropertyChanged("IsProgressBarIndeterminate");
                 }
             }
         }
@@ -165,6 +166,32 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public bool IsLoadButtonEnabled
+        {
+            get { return _songListModel.IsLoadButtonEnabled; }
+            set
+            {
+                if (_songListModel.IsLoadButtonEnabled != value)
+                {
+                    _songListModel.IsLoadButtonEnabled = value;
+                    NotifyPropertyChanged("IsLoadButtonEnabled");
+                }
+            }
+        }
+
+        public ISong SelectedTrackCollectionItem
+        {
+            get { return _songListModel.SelectedTrackCollectionItem; }
+            set
+            {
+                if (_songListModel.SelectedTrackCollectionItem != value)
+                {
+                    _songListModel.SelectedTrackCollectionItem = value;
+                    NotifyPropertyChanged("SelectedTrackCollectionItem");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -172,13 +199,15 @@ namespace Cellekta_3.ViewModel
             NewMenuCommand = new RelayCommand(OnNewMenuCommand);
             ImportMenuCommand = new RelayCommand(OnImportMenuCommand);
             ExitMenuCommand = new RelayCommand(OnExitMenuCommand);
+            LoadButtonCommand = new RelayCommand(OnLoadButtonCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
         }
 
         internal void OnNewMenuCommand(object param)
         {
-            _songListModel.TrackCollection.Clear();
+            TrackCollection.Clear();
+            IsLoadButtonEnabled = TrackCollection.Count > 0;
             ProgressBarMessage = "Ready to import";
         }
 
@@ -186,12 +215,12 @@ namespace Cellekta_3.ViewModel
         {
             if (_songListModel.TraktorLibrary.IsCollectionFound())
             {
-                _songListModel.ProgressBarIsIndeterminate = true;
+                _songListModel.IsProgressBarIndeterminate = true;
                 await Task.Run(() => _songListModel.TraktorLibrary.DeleteWorkingCollection());
                 await Task.Run(() => _songListModel.TraktorLibrary.CreateWorkingCollection());
                 await Task.Run(() => _songListModel.TraktorLibrary.LoadWorkingCollection());
                 ProgressBarMax = await Task.Run(() => _songListModel.TraktorLibrary.GetSongCount());
-                ProgressBarIsIndeterminate = false;
+                IsProgressBarIndeterminate = false;
 
                 if (!string.IsNullOrEmpty(_songListModel.TraktorLibrary.WorkingCollection))
                 {
@@ -205,6 +234,7 @@ namespace Cellekta_3.ViewModel
                             ISong song = await Task.Run(() => GetSong(entryNode));
                             TrackCollection.Add(song);
                             ProgressBarValue++;
+                            IsLoadButtonEnabled = TrackCollection.Count > 0;
                         }
                     }
                 }
@@ -224,6 +254,16 @@ namespace Cellekta_3.ViewModel
         {
             Application.Current.Shutdown();
         }
+
+        internal void OnLoadButtonCommand(object param)
+        {
+            if (SelectedTrackCollectionItem != null)
+            {
+                Preparation.Add(SelectedTrackCollectionItem);
+                ProgressBarMessage = string.Concat("Loaded ", SelectedTrackCollectionItem.Artist, " ", SelectedTrackCollectionItem.Title);
+            }
+        }
+
 
         internal void ResetProgressBar()
         {

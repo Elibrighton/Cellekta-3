@@ -14,13 +14,15 @@ namespace Cellekta_3.Model
         public ObservableCollection<ISong> Preparation { get; set; }
         public int ProgressBarMax { get; set; }
         public int ProgressBarValue { get; set; }
-        public bool ProgressBarIsIndeterminate { get; set; }
+        public bool IsProgressBarIndeterminate { get; set; }
         public string ProgressBarMessage { get; set; }
         public int WindowHeight { get; set; }
         public int WindowWidth { get; set; }
         public int ListViewHeight { get; set; }
         public int ListViewWidth { get; set; }
         public int ProgressBarWidth { get; set; }
+        public bool IsLoadButtonEnabled { get; set; }
+        public ISong SelectedTrackCollectionItem { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper)
         {
@@ -30,9 +32,10 @@ namespace Cellekta_3.Model
             Preparation = new ObservableCollection<ISong>();
             WindowHeight = 412;
             WindowWidth = 1316;
-            ListViewHeight = 301;
+            ListViewHeight = 281; 
             ListViewWidth = 1292;
             ProgressBarWidth = 1294;
+            IsLoadButtonEnabled = false;
         }
     }
 }
