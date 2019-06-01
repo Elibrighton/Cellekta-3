@@ -19,6 +19,7 @@ namespace SongInterface
         XmlNode EntryNode { get; set; }
         bool IsCharting { get; set; }
         string IsChartingText { get; }
+        string FullNameText { get; }
 
         void Load();
     }

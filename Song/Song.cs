@@ -26,6 +26,7 @@ namespace SongImplementation
         public XmlNode EntryNode { get; set; }
         public bool IsCharting { get; set; }
         public string IsChartingText { get; private set; }
+        public string FullNameText { get; private set; }
 
         private IXmlWrapper _xmlWrapper;
 
@@ -38,6 +39,7 @@ namespace SongImplementation
         {
             Artist = _xmlWrapper.GetAttribute(EntryNode.Attributes["ARTIST"]);
             Title = _xmlWrapper.GetAttribute(EntryNode.Attributes["TITLE"]);
+            FullNameText = GetFullNameText(Artist, Title);
             var locationNode = EntryNode.SelectSingleNode("LOCATION");
             Playlist = GetPlayList(locationNode);
             Path = GetPath(locationNode);
@@ -265,6 +267,11 @@ namespace SongImplementation
             }
 
             return isChartingText;
+        }
+
+        internal string GetFullNameText(string artist, string title)
+        {
+            return string.Concat(artist, !string.IsNullOrEmpty(artist) && !string.IsNullOrEmpty(title) ? " - " : "", title);
         }
     }
 }

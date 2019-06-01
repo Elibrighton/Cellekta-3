@@ -6,7 +6,7 @@ namespace Cellekta_3.ViewModel
 {
     public interface ISongListViewModel
     {
-        ICommand NewMenuCommand { get; set; }
+        ICommand ClearMenuCommand { get; set; }
         ICommand ImportMenuCommand { get; set; }
         ICommand ExitMenuCommand { get; set; }
         ObservableCollection<ISong> TrackCollection { get; set; }
@@ -22,5 +22,7 @@ namespace Cellekta_3.ViewModel
         int ProgressBarWidth { get; set; }
         bool IsLoadButtonEnabled { get; set; }
         ISong SelectedTrackCollectionItem { get; set; }
+        bool IsDeleteButtonEnabled { get; set; }
+        ISong SelectedPreparationItem { get; set; }
     }
 }

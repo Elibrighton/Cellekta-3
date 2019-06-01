@@ -20,5 +20,7 @@ namespace Cellekta_3.Model
         int ProgressBarWidth { get; set; }
         bool IsLoadButtonEnabled { get; set; }
         ISong SelectedTrackCollectionItem { get; set; }
+        bool IsDeleteButtonEnabled { get; set; }
+        ISong SelectedPreparationItem { get; set; }
     }
 }

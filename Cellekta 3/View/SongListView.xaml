@@ -15,7 +15,7 @@
         <Grid DockPanel.Dock="Top">
             <Menu>
                 <MenuItem Header="_File">
-                    <MenuItem Header="_New" Command="{Binding NewMenuCommand}" />
+                    <MenuItem Header="_Clear" Command="{Binding ClearMenuCommand}" />
                     <MenuItem Header="_Import" Command="{Binding ImportMenuCommand}" />
                     <MenuItem Header="_Save" />
                     <Separator />
@@ -51,9 +51,10 @@
                 <TabItem Header="Preparation">
                     <StackPanel>
                         <ListView ItemsSource="{Binding Preparation}" 
-                      SelectionMode="Single"
-                      Height="{Binding ListViewHeight, Mode=TwoWay}"
-                      Width="{Binding ListViewWidth, Mode=TwoWay}">
+                                  SelectionMode="Single"
+                                  Height="{Binding ListViewHeight, Mode=TwoWay}"
+                                  Width="{Binding ListViewWidth, Mode=TwoWay}"
+                                  SelectedItem="{Binding SelectedPreparationItem, Mode=TwoWay}">
                             <ListView.View>
                                 <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
                                     <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="200"/>
@@ -67,7 +68,7 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <Button Command="{Binding LoadButtonCommand}" IsEnabled="{Binding IsLoadButtonEnabled}">Delete</Button>
+                        <Button Command="{Binding DeleteButtonCommand}" IsEnabled="{Binding IsDeleteButtonEnabled}">Delete</Button>
                     </StackPanel>
                 </TabItem>
             </TabControl>

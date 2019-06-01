@@ -18,10 +18,11 @@ namespace Cellekta_3.ViewModel
         private ISongListModel _songListModel;
         private IXmlWrapper _xmlWrapper;
 
-        public ICommand NewMenuCommand { get; set; }
+        public ICommand ClearMenuCommand { get; set; }
         public ICommand ImportMenuCommand { get; set; }
         public ICommand ExitMenuCommand { get; set; }
         public ICommand LoadButtonCommand { get; set; }
+        public ICommand DeleteButtonCommand { get; set; }
 
         public ObservableCollection<ISong> TrackCollection
         {
@@ -192,23 +193,55 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public bool IsDeleteButtonEnabled
+        {
+            get { return _songListModel.IsDeleteButtonEnabled; }
+            set
+            {
+                if (_songListModel.IsDeleteButtonEnabled != value)
+                {
+                    _songListModel.IsDeleteButtonEnabled = value;
+                    NotifyPropertyChanged("IsDeleteButtonEnabled");
+                }
+            }
+        }
+
+        public ISong SelectedPreparationItem
+        {
+            get { return _songListModel.SelectedPreparationItem; }
+            set
+            {
+                if (_songListModel.SelectedPreparationItem != value)
+                {
+                    _songListModel.SelectedPreparationItem = value;
+                    NotifyPropertyChanged("SelectedPreparationItem");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
             _xmlWrapper = xmlWrapper;
-            NewMenuCommand = new RelayCommand(OnNewMenuCommand);
+            ClearMenuCommand = new RelayCommand(OnClearMenuCommand);
             ImportMenuCommand = new RelayCommand(OnImportMenuCommand);
             ExitMenuCommand = new RelayCommand(OnExitMenuCommand);
             LoadButtonCommand = new RelayCommand(OnLoadButtonCommand);
+            DeleteButtonCommand = new RelayCommand(OnDeleteButtonCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
         }
 
-        internal void OnNewMenuCommand(object param)
+        internal void OnClearMenuCommand(object param)
         {
-            TrackCollection.Clear();
-            IsLoadButtonEnabled = TrackCollection.Count > 0;
-            ProgressBarMessage = "Ready to import";
+            if (MessageBox.Show("Are you sure you want to clear the playlists?", "Clear playlists", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                TrackCollection.Clear();
+                Preparation.Clear();
+                IsLoadButtonEnabled = TrackCollection.Count > 0;
+                IsDeleteButtonEnabled = Preparation.Count > 0;
+                ProgressBarMessage = "Ready to import";
+            }
         }
 
         internal async void OnImportMenuCommand(object param)
@@ -260,7 +293,8 @@ namespace Cellekta_3.ViewModel
             if (SelectedTrackCollectionItem != null)
             {
                 Preparation.Add(SelectedTrackCollectionItem);
-                ProgressBarMessage = string.Concat("Loaded ", SelectedTrackCollectionItem.Artist, " ", SelectedTrackCollectionItem.Title);
+                IsDeleteButtonEnabled = Preparation.Count > 0;
+                ProgressBarMessage = string.Concat("Loaded ", SelectedTrackCollectionItem.FullNameText);
             }
             else
             {
@@ -268,6 +302,20 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        internal void OnDeleteButtonCommand(object param)
+        {
+            if (SelectedPreparationItem != null)
+            {
+                var fullNameText = SelectedPreparationItem.FullNameText;
+                Preparation.Remove(SelectedPreparationItem);
+                IsDeleteButtonEnabled = Preparation.Count > 0;
+                ProgressBarMessage = string.Concat("Deleted ", fullNameText);
+            }
+            else
+            {
+                MessageBox.Show("No track selected to delete.");
+            }
+        }
 
         internal void ResetProgressBar()
         {
