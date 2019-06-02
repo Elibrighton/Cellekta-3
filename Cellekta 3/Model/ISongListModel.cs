@@ -27,6 +27,7 @@ namespace Cellekta_3.Model
         bool IsAddNextButtonEnabled { get; set; }
         int TempoSliderValue { get; set; }
         string TempoSliderValueText { get; set; }
+        bool IsMixableRangeCheckboxChecked { get; set; }
 
         ObservableCollection<ISong> GetAddNextTrackCollection();
         ObservableCollection<ISong> GetFilteredTrackCollection();

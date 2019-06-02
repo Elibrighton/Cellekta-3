@@ -28,6 +28,7 @@ namespace Cellekta_3.ViewModel
         public ICommand DeleteButtonCommand { get; set; }
         public ICommand AddNextButtonCommand { get; set; }
         public ICommand TempoSliderValueCommand { get; set; }
+        public ICommand MixableRangeCheckboxCheckedCommand { get; set; }
 
         public ObservableCollection<ISong> ImportedTrackCollection
         {
@@ -287,6 +288,19 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public bool IsMixableRangeCheckboxChecked
+        {
+            get { return _songListModel.IsMixableRangeCheckboxChecked; }
+            set
+            {
+                if (_songListModel.IsMixableRangeCheckboxChecked != value)
+                {
+                    _songListModel.IsMixableRangeCheckboxChecked = value;
+                    NotifyPropertyChanged("IsMixableRangeCheckboxChecked");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -298,6 +312,7 @@ namespace Cellekta_3.ViewModel
             DeleteButtonCommand = new RelayCommand(OnDeleteButtonCommand);
             AddNextButtonCommand = new RelayCommand(OnAddNextButtonCommand);
             TempoSliderValueCommand = new RelayCommand(OnTempoSliderValueCommand);
+            MixableRangeCheckboxCheckedCommand = new RelayCommand(OnMixableRangeCheckboxCheckedCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
         }
@@ -341,8 +356,8 @@ namespace Cellekta_3.ViewModel
                         }
                     }
                 }
-
-                FilteredTrackCollection = new ObservableCollection<ISong>(ImportedTrackCollection);
+                
+                Filter();
 
                 if (FilteredTrackCollection.Count > 0)
                 {
@@ -439,13 +454,12 @@ namespace Cellekta_3.ViewModel
 
         internal void OnTempoSliderValueCommand(object param)
         {
-            FilteredTrackCollection = _songListModel.GetFilteredTrackCollection();
-            var filteredTrackCollectionCount = FilteredTrackCollection.Count();
+            Filter();
+        }
 
-            if (filteredTrackCollectionCount > 0)
-            {
-                SelectedTrackCollectionItem = FilteredTrackCollection[0];
-            }
+        internal void OnMixableRangeCheckboxCheckedCommand(object param)
+        {
+            Filter();
         }
 
         internal void ResetProgressBar()
@@ -472,6 +486,17 @@ namespace Cellekta_3.ViewModel
             IsAddNextButtonEnabled = false;
             IsDeleteButtonEnabled = false;
             ProgressBarMessage = "Ready to import";
+        }
+
+        internal void Filter()
+        {
+            FilteredTrackCollection = _songListModel.GetFilteredTrackCollection();
+            var filteredTrackCollectionCount = FilteredTrackCollection.Count();
+
+            if (filteredTrackCollectionCount > 0)
+            {
+                SelectedTrackCollectionItem = FilteredTrackCollection[0];
+            }
         }
     }
 }

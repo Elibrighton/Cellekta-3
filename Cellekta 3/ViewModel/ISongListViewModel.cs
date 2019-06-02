@@ -13,6 +13,7 @@ namespace Cellekta_3.ViewModel
         ICommand DeleteButtonCommand { get; set; }
         ICommand AddNextButtonCommand { get; set; }
         ICommand TempoSliderValueCommand { get; set; }
+        ICommand MixableRangeCheckboxCheckedCommand { get; set; }
         ObservableCollection<ISong> ImportedTrackCollection { get; set; }
         ObservableCollection<ISong> FilteredTrackCollection { get; set; }
         ObservableCollection<ISong> PreparationCollection { get; set; }
@@ -33,5 +34,6 @@ namespace Cellekta_3.ViewModel
         bool IsAddNextButtonEnabled { get; set; }
         int TempoSliderValue { get; set; }
         string TempoSliderValueText { get; set; }
+        bool IsMixableRangeCheckboxChecked { get; set; }
     }
 }

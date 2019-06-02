@@ -42,6 +42,7 @@ namespace Cellekta_3.Model
                 TempoSliderValueText = value;
             }
         }
+        public bool IsMixableRangeCheckboxChecked { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper)
         {
@@ -59,6 +60,7 @@ namespace Cellekta_3.Model
             IsDeleteButtonEnabled = false;
             SelectedTabControlIndex = 0;
             IsAddNextButtonEnabled = false;
+            IsMixableRangeCheckboxChecked = false;
         }
 
         public ObservableCollection<ISong> GetAddNextTrackCollection()
@@ -92,8 +94,17 @@ namespace Cellekta_3.Model
 
         public ObservableCollection<ISong> GetFilteredTrackCollection()
         {
-            return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => (t.LeadingTempo >= Convert.ToDouble(TempoSliderValue)
-                                                                                && t.LeadingTempo <= Convert.ToDouble(TempoSliderValue + 1))));
+            var slowestTempoSliderValue = Math.Round(Convert.ToDouble(TempoSliderValue), 3);
+            var fastestTempoSliderValue = Math.Round(Convert.ToDouble(TempoSliderValue + 1), 3);
+            var slowestTempoSliderRangeValue = Math.Round((slowestTempoSliderValue - 3.0), 3); // replace 3 with prop
+            var fastestTempoSliderRangeValue = Math.Round((fastestTempoSliderValue + 3.0), 3); // replace 3 with prop
+
+            return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => ((!IsMixableRangeCheckboxChecked
+                                                                                && t.LeadingTempo >= slowestTempoSliderValue
+                                                                                && t.LeadingTempo <= fastestTempoSliderValue)
+                                                                                || (IsMixableRangeCheckboxChecked
+                                                                                && ((t.LeadingTempo >= slowestTempoSliderRangeValue
+                                                                                && t.LeadingTempo <= fastestTempoSliderRangeValue))))));
         }
     }
 }

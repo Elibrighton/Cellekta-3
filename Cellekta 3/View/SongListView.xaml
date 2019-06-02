@@ -59,6 +59,19 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </ComboBox>
+                            <CheckBox IsChecked="{Binding IsMixableRangeCheckboxChecked}" 
+                                      VerticalAlignment="Center"
+                                      Margin="5, 1, 0, 3">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction Command="{Binding MixableRangeCheckboxCheckedCommand}" />
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="Unchecked">
+                                        <i:InvokeCommandAction Command="{Binding MixableRangeCheckboxCheckedCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                Mixable range
+                            </CheckBox>
                         </StackPanel>
                         <ListView ItemsSource="{Binding FilteredTrackCollection}" 
                                   SelectionMode="Single"
