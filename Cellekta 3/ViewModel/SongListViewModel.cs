@@ -275,20 +275,19 @@ namespace Cellekta_3.ViewModel
 
         internal void OnClearMenuCommand(object param)
         {
-            if (MessageBox.Show("Are you sure you want to clear the playlists?", "Clear playlists", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (ImportedTrackCollection.Count() > 0)
             {
-                FilteredTrackCollection.Clear();
-                ImportedTrackCollection.Clear();
-                PreparationCollection.Clear();
-                IsLoadButtonEnabled = FilteredTrackCollection.Count > 0;
-                IsAddNextButtonEnabled = FilteredTrackCollection.Count > 0;
-                IsDeleteButtonEnabled = PreparationCollection.Count > 0;
-                ProgressBarMessage = "Ready to import";
+                if (MessageBox.Show("Are you sure you want to clear the playlists?", "Clear playlists", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    ClearPlaylists();
+                }
             }
         }
 
         internal async void OnImportMenuCommand(object param)
         {
+            ClearPlaylists();
+
             if (_songListModel.TraktorLibrary.IsCollectionFound())
             {
                 _songListModel.IsProgressBarIndeterminate = true;
@@ -346,9 +345,10 @@ namespace Cellekta_3.ViewModel
             {
                 PreparationCollection.Add(SelectedTrackCollectionItem);
                 IsDeleteButtonEnabled = PreparationCollection.Count > 0;
+                IsAddNextButtonEnabled = PreparationCollection.Count > 0;
                 ProgressBarMessage = string.Concat("Loaded ", SelectedTrackCollectionItem.FullNameText);
                 SelectedPreparationItem = SelectedTrackCollectionItem;
-                SelectedTabControlIndex = PreparationTabControlIndex; 
+                SelectedTabControlIndex = PreparationTabControlIndex;
             }
             else
             {
@@ -362,7 +362,15 @@ namespace Cellekta_3.ViewModel
             {
                 var fullNameText = SelectedPreparationItem.FullNameText;
                 PreparationCollection.Remove(SelectedPreparationItem);
+                var preparationCollectionCount = PreparationCollection.Count();
+
+                if (preparationCollectionCount > 0)
+                {
+                    SelectedPreparationItem = PreparationCollection[preparationCollectionCount - 1];
+                }
+
                 IsDeleteButtonEnabled = PreparationCollection.Count > 0;
+                IsAddNextButtonEnabled = PreparationCollection.Count > 0;
                 ProgressBarMessage = string.Concat("Deleted ", fullNameText);
             }
             else
@@ -377,8 +385,9 @@ namespace Cellekta_3.ViewModel
             {
                 var fullNameText = SelectedPreparationItem.FullNameText;
                 FilteredTrackCollection = _songListModel.GetFilteredTrackCollection();
+                var filteredTrackCollectionCount = FilteredTrackCollection.Count();
 
-                if (FilteredTrackCollection.Count() > 0)
+                if (filteredTrackCollectionCount > 0)
                 {
                     var randomRowIndex = _songListModel.GetRandomRowIndex();
                     SelectedTrackCollectionItem = FilteredTrackCollection[randomRowIndex];
@@ -387,7 +396,7 @@ namespace Cellekta_3.ViewModel
                 ProgressBarMessage = string.Concat("Adding track to ", fullNameText);
                 SelectedTabControlIndex = TrackCollectionTabControlIndex;
 
-                if (FilteredTrackCollection.Count() == 0)
+                if (filteredTrackCollectionCount == 0)
                 {
                     MessageBox.Show("No tracks are mixable with the loaded track.");
                 }
@@ -411,6 +420,17 @@ namespace Cellekta_3.ViewModel
             ProgressBarMessage = song.Path;
 
             return song;
+        }
+
+        internal void ClearPlaylists()
+        {
+            FilteredTrackCollection.Clear();
+            ImportedTrackCollection.Clear();
+            PreparationCollection.Clear();
+            IsLoadButtonEnabled = false;
+            IsAddNextButtonEnabled = false;
+            IsDeleteButtonEnabled = false;
+            ProgressBarMessage = "Ready to import";
         }
     }
 }
