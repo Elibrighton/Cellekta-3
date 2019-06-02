@@ -25,24 +25,35 @@ namespace Cellekta_3.ViewModel
         public ICommand ExitMenuCommand { get; set; }
         public ICommand LoadButtonCommand { get; set; }
         public ICommand DeleteButtonCommand { get; set; }
+        public ICommand AddNextButtonCommand { get; set; }
 
-        public ObservableCollection<ISong> TrackCollection
+        public ObservableCollection<ISong> ImportedTrackCollection
         {
-            get { return _songListModel.TrackCollection; }
+            get { return _songListModel.ImportedTrackCollection; }
             set
             {
-                _songListModel.TrackCollection = value;
-                NotifyPropertyChanged("TrackCollection");
+                _songListModel.ImportedTrackCollection = value;
+                NotifyPropertyChanged("ImportedTrackCollection");
             }
         }
 
-        public ObservableCollection<ISong> Preparation
+        public ObservableCollection<ISong> FilteredTrackCollection
         {
-            get { return _songListModel.Preparation; }
+            get { return _songListModel.FilteredTrackCollection; }
             set
             {
-                _songListModel.Preparation = value;
-                NotifyPropertyChanged("Preparation");
+                _songListModel.FilteredTrackCollection = value;
+                NotifyPropertyChanged("FilteredTrackCollection");
+            }
+        }
+
+        public ObservableCollection<ISong> PreparationCollection
+        {
+            get { return _songListModel.PreparationCollection; }
+            set
+            {
+                _songListModel.PreparationCollection = value;
+                NotifyPropertyChanged("PreparationCollection");
             }
         }
 
@@ -105,7 +116,7 @@ namespace Cellekta_3.ViewModel
                     _songListModel.WindowHeight = value;
                     NotifyPropertyChanged("WindowHeight");
 
-                    ListViewHeight = (value - 111);
+                    ListViewHeight = (value - 135);
                     NotifyPropertyChanged("ListViewHeight");
                 }
             }
@@ -234,6 +245,19 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public bool IsAddNextButtonEnabled
+        {
+            get { return _songListModel.IsAddNextButtonEnabled; }
+            set
+            {
+                if (_songListModel.IsAddNextButtonEnabled != value)
+                {
+                    _songListModel.IsAddNextButtonEnabled = value;
+                    NotifyPropertyChanged("IsAddNextButtonEnabled");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -243,6 +267,7 @@ namespace Cellekta_3.ViewModel
             ExitMenuCommand = new RelayCommand(OnExitMenuCommand);
             LoadButtonCommand = new RelayCommand(OnLoadButtonCommand);
             DeleteButtonCommand = new RelayCommand(OnDeleteButtonCommand);
+            AddNextButtonCommand = new RelayCommand(OnAddNextButtonCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
         }
@@ -251,10 +276,12 @@ namespace Cellekta_3.ViewModel
         {
             if (MessageBox.Show("Are you sure you want to clear the playlists?", "Clear playlists", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                TrackCollection.Clear();
-                Preparation.Clear();
-                IsLoadButtonEnabled = TrackCollection.Count > 0;
-                IsDeleteButtonEnabled = Preparation.Count > 0;
+                FilteredTrackCollection.Clear();
+                ImportedTrackCollection.Clear();
+                PreparationCollection.Clear();
+                IsLoadButtonEnabled = FilteredTrackCollection.Count > 0;
+                IsAddNextButtonEnabled = FilteredTrackCollection.Count > 0;
+                IsDeleteButtonEnabled = PreparationCollection.Count > 0;
                 ProgressBarMessage = "Ready to import";
             }
         }
@@ -280,13 +307,16 @@ namespace Cellekta_3.ViewModel
                         foreach (XmlNode entryNode in collectionNode.SelectNodes("ENTRY"))
                         {
                             ISong song = await Task.Run(() => GetSong(entryNode));
-                            TrackCollection.Add(song);
+                            ImportedTrackCollection.Add(song);
                             ProgressBarValue++;
-                            IsLoadButtonEnabled = TrackCollection.Count > 0;
                         }
                     }
                 }
 
+                FilteredTrackCollection = new ObservableCollection<ISong>(ImportedTrackCollection);
+
+                IsLoadButtonEnabled = FilteredTrackCollection.Count > 0;
+                IsAddNextButtonEnabled = FilteredTrackCollection.Count > 0;
                 ProgressBarMessage = "Traktor collection imported";
             }
             else
@@ -294,6 +324,7 @@ namespace Cellekta_3.ViewModel
                 ProgressBarMessage = "No Traktor collection found";
             }
 
+            SelectedTabControlIndex = TrackCollectionTabControlIndex;
             MessageBox.Show("Traktor collection imported.");
             ResetProgressBar();
         }
@@ -307,8 +338,8 @@ namespace Cellekta_3.ViewModel
         {
             if (SelectedTrackCollectionItem != null)
             {
-                Preparation.Add(SelectedTrackCollectionItem);
-                IsDeleteButtonEnabled = Preparation.Count > 0;
+                PreparationCollection.Add(SelectedTrackCollectionItem);
+                IsDeleteButtonEnabled = PreparationCollection.Count > 0;
                 ProgressBarMessage = string.Concat("Loaded ", SelectedTrackCollectionItem.FullNameText);
                 SelectedTabControlIndex = PreparationTabControlIndex; 
             }
@@ -323,13 +354,29 @@ namespace Cellekta_3.ViewModel
             if (SelectedPreparationItem != null)
             {
                 var fullNameText = SelectedPreparationItem.FullNameText;
-                Preparation.Remove(SelectedPreparationItem);
-                IsDeleteButtonEnabled = Preparation.Count > 0;
+                PreparationCollection.Remove(SelectedPreparationItem);
+                IsDeleteButtonEnabled = PreparationCollection.Count > 0;
                 ProgressBarMessage = string.Concat("Deleted ", fullNameText);
             }
             else
             {
                 MessageBox.Show("No track selected to delete.");
+            }
+        }
+
+        internal void OnAddNextButtonCommand(object param)
+        {
+            if (SelectedPreparationItem != null)
+            {
+                var fullNameText = SelectedPreparationItem.FullNameText;
+                FilteredTrackCollection = _songListModel.GetFilteredTrackCollection();
+                // select a mixable track
+                ProgressBarMessage = string.Concat("Adding track to ", fullNameText);
+                SelectedTabControlIndex = TrackCollectionTabControlIndex;
+            }
+            else
+            {
+                MessageBox.Show("No track selected to find mixable tracks for.");
             }
         }
 

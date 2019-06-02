@@ -9,8 +9,12 @@ namespace Cellekta_3.ViewModel
         ICommand ClearMenuCommand { get; set; }
         ICommand ImportMenuCommand { get; set; }
         ICommand ExitMenuCommand { get; set; }
-        ObservableCollection<ISong> TrackCollection { get; set; }
-        ObservableCollection<ISong> Preparation { get; set; }
+        ICommand LoadButtonCommand { get; set; }
+        ICommand DeleteButtonCommand { get; set; }
+        ICommand AddNextButtonCommand { get; set; }
+        ObservableCollection<ISong> ImportedTrackCollection { get; set; }
+        ObservableCollection<ISong> FilteredTrackCollection { get; set; }
+        ObservableCollection<ISong> PreparationCollection { get; set; }
         int ProgressBarMax { get; set; }
         int ProgressBarValue { get; set; }
         bool IsProgressBarIndeterminate { get; set; }
@@ -25,5 +29,6 @@ namespace Cellekta_3.ViewModel
         bool IsDeleteButtonEnabled { get; set; }
         ISong SelectedPreparationItem { get; set; }
         int SelectedTabControlIndex { get; set; }
+        bool IsAddNextButtonEnabled { get; set; }
     }
 }

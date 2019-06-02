@@ -120,6 +120,14 @@
       <Project>{1bfd9033-e412-4b19-ab1b-db14e64c34ea}</Project>
       <Name>HarmonicKeyImplementation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MixableRangeImplementation\MixableRangeImplementation.csproj">
+      <Project>{ACA54132-D6ED-4E2B-ACF8-6C876A1B92DD}</Project>
+      <Name>MixableRangeImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MixableRangeInterface\MixableRangeInterface.csproj">
+      <Project>{402F8F21-9780-477A-A598-95BC64C01AA8}</Project>
+      <Name>MixableRangeInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SongInterface\SongInterface.csproj">
       <Project>{bff769fd-4a79-41df-bea1-3471f9222428}</Project>
       <Name>SongInterface</Name>

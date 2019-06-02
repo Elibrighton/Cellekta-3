@@ -27,7 +27,7 @@
             <TabControl SelectedIndex="{Binding SelectedTabControlIndex}">
                 <TabItem Header="Track collection">
                     <StackPanel>
-                        <ListView ItemsSource="{Binding TrackCollection}" 
+                        <ListView ItemsSource="{Binding FilteredTrackCollection}" 
                                   SelectionMode="Single"
                                   Height="{Binding ListViewHeight, Mode=TwoWay}"
                                   Width="{Binding ListViewWidth, Mode=TwoWay}"
@@ -45,12 +45,14 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <Button Command="{Binding LoadButtonCommand}" IsEnabled="{Binding IsLoadButtonEnabled}">Load</Button>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Command="{Binding LoadButtonCommand}" IsEnabled="{Binding IsLoadButtonEnabled}" MinWidth="100" Margin="0, 3, 5, 1">Load</Button>
+                        </StackPanel>
                     </StackPanel>
                 </TabItem>
                 <TabItem Header="Preparation">
                     <StackPanel>
-                        <ListView ItemsSource="{Binding Preparation}" 
+                        <ListView ItemsSource="{Binding PreparationCollection}" 
                                   SelectionMode="Single"
                                   Height="{Binding ListViewHeight, Mode=TwoWay}"
                                   Width="{Binding ListViewWidth, Mode=TwoWay}"
@@ -68,7 +70,10 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <Button Command="{Binding DeleteButtonCommand}" IsEnabled="{Binding IsDeleteButtonEnabled}">Delete</Button>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Command="{Binding DeleteButtonCommand}" IsEnabled="{Binding IsDeleteButtonEnabled}" MinWidth="100" Margin="0, 3, 5, 1">Delete</Button>
+                            <Button Command="{Binding AddNextButtonCommand}" IsEnabled="{Binding IsAddNextButtonEnabled}" MinWidth="100" Margin="0, 3, 5, 1">Add next</Button>
+                        </StackPanel>
                     </StackPanel>
                 </TabItem>
             </TabControl>

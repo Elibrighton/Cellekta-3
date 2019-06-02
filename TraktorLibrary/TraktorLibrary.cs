@@ -1,4 +1,6 @@
 ﻿using Microsoft.Win32;
+using MixableRangeImplementation;
+using MixableRangeInterface;
 using SongImplementation;
 using SongInterface;
 using System.Configuration;
@@ -93,7 +95,8 @@ namespace TraktorLibraryImplementation
 
         public ISong GetSong(XmlNode entryNode)
         {
-            ISong song = new Song(_xmlWrapper)
+            IMixableRange mixableRange = new MixableRange();
+            ISong song = new Song(_xmlWrapper, mixableRange)
             {
                 EntryNode = entryNode
             };

@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using MixableRangeInterface;
+using System.Xml;
 
 namespace SongInterface
 {
@@ -20,6 +21,7 @@ namespace SongInterface
         bool IsCharting { get; set; }
         string IsChartingText { get; }
         string FullNameText { get; }
+        IMixableRange MixableRange { get; set; }
 
         void Load();
     }

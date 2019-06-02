@@ -7,8 +7,9 @@ namespace Cellekta_3.Model
     public interface ISongListModel
     {
         ITraktorLibrary TraktorLibrary { get; set; }
-        ObservableCollection<ISong> TrackCollection { get; set; }
-        ObservableCollection<ISong> Preparation { get; set; }
+        ObservableCollection<ISong> ImportedTrackCollection { get; set; }
+        ObservableCollection<ISong> FilteredTrackCollection { get; set; }
+        ObservableCollection<ISong> PreparationCollection { get; set; }
         int ProgressBarMax { get; set; }
         int ProgressBarValue { get; set; }
         bool IsProgressBarIndeterminate { get; set; }
@@ -23,5 +24,8 @@ namespace Cellekta_3.Model
         bool IsDeleteButtonEnabled { get; set; }
         ISong SelectedPreparationItem { get; set; }
         int SelectedTabControlIndex { get; set; }
+        bool IsAddNextButtonEnabled { get; set; }
+
+        ObservableCollection<ISong> GetFilteredTrackCollection();
     }
 }

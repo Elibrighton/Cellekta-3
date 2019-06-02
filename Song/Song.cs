@@ -1,4 +1,5 @@
-﻿using SongInterface;
+﻿using MixableRangeInterface;
+using SongInterface;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -27,19 +28,20 @@ namespace SongImplementation
         public bool IsCharting { get; set; }
         public string IsChartingText { get; private set; }
         public string FullNameText { get; private set; }
+        public IMixableRange MixableRange { get; set; }
 
         private IXmlWrapper _xmlWrapper;
 
-        public Song(IXmlWrapper xmlWrapper)
+        public Song(IXmlWrapper xmlWrapper, IMixableRange mixableRange)
         {
             _xmlWrapper = xmlWrapper;
+            MixableRange = mixableRange;
         }
 
         public void Load()
         {
             Artist = _xmlWrapper.GetAttribute(EntryNode.Attributes["ARTIST"]);
             Title = _xmlWrapper.GetAttribute(EntryNode.Attributes["TITLE"]);
-            FullNameText = GetFullNameText(Artist, Title);
             var locationNode = EntryNode.SelectSingleNode("LOCATION");
             Playlist = GetPlayList(locationNode);
             Path = GetPath(locationNode);
@@ -55,6 +57,8 @@ namespace SongImplementation
             HarmonicKeyText = GetHarmonicKeyText(LeadingHarmonicKey, TrailingHarmonicKey);
             IsCharting = GetIsCharting();
             IsChartingText = GetIsChartingText(IsCharting);
+            FullNameText = GetFullNameText(Artist, Title, TempoText, HarmonicKeyText, Intensity, Playlist);
+            MixableRange.Load(TrailingTempo, 3, TrailingHarmonicKey); // tempoRange to control to be added later
         }
 
         internal double GetTempo(XmlNode tempoNode, string path, bool isLeadingTempo = true)
@@ -269,9 +273,9 @@ namespace SongImplementation
             return isChartingText;
         }
 
-        internal string GetFullNameText(string artist, string title)
+        internal string GetFullNameText(string artist, string title, string tempoText, string harmonicKeyText, int intensity, string playlist)
         {
-            return string.Concat(artist, !string.IsNullOrEmpty(artist) && !string.IsNullOrEmpty(title) ? " - " : "", title);
+            return string.Concat(artist, !string.IsNullOrEmpty(artist) && !string.IsNullOrEmpty(title) ? " - " : "", title, " - ", tempoText, " - ", harmonicKeyText, " - ", intensity, " - ", playlist);
         }
     }
 }

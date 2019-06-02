@@ -43,5 +43,11 @@
     <Compile Include="ISong.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MixableRangeInterface\MixableRangeInterface.csproj">
+      <Project>{402F8F21-9780-477A-A598-95BC64C01AA8}</Project>
+      <Name>MixableRangeInterface</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
