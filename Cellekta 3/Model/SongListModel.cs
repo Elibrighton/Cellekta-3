@@ -1,5 +1,5 @@
 ﻿using SongInterface;
-using System.Collections.Generic;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TraktorLibraryInterface;
@@ -51,7 +51,7 @@ namespace Cellekta_3.Model
 
         public ObservableCollection<ISong> GetFilteredTrackCollection()
         {
-            return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => 
+            return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t =>
                 (!PreparationCollection.Contains(t)
                 && ((t.LeadingTempo <= SelectedPreparationItem.MixableRange.FastestTempo
                 && t.LeadingTempo >= SelectedPreparationItem.MixableRange.SlowestTempo)
@@ -63,6 +63,19 @@ namespace Cellekta_3.Model
                 || t.LeadingHarmonicKey == SelectedPreparationItem.MixableRange.OuterCircleHarmonicKey
                 || t.LeadingHarmonicKey == SelectedPreparationItem.MixableRange.PlusOneHarmonicKey
                 || t.LeadingHarmonicKey == SelectedPreparationItem.MixableRange.MinusOneHarmonicKey))));
+        }
+
+        public int GetRandomRowIndex()
+        {
+            var randomRowIndex = 0;
+
+            if (FilteredTrackCollection.Count > 1)
+            {
+                var random = new Random();
+                randomRowIndex = random.Next(FilteredTrackCollection.Count);
+            }
+
+            return randomRowIndex;
         }
     }
 }

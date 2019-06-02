@@ -27,5 +27,6 @@ namespace Cellekta_3.Model
         bool IsAddNextButtonEnabled { get; set; }
 
         ObservableCollection<ISong> GetFilteredTrackCollection();
+        int GetRandomRowIndex();
     }
 }

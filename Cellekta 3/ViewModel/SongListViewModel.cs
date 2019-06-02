@@ -2,6 +2,7 @@
 using Cellekta_3.Model;
 using SongInterface;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -315,6 +316,11 @@ namespace Cellekta_3.ViewModel
 
                 FilteredTrackCollection = new ObservableCollection<ISong>(ImportedTrackCollection);
 
+                if (FilteredTrackCollection.Count > 0)
+                {
+                    SelectedTrackCollectionItem = FilteredTrackCollection[0];
+                }
+
                 IsLoadButtonEnabled = FilteredTrackCollection.Count > 0;
                 IsAddNextButtonEnabled = FilteredTrackCollection.Count > 0;
                 ProgressBarMessage = "Traktor collection imported";
@@ -371,9 +377,20 @@ namespace Cellekta_3.ViewModel
             {
                 var fullNameText = SelectedPreparationItem.FullNameText;
                 FilteredTrackCollection = _songListModel.GetFilteredTrackCollection();
-                // select a mixable track
+
+                if (FilteredTrackCollection.Count() > 0)
+                {
+                    var randomRowIndex = _songListModel.GetRandomRowIndex();
+                    SelectedTrackCollectionItem = FilteredTrackCollection[randomRowIndex];
+                }
+
                 ProgressBarMessage = string.Concat("Adding track to ", fullNameText);
                 SelectedTabControlIndex = TrackCollectionTabControlIndex;
+
+                if (FilteredTrackCollection.Count() == 0)
+                {
+                    MessageBox.Show("No tracks are mixable with the loaded track.");
+                }
             }
             else
             {
