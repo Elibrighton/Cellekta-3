@@ -25,6 +25,7 @@ namespace Cellekta_3.Model
         public ISong SelectedTrackCollectionItem { get; set; }
         public bool IsDeleteButtonEnabled { get; set; }
         public ISong SelectedPreparationItem { get; set; }
+        public int SelectedTabControlIndex { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper)
         {
@@ -39,6 +40,7 @@ namespace Cellekta_3.Model
             ProgressBarWidth = 1294;
             IsLoadButtonEnabled = false;
             IsDeleteButtonEnabled = false;
+            SelectedTabControlIndex = 0;
         }
     }
 }

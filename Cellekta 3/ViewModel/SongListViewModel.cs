@@ -14,6 +14,8 @@ namespace Cellekta_3.ViewModel
     {
         private const int InitialProgressBarMax = 1;
         private const int InitialProgressBarValue = 0;
+        private const int TrackCollectionTabControlIndex = 0;
+        private const int PreparationTabControlIndex = 1;
 
         private ISongListModel _songListModel;
         private IXmlWrapper _xmlWrapper;
@@ -219,6 +221,19 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public int SelectedTabControlIndex
+        {
+            get { return _songListModel.SelectedTabControlIndex; }
+            set
+            {
+                if (_songListModel.SelectedTabControlIndex != value)
+                {
+                    _songListModel.SelectedTabControlIndex = value;
+                    NotifyPropertyChanged("SelectedTabControlIndex");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -295,6 +310,7 @@ namespace Cellekta_3.ViewModel
                 Preparation.Add(SelectedTrackCollectionItem);
                 IsDeleteButtonEnabled = Preparation.Count > 0;
                 ProgressBarMessage = string.Concat("Loaded ", SelectedTrackCollectionItem.FullNameText);
+                SelectedTabControlIndex = PreparationTabControlIndex; 
             }
             else
             {

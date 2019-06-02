@@ -24,5 +24,6 @@ namespace Cellekta_3.ViewModel
         ISong SelectedTrackCollectionItem { get; set; }
         bool IsDeleteButtonEnabled { get; set; }
         ISong SelectedPreparationItem { get; set; }
+        int SelectedTabControlIndex { get; set; }
     }
 }

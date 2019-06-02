@@ -24,7 +24,7 @@
             </Menu>
         </Grid>
         <StackPanel VerticalAlignment="Top">
-            <TabControl>
+            <TabControl SelectedIndex="{Binding SelectedTabControlIndex}">
                 <TabItem Header="Track collection">
                     <StackPanel>
                         <ListView ItemsSource="{Binding TrackCollection}" 
