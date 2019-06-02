@@ -91,6 +91,16 @@ namespace SongImplementation
                 throw;
             }
 
+            // perform calculation to ensure tempo is in range of 65 to 165 BPM
+            if (tempo > 165.0)
+            {
+                tempo /= 2;
+            }
+            else if (tempo < 65.0)
+            {
+                tempo *= 2;
+            }
+
             return tempo;
         }
 

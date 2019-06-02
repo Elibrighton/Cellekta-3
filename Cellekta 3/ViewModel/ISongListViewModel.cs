@@ -12,6 +12,7 @@ namespace Cellekta_3.ViewModel
         ICommand LoadButtonCommand { get; set; }
         ICommand DeleteButtonCommand { get; set; }
         ICommand AddNextButtonCommand { get; set; }
+        ICommand TempoSliderValueCommand { get; set; }
         ObservableCollection<ISong> ImportedTrackCollection { get; set; }
         ObservableCollection<ISong> FilteredTrackCollection { get; set; }
         ObservableCollection<ISong> PreparationCollection { get; set; }
@@ -30,5 +31,7 @@ namespace Cellekta_3.ViewModel
         ISong SelectedPreparationItem { get; set; }
         int SelectedTabControlIndex { get; set; }
         bool IsAddNextButtonEnabled { get; set; }
+        int TempoSliderValue { get; set; }
+        string TempoSliderValueText { get; set; }
     }
 }

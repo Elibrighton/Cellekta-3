@@ -27,6 +27,7 @@ namespace Cellekta_3.ViewModel
         public ICommand LoadButtonCommand { get; set; }
         public ICommand DeleteButtonCommand { get; set; }
         public ICommand AddNextButtonCommand { get; set; }
+        public ICommand TempoSliderValueCommand { get; set; }
 
         public ObservableCollection<ISong> ImportedTrackCollection
         {
@@ -117,7 +118,7 @@ namespace Cellekta_3.ViewModel
                     _songListModel.WindowHeight = value;
                     NotifyPropertyChanged("WindowHeight");
 
-                    ListViewHeight = (value - 135);
+                    ListViewHeight = (value - 162);
                     NotifyPropertyChanged("ListViewHeight");
                 }
             }
@@ -259,6 +260,33 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public int TempoSliderValue
+        {
+            get { return _songListModel.TempoSliderValue; }
+            set
+            {
+                if (_songListModel.TempoSliderValue != value)
+                {
+                    _songListModel.TempoSliderValue = value;
+                    NotifyPropertyChanged("TempoSliderValue");
+                    NotifyPropertyChanged("TempoSliderValueText");
+                }
+            }
+        }
+
+        public string TempoSliderValueText
+        {
+            get { return _songListModel.TempoSliderValueText; }
+            set
+            {
+                if (_songListModel.TempoSliderValueText != value)
+                {
+                    _songListModel.TempoSliderValueText = value;
+                    NotifyPropertyChanged("TempoSliderValueText");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -269,6 +297,7 @@ namespace Cellekta_3.ViewModel
             LoadButtonCommand = new RelayCommand(OnLoadButtonCommand);
             DeleteButtonCommand = new RelayCommand(OnDeleteButtonCommand);
             AddNextButtonCommand = new RelayCommand(OnAddNextButtonCommand);
+            TempoSliderValueCommand = new RelayCommand(OnTempoSliderValueCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
         }
@@ -323,14 +352,15 @@ namespace Cellekta_3.ViewModel
                 IsLoadButtonEnabled = FilteredTrackCollection.Count > 0;
                 IsAddNextButtonEnabled = FilteredTrackCollection.Count > 0;
                 ProgressBarMessage = "Traktor collection imported";
+                MessageBox.Show("Traktor collection imported.");
             }
             else
             {
                 ProgressBarMessage = "No Traktor collection found";
+                MessageBox.Show("No Traktor collection found.");
             }
 
             SelectedTabControlIndex = TrackCollectionTabControlIndex;
-            MessageBox.Show("Traktor collection imported.");
             ResetProgressBar();
         }
 
@@ -384,7 +414,7 @@ namespace Cellekta_3.ViewModel
             if (SelectedPreparationItem != null)
             {
                 var fullNameText = SelectedPreparationItem.FullNameText;
-                FilteredTrackCollection = _songListModel.GetFilteredTrackCollection();
+                FilteredTrackCollection = _songListModel.GetAddNextTrackCollection();
                 var filteredTrackCollectionCount = FilteredTrackCollection.Count();
 
                 if (filteredTrackCollectionCount > 0)
@@ -404,6 +434,17 @@ namespace Cellekta_3.ViewModel
             else
             {
                 MessageBox.Show("No track selected to find mixable tracks for.");
+            }
+        }
+
+        internal void OnTempoSliderValueCommand(object param)
+        {
+            FilteredTrackCollection = _songListModel.GetFilteredTrackCollection();
+            var filteredTrackCollectionCount = FilteredTrackCollection.Count();
+
+            if (filteredTrackCollectionCount > 0)
+            {
+                SelectedTrackCollectionItem = FilteredTrackCollection[0];
             }
         }
 

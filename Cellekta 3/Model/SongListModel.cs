@@ -30,6 +30,18 @@ namespace Cellekta_3.Model
         public ISong SelectedPreparationItem { get; set; }
         public int SelectedTabControlIndex { get; set; }
         public bool IsAddNextButtonEnabled { get; set; }
+        public int TempoSliderValue { get; set; }
+        public string TempoSliderValueText
+        {
+            get
+            {
+                return string.Concat(TempoSliderValue.ToString(), " BPM");
+            }
+            set
+            {
+                TempoSliderValueText = value;
+            }
+        }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper)
         {
@@ -40,7 +52,7 @@ namespace Cellekta_3.Model
             PreparationCollection = new ObservableCollection<ISong>();
             WindowHeight = 412;
             WindowWidth = 1316;
-            ListViewHeight = 277;
+            ListViewHeight = 250;
             ListViewWidth = 1292;
             ProgressBarWidth = 1294;
             IsLoadButtonEnabled = false;
@@ -49,7 +61,7 @@ namespace Cellekta_3.Model
             IsAddNextButtonEnabled = false;
         }
 
-        public ObservableCollection<ISong> GetFilteredTrackCollection()
+        public ObservableCollection<ISong> GetAddNextTrackCollection()
         {
             return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t =>
                 (!PreparationCollection.Contains(t)
@@ -76,6 +88,12 @@ namespace Cellekta_3.Model
             }
 
             return randomRowIndex;
+        }
+
+        public ObservableCollection<ISong> GetFilteredTrackCollection()
+        {
+            return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => (t.LeadingTempo >= Convert.ToDouble(TempoSliderValue)
+                                                                                && t.LeadingTempo <= Convert.ToDouble(TempoSliderValue + 1))));
         }
     }
 }

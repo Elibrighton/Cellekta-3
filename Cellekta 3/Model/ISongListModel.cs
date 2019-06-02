@@ -25,7 +25,10 @@ namespace Cellekta_3.Model
         ISong SelectedPreparationItem { get; set; }
         int SelectedTabControlIndex { get; set; }
         bool IsAddNextButtonEnabled { get; set; }
+        int TempoSliderValue { get; set; }
+        string TempoSliderValueText { get; set; }
 
+        ObservableCollection<ISong> GetAddNextTrackCollection();
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();
     }
