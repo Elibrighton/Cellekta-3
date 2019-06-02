@@ -341,6 +341,7 @@ namespace Cellekta_3.ViewModel
                 PreparationCollection.Add(SelectedTrackCollectionItem);
                 IsDeleteButtonEnabled = PreparationCollection.Count > 0;
                 ProgressBarMessage = string.Concat("Loaded ", SelectedTrackCollectionItem.FullNameText);
+                SelectedPreparationItem = SelectedTrackCollectionItem;
                 SelectedTabControlIndex = PreparationTabControlIndex; 
             }
             else
