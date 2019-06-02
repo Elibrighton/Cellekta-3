@@ -497,6 +497,9 @@ namespace Cellekta_3.ViewModel
             {
                 SelectedTrackCollectionItem = FilteredTrackCollection[0];
             }
+
+            IsLoadButtonEnabled = FilteredTrackCollection.Count > 0;
+            IsAddNextButtonEnabled = FilteredTrackCollection.Count > 0;
         }
     }
 }
