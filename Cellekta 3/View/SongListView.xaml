@@ -72,7 +72,7 @@
                                 </i:Interaction.Triggers>
                                 Mixable range
                             </CheckBox>
-                            <Button Command="{Binding ClearButtonCommand}" MinWidth="100" Margin="5, 1, 0, 3">Clear</Button>
+                            <Button Command="{Binding ClearButtonCommand}" IsEnabled="{Binding IsClearButtonEnabled}" MinWidth="100" Margin="5, 1, 0, 3">Clear</Button>
                         </StackPanel>
                         <ListView ItemsSource="{Binding FilteredTrackCollection}" 
                                   SelectionMode="Single"

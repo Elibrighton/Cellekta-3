@@ -36,5 +36,6 @@ namespace Cellekta_3.ViewModel
         int TempoSliderValue { get; set; }
         string TempoSliderValueText { get; set; }
         bool IsMixableRangeCheckboxChecked { get; set; }
+        bool IsClearButtonEnabled { get; set; }
     }
 }

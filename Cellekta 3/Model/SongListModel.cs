@@ -43,6 +43,7 @@ namespace Cellekta_3.Model
             }
         }
         public bool IsMixableRangeCheckboxChecked { get; set; }
+        public bool IsClearButtonEnabled { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper)
         {
@@ -61,6 +62,7 @@ namespace Cellekta_3.Model
             SelectedTabControlIndex = 0;
             IsAddNextButtonEnabled = false;
             IsMixableRangeCheckboxChecked = false;
+            IsClearButtonEnabled = false;
         }
 
         public ObservableCollection<ISong> GetAddNextTrackCollection()

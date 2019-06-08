@@ -302,6 +302,19 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public bool IsClearButtonEnabled
+        {
+            get { return _songListModel.IsClearButtonEnabled; }
+            set
+            {
+                if (_songListModel.IsClearButtonEnabled != value)
+                {
+                    _songListModel.IsClearButtonEnabled = value;
+                    NotifyPropertyChanged("IsClearButtonEnabled");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -366,8 +379,7 @@ namespace Cellekta_3.ViewModel
                     SelectedTrackCollectionItem = FilteredTrackCollection[0];
                 }
 
-                IsLoadButtonEnabled = FilteredTrackCollection.Count > 0;
-                IsAddNextButtonEnabled = FilteredTrackCollection.Count > 0;
+                EnableControls();
                 ProgressBarMessage = "Traktor collection imported";
                 MessageBox.Show("Traktor collection imported.");
             }
@@ -391,8 +403,7 @@ namespace Cellekta_3.ViewModel
             if (SelectedTrackCollectionItem != null)
             {
                 PreparationCollection.Add(SelectedTrackCollectionItem);
-                IsDeleteButtonEnabled = PreparationCollection.Count > 0;
-                IsAddNextButtonEnabled = PreparationCollection.Count > 0;
+                EnableControls();
                 ProgressBarMessage = string.Concat("Loaded ", SelectedTrackCollectionItem.FullNameText);
                 SelectedPreparationItem = SelectedTrackCollectionItem;
                 SelectedTabControlIndex = PreparationTabControlIndex;
@@ -415,9 +426,7 @@ namespace Cellekta_3.ViewModel
                 {
                     SelectedPreparationItem = PreparationCollection[preparationCollectionCount - 1];
                 }
-
-                IsDeleteButtonEnabled = PreparationCollection.Count > 0;
-                IsAddNextButtonEnabled = PreparationCollection.Count > 0;
+                EnableControls();
                 ProgressBarMessage = string.Concat("Deleted ", fullNameText);
             }
             else
@@ -489,9 +498,7 @@ namespace Cellekta_3.ViewModel
             FilteredTrackCollection.Clear();
             ImportedTrackCollection.Clear();
             PreparationCollection.Clear();
-            IsLoadButtonEnabled = false;
-            IsAddNextButtonEnabled = false;
-            IsDeleteButtonEnabled = false;
+            EnableControls();
             ProgressBarMessage = "Ready to import";
         }
 
@@ -505,15 +512,24 @@ namespace Cellekta_3.ViewModel
                 SelectedTrackCollectionItem = FilteredTrackCollection[0];
             }
 
-            IsLoadButtonEnabled = FilteredTrackCollection.Count > 0;
-            IsAddNextButtonEnabled = FilteredTrackCollection.Count > 0;
+            EnableControls();
         }
 
         internal void ClearFilter()
         {
             TempoSliderValue = 0;
+            IsMixableRangeCheckboxChecked = false;
             Filter();
             ProgressBarMessage = "Filters cleared";
+        }
+
+        internal void EnableControls()
+        {
+            IsLoadButtonEnabled = FilteredTrackCollection.Count > 0;
+            IsAddNextButtonEnabled = FilteredTrackCollection.Count > 0;
+            IsDeleteButtonEnabled = PreparationCollection.Count > 0;
+            IsAddNextButtonEnabled = PreparationCollection.Count > 0;
+            IsClearButtonEnabled = TempoSliderValue != 0 || IsMixableRangeCheckboxChecked;
         }
     }
 }
