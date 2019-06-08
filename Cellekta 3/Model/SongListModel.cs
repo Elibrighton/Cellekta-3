@@ -99,7 +99,8 @@ namespace Cellekta_3.Model
             var slowestTempoSliderRangeValue = Math.Round((slowestTempoSliderValue - 3.0), 3); // replace 3 with prop
             var fastestTempoSliderRangeValue = Math.Round((fastestTempoSliderValue + 3.0), 3); // replace 3 with prop
 
-            return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => ((!IsMixableRangeCheckboxChecked
+            return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => ((TempoSliderValue == 0) 
+                                                                                || (!IsMixableRangeCheckboxChecked
                                                                                 && t.LeadingTempo >= slowestTempoSliderValue
                                                                                 && t.LeadingTempo <= fastestTempoSliderValue)
                                                                                 || (IsMixableRangeCheckboxChecked

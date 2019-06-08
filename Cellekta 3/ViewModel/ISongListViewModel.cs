@@ -14,6 +14,7 @@ namespace Cellekta_3.ViewModel
         ICommand AddNextButtonCommand { get; set; }
         ICommand TempoSliderValueCommand { get; set; }
         ICommand MixableRangeCheckboxCheckedCommand { get; set; }
+        ICommand ClearButtonCommand { get; set; }
         ObservableCollection<ISong> ImportedTrackCollection { get; set; }
         ObservableCollection<ISong> FilteredTrackCollection { get; set; }
         ObservableCollection<ISong> PreparationCollection { get; set; }

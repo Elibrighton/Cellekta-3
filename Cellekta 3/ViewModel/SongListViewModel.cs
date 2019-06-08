@@ -29,6 +29,7 @@ namespace Cellekta_3.ViewModel
         public ICommand AddNextButtonCommand { get; set; }
         public ICommand TempoSliderValueCommand { get; set; }
         public ICommand MixableRangeCheckboxCheckedCommand { get; set; }
+        public ICommand ClearButtonCommand { get; set; }
 
         public ObservableCollection<ISong> ImportedTrackCollection
         {
@@ -313,6 +314,7 @@ namespace Cellekta_3.ViewModel
             AddNextButtonCommand = new RelayCommand(OnAddNextButtonCommand);
             TempoSliderValueCommand = new RelayCommand(OnTempoSliderValueCommand);
             MixableRangeCheckboxCheckedCommand = new RelayCommand(OnMixableRangeCheckboxCheckedCommand);
+            ClearButtonCommand = new RelayCommand(OnClearButtonCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
         }
@@ -462,6 +464,11 @@ namespace Cellekta_3.ViewModel
             Filter();
         }
 
+        internal void OnClearButtonCommand(object param)
+        {
+            ClearFilter();
+        }
+
         internal void ResetProgressBar()
         {
             ProgressBarValue = InitialProgressBarValue;
@@ -500,6 +507,13 @@ namespace Cellekta_3.ViewModel
 
             IsLoadButtonEnabled = FilteredTrackCollection.Count > 0;
             IsAddNextButtonEnabled = FilteredTrackCollection.Count > 0;
+        }
+
+        internal void ClearFilter()
+        {
+            TempoSliderValue = 0;
+            Filter();
+            ProgressBarMessage = "Filters cleared";
         }
     }
 }
