@@ -1,5 +1,6 @@
 ﻿using Cellekta_3.Base;
 using Cellekta_3.Model;
+using HarmonicKeyInterface;
 using SongInterface;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -330,6 +331,16 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public ObservableCollection<IHarmonicKey> HarmonicKeyComboBoxCollection
+        {
+            get { return _songListModel.HarmonicKeyComboBoxCollection; }
+            set
+            {
+                _songListModel.HarmonicKeyComboBoxCollection = value;
+                NotifyPropertyChanged("HarmonicKeyComboBoxCollection");
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -395,7 +406,7 @@ namespace Cellekta_3.ViewModel
                 }
 
                 EnableControls();
-                var statusMessage = string.Concat(FilteredTrackCollection.Count.ToString(), " tracks imported from Traktor collection");
+                var statusMessage = string.Concat(ImportedTrackCollection.Count.ToString(), " tracks imported from Traktor collection");
                 ProgressBarMessage = statusMessage;
                 MessageBox.Show(string.Concat(statusMessage, "."));
             }

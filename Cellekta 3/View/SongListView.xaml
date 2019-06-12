@@ -65,7 +65,9 @@
                             <TextBlock Text="Harmonic key" Margin="5, 3, 0, 3" />
                             <ComboBox ItemsSource="{Binding HarmonicKeyComboBoxCollection}"  
                                       SelectedItem="{Binding HarmonicKeyComboBoxSelectedItem}"
-                                      Margin="5, 1, 0, 3">
+                                      DisplayMemberPath="Name"  
+                                      Margin="5, 1, 0, 3"
+                                      MinWidth="75">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="SelectionChanged">
                                         <i:InvokeCommandAction Command="{Binding HarmonicKeyComboBoxSelectionChangedCommand}" />

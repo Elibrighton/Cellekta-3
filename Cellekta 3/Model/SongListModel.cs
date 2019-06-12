@@ -1,4 +1,6 @@
-﻿using SongInterface;
+﻿using HarmonicKeyImplementation;
+using HarmonicKeyInterface;
+using SongInterface;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -45,6 +47,7 @@ namespace Cellekta_3.Model
         }
         public bool IsMixableRangeCheckboxChecked { get; set; }
         public bool IsClearButtonEnabled { get; set; }
+        public ObservableCollection<IHarmonicKey> HarmonicKeyComboBoxCollection { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper)
         {
@@ -65,6 +68,35 @@ namespace Cellekta_3.Model
             IsAddNextButtonEnabled = false;
             IsMixableRangeCheckboxChecked = false;
             IsClearButtonEnabled = false;
+            HarmonicKeyComboBoxCollection = new ObservableCollection<IHarmonicKey>()
+            {
+                new HarmonicKey() {Id = 0, Name = "1d" },
+                new HarmonicKey() {Id = 1, Name = "8d" },
+                new HarmonicKey() {Id = 2, Name = "3d" },
+                new HarmonicKey() {Id = 3, Name = "10d" },
+                new HarmonicKey() {Id = 4, Name = "5d" },
+                new HarmonicKey() {Id = 5, Name = "12d" },
+                new HarmonicKey() {Id = 6, Name = "7d" },
+                new HarmonicKey() {Id = 7, Name = "2d" },
+                new HarmonicKey() {Id = 8, Name = "9d" },
+                new HarmonicKey() {Id = 9, Name = "4d" },
+                new HarmonicKey() {Id = 10, Name = "11d" },
+                new HarmonicKey() {Id = 11, Name = "6d" },
+                new HarmonicKey() {Id = 12, Name = "10m" },
+                new HarmonicKey() {Id = 13, Name = "5m" },
+                new HarmonicKey() {Id = 14, Name = "12m" },
+                new HarmonicKey() {Id = 15, Name = "7m" },
+                new HarmonicKey() {Id = 16, Name = "2m" },
+                new HarmonicKey() {Id = 17, Name = "9m" },
+                new HarmonicKey() {Id = 18, Name = "4m" },
+                new HarmonicKey() {Id = 19, Name = "11m" },
+                new HarmonicKey() {Id = 20, Name = "6m" },
+                new HarmonicKey() {Id = 21, Name = "1m" },
+                new HarmonicKey() {Id = 22, Name = "8m" },
+                new HarmonicKey() {Id = 23, Name = "3m" },
+                new HarmonicKey() {Id = 24, Name = "" }
+            };
+            HarmonicKeyComboBoxCollection = new ObservableCollection<IHarmonicKey>(HarmonicKeyComboBoxCollection.OrderBy(k => k.Name));
         }
 
         // To be merged into GetFilteredTrackCollection()
