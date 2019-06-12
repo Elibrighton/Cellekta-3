@@ -22,6 +22,7 @@ namespace SongInterface
         string IsChartingText { get; }
         string FullNameText { get; }
         IMixableRange MixableRange { get; set; }
+        int RoundedTrailingTempo { get; }
 
         void Load();
     }

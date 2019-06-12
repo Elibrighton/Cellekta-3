@@ -16,7 +16,8 @@ namespace Cellekta_3.Model
         string ProgressBarMessage { get; set; }
         int WindowHeight { get; set; }
         int WindowWidth { get; set; }
-        int ListViewHeight { get; set; }
+        int TrackCollectionListViewHeight { get; set; }
+        int PreparationListViewHeight { get; set; }
         int ListViewWidth { get; set; }
         int ProgressBarWidth { get; set; }
         bool IsLoadButtonEnabled { get; set; }
@@ -30,7 +31,6 @@ namespace Cellekta_3.Model
         bool IsMixableRangeCheckboxChecked { get; set; }
         bool IsClearButtonEnabled { get; set; }
 
-        ObservableCollection<ISong> GetAddNextTrackCollection();
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();
     }

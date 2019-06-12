@@ -24,7 +24,8 @@ namespace Cellekta_3.ViewModel
         string ProgressBarMessage { get; set; }
         int WindowHeight { get; set; }
         int WindowWidth { get; set; }
-        int ListViewHeight { get; set; }
+        int TrackCollectionListViewHeight { get; set; }
+        int PreparationListViewHeight { get; set; }
         int ListViewWidth { get; set; }
         int ProgressBarWidth { get; set; }
         bool IsLoadButtonEnabled { get; set; }

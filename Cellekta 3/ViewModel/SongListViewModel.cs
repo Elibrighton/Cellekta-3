@@ -120,8 +120,10 @@ namespace Cellekta_3.ViewModel
                     _songListModel.WindowHeight = value;
                     NotifyPropertyChanged("WindowHeight");
 
-                    ListViewHeight = (value - 162);
-                    NotifyPropertyChanged("ListViewHeight");
+                    TrackCollectionListViewHeight = (value - 162);
+                    PreparationListViewHeight = (value - 134);
+                    NotifyPropertyChanged("TrackCollectionListViewHeight");
+                    NotifyPropertyChanged("PreparationListViewHeight");
                 }
             }
         }
@@ -145,15 +147,28 @@ namespace Cellekta_3.ViewModel
             }
         }
 
-        public int ListViewHeight
+        public int TrackCollectionListViewHeight
         {
-            get { return _songListModel.ListViewHeight; }
+            get { return _songListModel.TrackCollectionListViewHeight; }
             set
             {
-                if (_songListModel.ListViewHeight != value)
+                if (_songListModel.TrackCollectionListViewHeight != value)
                 {
-                    _songListModel.ListViewHeight = value;
-                    NotifyPropertyChanged("ListViewHeight");
+                    _songListModel.TrackCollectionListViewHeight = value;
+                    NotifyPropertyChanged("TrackCollectionListViewHeight");
+                }
+            }
+        }
+
+        public int PreparationListViewHeight
+        {
+            get { return _songListModel.PreparationListViewHeight; }
+            set
+            {
+                if (_songListModel.PreparationListViewHeight != value)
+                {
+                    _songListModel.PreparationListViewHeight = value;
+                    NotifyPropertyChanged("PreparationListViewHeight");
                 }
             }
         }
@@ -166,7 +181,7 @@ namespace Cellekta_3.ViewModel
                 if (_songListModel.ListViewWidth != value)
                 {
                     _songListModel.ListViewWidth = value;
-                    NotifyPropertyChanged("ListViewHeight");
+                    NotifyPropertyChanged("ListViewWidth");
                 }
             }
         }
@@ -380,8 +395,9 @@ namespace Cellekta_3.ViewModel
                 }
 
                 EnableControls();
-                ProgressBarMessage = "Traktor collection imported";
-                MessageBox.Show("Traktor collection imported.");
+                var statusMessage = string.Concat(FilteredTrackCollection.Count.ToString(), " tracks imported from Traktor collection");
+                ProgressBarMessage = statusMessage;
+                MessageBox.Show(string.Concat(statusMessage, "."));
             }
             else
             {
@@ -390,7 +406,7 @@ namespace Cellekta_3.ViewModel
             }
 
             SelectedTabControlIndex = TrackCollectionTabControlIndex;
-            ResetProgressBar();
+            ResetProgressBar(false);
         }
 
         internal void OnExitMenuCommand(object param)
@@ -439,23 +455,15 @@ namespace Cellekta_3.ViewModel
         {
             if (SelectedPreparationItem != null)
             {
-                var fullNameText = SelectedPreparationItem.FullNameText;
-                FilteredTrackCollection = _songListModel.GetAddNextTrackCollection();
-                var filteredTrackCollectionCount = FilteredTrackCollection.Count();
-
-                if (filteredTrackCollectionCount > 0)
+                if (!IsMixableRangeCheckboxChecked)
                 {
-                    var randomRowIndex = _songListModel.GetRandomRowIndex();
-                    SelectedTrackCollectionItem = FilteredTrackCollection[randomRowIndex];
+                    IsMixableRangeCheckboxChecked = true;
                 }
 
-                ProgressBarMessage = string.Concat("Adding track to ", fullNameText);
+                TempoSliderValue = SelectedPreparationItem.RoundedTrailingTempo;
+
+                SelectRandomTrackCollectionItem();
                 SelectedTabControlIndex = TrackCollectionTabControlIndex;
-
-                if (filteredTrackCollectionCount == 0)
-                {
-                    MessageBox.Show("No tracks are mixable with the loaded track.");
-                }
             }
             else
             {
@@ -478,11 +486,15 @@ namespace Cellekta_3.ViewModel
             ClearFilter();
         }
 
-        internal void ResetProgressBar()
+        internal void ResetProgressBar(bool isClearingProgressMessage = true)
         {
             ProgressBarValue = InitialProgressBarValue;
             ProgressBarMax = InitialProgressBarMax;
-            ProgressBarMessage = "";
+
+            if (isClearingProgressMessage)
+            {
+                ProgressBarMessage = "";
+            }
         }
 
         internal ISong GetSong(XmlNode entryNode)
@@ -530,6 +542,26 @@ namespace Cellekta_3.ViewModel
             IsDeleteButtonEnabled = PreparationCollection.Count > 0;
             IsAddNextButtonEnabled = PreparationCollection.Count > 0;
             IsClearButtonEnabled = TempoSliderValue != 0 || IsMixableRangeCheckboxChecked;
+        }
+
+        internal void SelectRandomTrackCollectionItem()
+        {
+            var filteredTrackCollectionCount = FilteredTrackCollection.Count();
+
+            if (filteredTrackCollectionCount > 0)
+            {
+                var randomRowIndex = _songListModel.GetRandomRowIndex();
+                SelectedTrackCollectionItem = FilteredTrackCollection[randomRowIndex];
+
+                if (SelectedPreparationItem != null)
+                {
+                    ProgressBarMessage = string.Concat("Find mixable track for ", SelectedPreparationItem.FullNameText, " from ", filteredTrackCollectionCount.ToString(), " tracks");
+                }
+            }
+            else 
+            {
+                MessageBox.Show("No tracks are mixable with the loaded track.");
+            }
         }
     }
 }

@@ -29,6 +29,7 @@ namespace SongImplementation
         public string IsChartingText { get; private set; }
         public string FullNameText { get; private set; }
         public IMixableRange MixableRange { get; set; }
+        public int RoundedTrailingTempo { get; private set; }
 
         private IXmlWrapper _xmlWrapper;
 
@@ -50,6 +51,7 @@ namespace SongImplementation
             LeadingTempo = GetTempo(EntryNode.SelectSingleNode("TEMPO"), Path);
             TrailingTempo = GetTempo(EntryNode.SelectSingleNode("TEMPO"), Path, false);
             TempoText = GetTempoText(LeadingTempo, TrailingTempo);
+            RoundedTrailingTempo = GetRoundedTrailingTempo(TrailingTempo);
             var comment = _xmlWrapper.GetAttribute(infoNode.Attributes["COMMENT"]);
             Intensity = GetIntensity(comment);
             LeadingHarmonicKey = GetLeadingHarmonicKey(comment);
@@ -286,6 +288,11 @@ namespace SongImplementation
         internal string GetFullNameText(string artist, string title, string tempoText, string harmonicKeyText, int intensity, string playlist)
         {
             return string.Concat(artist, !string.IsNullOrEmpty(artist) && !string.IsNullOrEmpty(title) ? " - " : "", title, " - ", tempoText, " - ", harmonicKeyText, " - ", intensity, " - ", playlist);
+        }
+
+        internal int GetRoundedTrailingTempo(double trailingTempo)
+        {
+            return Convert.ToInt32(Math.Round(trailingTempo));
         }
     }
 }

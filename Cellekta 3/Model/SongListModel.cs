@@ -21,7 +21,8 @@ namespace Cellekta_3.Model
         public string ProgressBarMessage { get; set; }
         public int WindowHeight { get; set; }
         public int WindowWidth { get; set; }
-        public int ListViewHeight { get; set; }
+        public int TrackCollectionListViewHeight { get; set; }
+        public int PreparationListViewHeight { get; set; }
         public int ListViewWidth { get; set; }
         public int ProgressBarWidth { get; set; }
         public bool IsLoadButtonEnabled { get; set; }
@@ -54,7 +55,8 @@ namespace Cellekta_3.Model
             PreparationCollection = new ObservableCollection<ISong>();
             WindowHeight = 412;
             WindowWidth = 1316;
-            ListViewHeight = 250;
+            TrackCollectionListViewHeight = 250;
+            PreparationListViewHeight = 278;
             ListViewWidth = 1292;
             ProgressBarWidth = 1294;
             IsLoadButtonEnabled = false;
@@ -65,21 +67,22 @@ namespace Cellekta_3.Model
             IsClearButtonEnabled = false;
         }
 
-        public ObservableCollection<ISong> GetAddNextTrackCollection()
-        {
-            return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t =>
-                (!PreparationCollection.Contains(t)
-                && ((t.LeadingTempo <= SelectedPreparationItem.MixableRange.FastestTempo
-                && t.LeadingTempo >= SelectedPreparationItem.MixableRange.SlowestTempo)
-                || (t.LeadingTempo <= SelectedPreparationItem.MixableRange.FastestHalfTempo
-                && t.LeadingTempo >= SelectedPreparationItem.MixableRange.SlowestHalfTempo)
-                || (t.LeadingTempo <= SelectedPreparationItem.MixableRange.FastestDoubleTempo
-                && t.LeadingTempo >= SelectedPreparationItem.MixableRange.SlowestDoubleTempo))
-                && (t.LeadingHarmonicKey == SelectedPreparationItem.MixableRange.InnerCircleHarmonicKey
-                || t.LeadingHarmonicKey == SelectedPreparationItem.MixableRange.OuterCircleHarmonicKey
-                || t.LeadingHarmonicKey == SelectedPreparationItem.MixableRange.PlusOneHarmonicKey
-                || t.LeadingHarmonicKey == SelectedPreparationItem.MixableRange.MinusOneHarmonicKey))));
-        }
+        // To be merged into GetFilteredTrackCollection()
+        //public ObservableCollection<ISong> GetAddNextTrackCollection()
+        //{
+        //    return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t =>
+        //        (!PreparationCollection.Contains(t)
+        //        && ((t.LeadingTempo <= SelectedPreparationItem.MixableRange.FastestTempo
+        //        && t.LeadingTempo >= SelectedPreparationItem.MixableRange.SlowestTempo)
+        //        || (t.LeadingTempo <= SelectedPreparationItem.MixableRange.FastestHalfTempo
+        //        && t.LeadingTempo >= SelectedPreparationItem.MixableRange.SlowestHalfTempo)
+        //        || (t.LeadingTempo <= SelectedPreparationItem.MixableRange.FastestDoubleTempo
+        //        && t.LeadingTempo >= SelectedPreparationItem.MixableRange.SlowestDoubleTempo))
+        //        && (t.LeadingHarmonicKey == SelectedPreparationItem.MixableRange.InnerCircleHarmonicKey
+        //        || t.LeadingHarmonicKey == SelectedPreparationItem.MixableRange.OuterCircleHarmonicKey
+        //        || t.LeadingHarmonicKey == SelectedPreparationItem.MixableRange.PlusOneHarmonicKey
+        //        || t.LeadingHarmonicKey == SelectedPreparationItem.MixableRange.MinusOneHarmonicKey))));
+        //}
 
         public int GetRandomRowIndex()
         {
