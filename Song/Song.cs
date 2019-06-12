@@ -28,12 +28,12 @@ namespace SongImplementation
         public bool IsCharting { get; set; }
         public string IsChartingText { get; private set; }
         public string FullNameText { get; private set; }
-        public IMixableRange MixableRange { get; set; }
+        public ITempoRange MixableRange { get; set; }
         public int RoundedTrailingTempo { get; private set; }
 
         private IXmlWrapper _xmlWrapper;
 
-        public Song(IXmlWrapper xmlWrapper, IMixableRange mixableRange)
+        public Song(IXmlWrapper xmlWrapper, ITempoRange mixableRange)
         {
             _xmlWrapper = xmlWrapper;
             MixableRange = mixableRange;
@@ -60,7 +60,7 @@ namespace SongImplementation
             IsCharting = GetIsCharting();
             IsChartingText = GetIsChartingText(IsCharting);
             FullNameText = GetFullNameText(Artist, Title, TempoText, HarmonicKeyText, Intensity, Playlist);
-            MixableRange.Load(TrailingTempo, 3, TrailingHarmonicKey); // tempoRange to control to be added later
+            MixableRange.Load(TrailingTempo, 3); // menu item control the range value to be added later
         }
 
         internal double GetTempo(XmlNode tempoNode, string path, bool isLeadingTempo = true)

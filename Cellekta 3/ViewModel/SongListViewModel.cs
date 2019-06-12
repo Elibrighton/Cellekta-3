@@ -31,6 +31,7 @@ namespace Cellekta_3.ViewModel
         public ICommand TempoSliderValueCommand { get; set; }
         public ICommand MixableRangeCheckboxCheckedCommand { get; set; }
         public ICommand ClearButtonCommand { get; set; }
+        public ICommand HarmonicKeyComboBoxSelectionChangedCommand { get; set; }
 
         public ObservableCollection<ISong> ImportedTrackCollection
         {
@@ -341,6 +342,19 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public IHarmonicKey SelectedHarmonicKeyComboBoxItem
+        {
+            get { return _songListModel.SelectedHarmonicKeyComboBoxItem; }
+            set
+            {
+                if (_songListModel.SelectedHarmonicKeyComboBoxItem != value)
+                {
+                    _songListModel.SelectedHarmonicKeyComboBoxItem = value;
+                    NotifyPropertyChanged("SelectedHarmonicKeyComboBoxItem");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -354,8 +368,10 @@ namespace Cellekta_3.ViewModel
             TempoSliderValueCommand = new RelayCommand(OnTempoSliderValueCommand);
             MixableRangeCheckboxCheckedCommand = new RelayCommand(OnMixableRangeCheckboxCheckedCommand);
             ClearButtonCommand = new RelayCommand(OnClearButtonCommand);
+            HarmonicKeyComboBoxSelectionChangedCommand = new RelayCommand(OnHarmonicKeyComboBoxSelectionChangedCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
+            SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
         }
 
         internal void OnClearMenuCommand(object param)
@@ -397,7 +413,7 @@ namespace Cellekta_3.ViewModel
                         }
                     }
                 }
-                
+
                 Filter();
 
                 if (FilteredTrackCollection.Count > 0)
@@ -497,6 +513,11 @@ namespace Cellekta_3.ViewModel
             ClearFilter();
         }
 
+        internal void OnHarmonicKeyComboBoxSelectionChangedCommand(object param)
+        {
+            Filter();
+        }
+
         internal void ResetProgressBar(bool isClearingProgressMessage = true)
         {
             ProgressBarValue = InitialProgressBarValue;
@@ -569,7 +590,7 @@ namespace Cellekta_3.ViewModel
                     ProgressBarMessage = string.Concat("Find mixable track for ", SelectedPreparationItem.FullNameText, " from ", filteredTrackCollectionCount.ToString(), " tracks");
                 }
             }
-            else 
+            else
             {
                 MessageBox.Show("No tracks are mixable with the loaded track.");
             }

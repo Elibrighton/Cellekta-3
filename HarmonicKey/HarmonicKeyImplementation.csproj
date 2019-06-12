@@ -48,6 +48,10 @@
       <Project>{4d29532b-16d4-40bc-8766-959fa7019b65}</Project>
       <Name>HarmonicKeyInterface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MixableRangeInterface\MixableRangeInterface.csproj">
+      <Project>{402F8F21-9780-477A-A598-95BC64C01AA8}</Project>
+      <Name>MixableRangeInterface</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -34,7 +34,8 @@ namespace Cellekta_3
             container.RegisterType<ISong, Song>();
             container.RegisterType<ITag, Tag>();
             container.RegisterType<IHarmonicKey, HarmonicKey>();
-            container.RegisterType<IMixableRange, MixableRange>();
+            container.RegisterType<ITempoRange, TempoRange>();
+            container.RegisterType<IHarmonicKeyRange, HarmonicKeyRange>();
 
             var window = container.Resolve<SongListView>();
             window.Show();

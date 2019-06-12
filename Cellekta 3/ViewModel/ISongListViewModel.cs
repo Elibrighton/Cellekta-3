@@ -1,4 +1,5 @@
-﻿using SongInterface;
+﻿using HarmonicKeyInterface;
+using SongInterface;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -15,6 +16,7 @@ namespace Cellekta_3.ViewModel
         ICommand TempoSliderValueCommand { get; set; }
         ICommand MixableRangeCheckboxCheckedCommand { get; set; }
         ICommand ClearButtonCommand { get; set; }
+        ICommand HarmonicKeyComboBoxSelectionChangedCommand { get; set; }
         ObservableCollection<ISong> ImportedTrackCollection { get; set; }
         ObservableCollection<ISong> FilteredTrackCollection { get; set; }
         ObservableCollection<ISong> PreparationCollection { get; set; }
@@ -38,5 +40,7 @@ namespace Cellekta_3.ViewModel
         string TempoSliderValueText { get; set; }
         bool IsMixableRangeCheckboxChecked { get; set; }
         bool IsClearButtonEnabled { get; set; }
+        ObservableCollection<IHarmonicKey> HarmonicKeyComboBoxCollection { get; set; }
+        IHarmonicKey SelectedHarmonicKeyComboBoxItem { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MixableRangeInterface;
+using System.Collections.Generic;
 
 namespace HarmonicKeyInterface
 {
@@ -6,5 +7,6 @@ namespace HarmonicKeyInterface
     {
         int Id { get; set; }
         string Name { get; set; }
+        IHarmonicKeyRange HarmonicKeyRange { get; set; }
     }
 }

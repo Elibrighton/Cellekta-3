@@ -1,5 +1,5 @@
 ﻿using HarmonicKeyInterface;
-using System.Collections.Generic;
+using MixableRangeInterface;
 
 namespace HarmonicKeyImplementation
 {
@@ -7,5 +7,11 @@ namespace HarmonicKeyImplementation
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public IHarmonicKeyRange HarmonicKeyRange { get; set; }
+
+        public HarmonicKey(IHarmonicKeyRange harmonicKeyRange)
+        {
+            HarmonicKeyRange = harmonicKeyRange;
+        }
     }
 }

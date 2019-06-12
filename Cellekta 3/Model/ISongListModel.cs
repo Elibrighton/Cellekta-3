@@ -32,6 +32,7 @@ namespace Cellekta_3.Model
         bool IsMixableRangeCheckboxChecked { get; set; }
         bool IsClearButtonEnabled { get; set; }
         ObservableCollection<IHarmonicKey> HarmonicKeyComboBoxCollection { get; set; }
+        IHarmonicKey SelectedHarmonicKeyComboBoxItem { get; set; }
 
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();
