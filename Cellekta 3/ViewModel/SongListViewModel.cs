@@ -490,7 +490,11 @@ namespace Cellekta_3.ViewModel
                 SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[(HarmonicKeyComboBoxCollection.IndexOf(SelectedPreparationItem.TrailingHarmonicKey))];
 
                 SelectRandomTrackCollectionItem();
-                SelectedTabControlIndex = TrackCollectionTabControlIndex;
+
+                if (FilteredTrackCollection.Count() > 0)
+                {
+                    SelectedTabControlIndex = TrackCollectionTabControlIndex;
+                }
             }
             else
             {
