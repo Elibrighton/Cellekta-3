@@ -11,8 +11,6 @@ using XmlWrapperImplementation;
 using SongImplementation;
 using TagInterface;
 using TagImplementation;
-using HarmonicKeyInterface;
-using HarmonicKeyImplementation;
 using MixableRangeInterface;
 using MixableRangeImplementation;
 
@@ -33,7 +31,6 @@ namespace Cellekta_3
             container.RegisterType<IXmlWrapper, XmlWrapper>();
             container.RegisterType<ISong, Song>();
             container.RegisterType<ITag, Tag>();
-            container.RegisterType<IHarmonicKey, HarmonicKey>();
             container.RegisterType<ITempoRange, TempoRange>();
             container.RegisterType<IHarmonicKeyRange, HarmonicKeyRange>();
 

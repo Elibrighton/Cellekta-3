@@ -112,14 +112,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HarmonicKeyInterface\HarmonicKeyInterface.csproj">
-      <Project>{4d29532b-16d4-40bc-8766-959fa7019b65}</Project>
-      <Name>HarmonicKeyInterface</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\HarmonicKey\HarmonicKeyImplementation.csproj">
-      <Project>{1bfd9033-e412-4b19-ab1b-db14e64c34ea}</Project>
-      <Name>HarmonicKeyImplementation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MixableRangeImplementation\MixableRangeImplementation.csproj">
       <Project>{ACA54132-D6ED-4E2B-ACF8-6C876A1B92DD}</Project>
       <Name>MixableRangeImplementation</Name>

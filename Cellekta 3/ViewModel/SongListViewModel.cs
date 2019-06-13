@@ -1,6 +1,5 @@
 ﻿using Cellekta_3.Base;
 using Cellekta_3.Model;
-using HarmonicKeyInterface;
 using SongInterface;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -332,7 +331,7 @@ namespace Cellekta_3.ViewModel
             }
         }
 
-        public ObservableCollection<IHarmonicKey> HarmonicKeyComboBoxCollection
+        public ObservableCollection<string> HarmonicKeyComboBoxCollection
         {
             get { return _songListModel.HarmonicKeyComboBoxCollection; }
             set
@@ -342,7 +341,7 @@ namespace Cellekta_3.ViewModel
             }
         }
 
-        public IHarmonicKey SelectedHarmonicKeyComboBoxItem
+        public string SelectedHarmonicKeyComboBoxItem
         {
             get { return _songListModel.SelectedHarmonicKeyComboBoxItem; }
             set
@@ -488,6 +487,7 @@ namespace Cellekta_3.ViewModel
                 }
 
                 TempoSliderValue = SelectedPreparationItem.RoundedTrailingTempo;
+                SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[(HarmonicKeyComboBoxCollection.IndexOf(SelectedPreparationItem.TrailingHarmonicKey))];
 
                 SelectRandomTrackCollectionItem();
                 SelectedTabControlIndex = TrackCollectionTabControlIndex;
@@ -542,6 +542,7 @@ namespace Cellekta_3.ViewModel
             FilteredTrackCollection.Clear();
             ImportedTrackCollection.Clear();
             PreparationCollection.Clear();
+            ClearFilter();
             EnableControls();
             ProgressBarMessage = "Ready to import";
         }
@@ -563,6 +564,7 @@ namespace Cellekta_3.ViewModel
         {
             TempoSliderValue = 0;
             IsMixableRangeCheckboxChecked = false;
+            SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
             Filter();
             ProgressBarMessage = "Filters cleared";
         }
@@ -593,6 +595,7 @@ namespace Cellekta_3.ViewModel
             else
             {
                 MessageBox.Show("No tracks are mixable with the loaded track.");
+                ProgressBarMessage = "No tracks are mixable with the loaded track";
             }
         }
     }

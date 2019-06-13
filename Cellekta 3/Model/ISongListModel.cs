@@ -1,5 +1,4 @@
-﻿using HarmonicKeyInterface;
-using SongInterface;
+﻿using SongInterface;
 using System.Collections.ObjectModel;
 using TraktorLibraryInterface;
 
@@ -31,8 +30,8 @@ namespace Cellekta_3.Model
         string TempoSliderValueText { get; set; }
         bool IsMixableRangeCheckboxChecked { get; set; }
         bool IsClearButtonEnabled { get; set; }
-        ObservableCollection<IHarmonicKey> HarmonicKeyComboBoxCollection { get; set; }
-        IHarmonicKey SelectedHarmonicKeyComboBoxItem { get; set; }
+        ObservableCollection<string> HarmonicKeyComboBoxCollection { get; set; }
+        string SelectedHarmonicKeyComboBoxItem { get; set; }
 
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();

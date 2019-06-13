@@ -1,7 +1,4 @@
-﻿using HarmonicKeyImplementation;
-using HarmonicKeyInterface;
-using MixableRangeImplementation;
-using MixableRangeInterface;
+﻿using MixableRangeInterface;
 using SongInterface;
 using System;
 using System.Collections.ObjectModel;
@@ -14,6 +11,7 @@ namespace Cellekta_3.Model
     public class SongListModel : ISongListModel
     {
         private IXmlWrapper _xmlWrapper;
+        private IHarmonicKeyRange _harmonicKeyRange;
 
         public ITraktorLibrary TraktorLibrary { get; set; }
         public ObservableCollection<ISong> ImportedTrackCollection { get; set; }
@@ -49,13 +47,14 @@ namespace Cellekta_3.Model
         }
         public bool IsMixableRangeCheckboxChecked { get; set; }
         public bool IsClearButtonEnabled { get; set; }
-        public ObservableCollection<IHarmonicKey> HarmonicKeyComboBoxCollection { get; set; }
-        public IHarmonicKey SelectedHarmonicKeyComboBoxItem { get; set; }
+        public ObservableCollection<string> HarmonicKeyComboBoxCollection { get; set; }
+        public string SelectedHarmonicKeyComboBoxItem { get; set; }
 
-        public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper)
+        public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange)
         {
             TraktorLibrary = traktorLibrary;
             _xmlWrapper = xmlWrapper;
+            _harmonicKeyRange = harmonicKeyRange;
             ImportedTrackCollection = new ObservableCollection<ISong>();
             FilteredTrackCollection = new ObservableCollection<ISong>();
             PreparationCollection = new ObservableCollection<ISong>();
@@ -112,161 +111,65 @@ namespace Cellekta_3.Model
             var slowestTempoSliderRangeValue = Math.Round((slowestTempoSliderValue - 3.0), 3); // replace 3 with prop for increasing tempo range from 3 to 6 etc
             var fastestTempoSliderRangeValue = Math.Round((fastestTempoSliderValue + 3.0), 3); // replace 3 with prop for increasing tempo range from 3 to 6 etc
 
+            _harmonicKeyRange.Load(SelectedHarmonicKeyComboBoxItem); 
+            
+
+
             return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => 
                                                                                     // not in preparation list
                                                                                     (!PreparationCollection.Contains(t)
                                                                                     // and (cleared filter
                                                                                     && ((TempoSliderValue == 0 
-                                                                                    && string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem.Name)) 
+                                                                                    && string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)) 
                                                                                     // or exact filter match
                                                                                     || (!IsMixableRangeCheckboxChecked
                                                                                     && (TempoSliderValue == 0 
                                                                                     || (t.LeadingTempo >= slowestTempoSliderValue
                                                                                     && t.LeadingTempo <= fastestTempoSliderValue))
-                                                                                    && (string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem.Name) 
-                                                                                    || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem.Name))
+                                                                                    && (string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem) 
+                                                                                    || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem))
                                                                                     // or mixable range filter match)
                                                                                     || (IsMixableRangeCheckboxChecked
                                                                                     && ((TempoSliderValue == 0 
                                                                                     || (t.LeadingTempo >= slowestTempoSliderRangeValue
                                                                                     && t.LeadingTempo <= fastestTempoSliderRangeValue)) 
-                                                                                    && ((string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem.Name) 
-                                                                                    || (t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem.HarmonicKeyRange.InnerCircleHarmonicKey
-                                                                                    || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem.HarmonicKeyRange.OuterCircleHarmonicKey
-                                                                                    || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem.HarmonicKeyRange.PlusOneHarmonicKey
-                                                                                    || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem.HarmonicKeyRange.MinusOneHarmonicKey)))))))));
+                                                                                    && ((string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem) 
+                                                                                    || (t.LeadingHarmonicKey == _harmonicKeyRange.InnerCircleHarmonicKey
+                                                                                    || t.LeadingHarmonicKey == _harmonicKeyRange.OuterCircleHarmonicKey
+                                                                                    || t.LeadingHarmonicKey == _harmonicKeyRange.PlusOneHarmonicKey
+                                                                                    || t.LeadingHarmonicKey == _harmonicKeyRange.MinusOneHarmonicKey)))))))));
         }
 
-        internal ObservableCollection<IHarmonicKey> GetHarmonicKeyComboBoxCollection()
+        internal ObservableCollection<string> GetHarmonicKeyComboBoxCollection()
         {
-            var harmonicKeyComboBoxCollection = new ObservableCollection<IHarmonicKey>();
-
-            IHarmonicKeyRange harmonicKeyRange = new HarmonicKeyRange();
-            IHarmonicKey harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 0, Name = "" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 1, Name = "1A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 2, Name = "1B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 3, Name = "2A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 4, Name = "2B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 5, Name = "3A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 6, Name = "3B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 7, Name = "4A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 8, Name = "4B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 9, Name = "5A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 10, Name = "5B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 11, Name = "6A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 12, Name = "6B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 13, Name = "7A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 14, Name = "7B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 15, Name = "8A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 16, Name = "8B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 17, Name = "9A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 18, Name = "9B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 19, Name = "10A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 20, Name = "10B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 21, Name = "11A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 22, Name = "11B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 23, Name = "12A" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            harmonicKeyRange = new HarmonicKeyRange();
-            harmonicKey = new HarmonicKey(harmonicKeyRange) { Id = 24, Name = "12B" };
-            harmonicKey.HarmonicKeyRange.Load(harmonicKey.Name);
-            harmonicKeyComboBoxCollection.Add(harmonicKey);
-
-            return harmonicKeyComboBoxCollection;
+            return new ObservableCollection<string>()
+            {
+                "",
+                "1A",
+                "1B",
+                "2A",
+                "2B",
+                "3A",
+                "3B",
+                "4A",
+                "4B",
+                "5A",
+                "5B",
+                "6A",
+                "6B",
+                "7A",
+                "7B",
+                "8A",
+                "8B",
+                "9A",
+                "9B",
+                "10A",
+                "10B",
+                "11A",
+                "11B",
+                "12A",
+                "12B"
+            };
         }
     }
 }
