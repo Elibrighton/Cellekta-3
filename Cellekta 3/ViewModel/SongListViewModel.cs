@@ -444,7 +444,16 @@ namespace Cellekta_3.ViewModel
         {
             if (SelectedTrackCollectionItem != null)
             {
-                PreparationCollection.Add(SelectedTrackCollectionItem);
+                if (SelectedPreparationItem != null)
+                {
+                    var index = PreparationCollection.IndexOf(SelectedPreparationItem);
+                    PreparationCollection.Insert(index + 1, SelectedTrackCollectionItem);
+                }
+                else
+                {
+                    PreparationCollection.Add(SelectedTrackCollectionItem);
+                }
+
                 EnableControls();
                 ProgressBarMessage = string.Concat("Loaded ", SelectedTrackCollectionItem.FullNameText);
                 SelectedPreparationItem = SelectedTrackCollectionItem;
