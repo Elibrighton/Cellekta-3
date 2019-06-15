@@ -60,11 +60,6 @@ namespace Cellekta_3.Model
         public bool IsRangeOfSixMenuEnabled { get; set; }
         public bool IsRangeOfTwelveMenuEnabled { get; set; }
 
-        public SongListModel()
-        {
-
-        }
-
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange)
         {
             TraktorLibrary = traktorLibrary;

@@ -13,14 +13,6 @@
         WindowStartupLocation="Manual"
         Left="25"
         Top="321">
-    <Window.DataContext>
-        <vm:SongListViewModel />
-    </Window.DataContext>
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded">
-            <i:InvokeCommandAction Command="{Binding WindowLoadedCommand}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <DockPanel>
         <Grid DockPanel.Dock="Top">
             <Menu>
