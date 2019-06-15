@@ -59,6 +59,8 @@ namespace Cellekta_3.Model
         public bool IsRangeOfThreeMenuEnabled { get; set; }
         public bool IsRangeOfSixMenuEnabled { get; set; }
         public bool IsRangeOfTwelveMenuEnabled { get; set; }
+        public ObservableCollection<string> PlaylistComboBoxCollection { get; set; }
+        public string SelectedPlaylistComboBoxItem { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange)
         {
@@ -87,6 +89,10 @@ namespace Cellekta_3.Model
             IsRangeOfThreeMenuEnabled = false;
             IsRangeOfSixMenuEnabled = true;
             IsRangeOfTwelveMenuEnabled = true;
+            PlaylistComboBoxCollection = new ObservableCollection<string>
+            {
+                "",
+            };
         }
 
         // To be merged into GetFilteredTrackCollection()
@@ -139,14 +145,17 @@ namespace Cellekta_3.Model
                                                                                     (!PreparationCollection.Contains(t)
                                                                                     // and (cleared filter
                                                                                     && ((TempoSliderValue == 0
-                                                                                    && string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem))
+                                                                                    && string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
+                                                                                    && string.IsNullOrEmpty(SelectedPlaylistComboBoxItem))
                                                                                     // or exact filter match
                                                                                     || (!IsMixableRangeCheckboxChecked
                                                                                     && (TempoSliderValue == 0
                                                                                     || (t.LeadingTempo >= slowestTempoSliderValue
                                                                                     && t.LeadingTempo <= fastestTempoSliderValue))
                                                                                     && (string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
-                                                                                    || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem))
+                                                                                    || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem)
+                                                                                    && (string.IsNullOrEmpty(SelectedPlaylistComboBoxItem)
+                                                                                    || t.Playlist == SelectedPlaylistComboBoxItem))
                                                                                     // or mixable range filter match)
                                                                                     || (IsMixableRangeCheckboxChecked
                                                                                     && ((TempoSliderValue == 0
@@ -156,7 +165,9 @@ namespace Cellekta_3.Model
                                                                                     || (t.LeadingHarmonicKey == _harmonicKeyRange.InnerCircleHarmonicKey
                                                                                     || t.LeadingHarmonicKey == _harmonicKeyRange.OuterCircleHarmonicKey
                                                                                     || t.LeadingHarmonicKey == _harmonicKeyRange.PlusOneHarmonicKey
-                                                                                    || t.LeadingHarmonicKey == _harmonicKeyRange.MinusOneHarmonicKey)))))))));
+                                                                                    || t.LeadingHarmonicKey == _harmonicKeyRange.MinusOneHarmonicKey))))
+                                                                                    && (string.IsNullOrEmpty(SelectedPlaylistComboBoxItem)
+                                                                                    || t.Playlist == SelectedPlaylistComboBoxItem))))));
         }
 
         internal ObservableCollection<string> GetHarmonicKeyComboBoxCollection()

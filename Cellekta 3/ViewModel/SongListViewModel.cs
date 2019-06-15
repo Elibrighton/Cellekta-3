@@ -34,6 +34,7 @@ namespace Cellekta_3.ViewModel
         public ICommand RangeOfThreeMenuCommand { get; set; }
         public ICommand RangeOfSixMenuCommand { get; set; }
         public ICommand RangeOfTwelveMenuCommand { get; set; }
+        public ICommand PlaylistComboBoxSelectionChangedCommand { get; set; }
 
         public ObservableCollection<ISong> ImportedTrackCollection
         {
@@ -435,6 +436,29 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public ObservableCollection<string> PlaylistComboBoxCollection
+        {
+            get { return _songListModel.PlaylistComboBoxCollection; }
+            set
+            {
+                _songListModel.PlaylistComboBoxCollection = value;
+                NotifyPropertyChanged("PlaylistComboBoxCollection");
+            }
+        }
+
+        public string SelectedPlaylistComboBoxItem
+        {
+            get { return _songListModel.SelectedPlaylistComboBoxItem; }
+            set
+            {
+                if (_songListModel.SelectedPlaylistComboBoxItem != value)
+                {
+                    _songListModel.SelectedPlaylistComboBoxItem = value;
+                    NotifyPropertyChanged("SelectedPlaylistComboBoxItem");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -452,6 +476,7 @@ namespace Cellekta_3.ViewModel
             RangeOfThreeMenuCommand = new RelayCommand(OnRangeOfThreeMenuCommand);
             RangeOfSixMenuCommand = new RelayCommand(OnRangeOfSixMenuCommand);
             RangeOfTwelveMenuCommand = new RelayCommand(OnRangeOfTwelveMenuCommand);
+            PlaylistComboBoxSelectionChangedCommand = new RelayCommand(OnPlaylistComboBoxSelectionChangedCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
             SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
@@ -493,11 +518,18 @@ namespace Cellekta_3.ViewModel
                         {
                             ISong song = await Task.Run(() => GetSong(entryNode));
                             ImportedTrackCollection.Add(song);
+
+                            if (!PlaylistComboBoxCollection.Contains(song.Playlist))
+                            {
+                                PlaylistComboBoxCollection.Add(song.Playlist);
+                            }
+
                             ProgressBarValue++;
                         }
                     }
                 }
 
+                PlaylistComboBoxCollection = new ObservableCollection<string>(PlaylistComboBoxCollection.OrderBy(p => p));
                 Filter();
 
                 if (FilteredTrackCollection.Count > 0)
@@ -616,6 +648,11 @@ namespace Cellekta_3.ViewModel
             Filter();
         }
 
+        internal void OnPlaylistComboBoxSelectionChangedCommand(object param)
+        {
+            Filter();
+        }
+
         internal void OnRangeOfThreeMenuCommand(object param)
         {
             if (IsRangeOfSixMenuChecked)
@@ -718,6 +755,7 @@ namespace Cellekta_3.ViewModel
                 SelectedTrackCollectionItem = FilteredTrackCollection[0];
             }
 
+            UpdateStatusMessage();
             EnableControls();
         }
 
@@ -741,23 +779,25 @@ namespace Cellekta_3.ViewModel
 
         internal void SelectRandomTrackCollectionItem()
         {
-            var filteredTrackCollectionCount = FilteredTrackCollection.Count();
-
-            if (filteredTrackCollectionCount > 0)
+            if (FilteredTrackCollection.Count() > 0)
             {
                 var randomRowIndex = _songListModel.GetRandomRowIndex();
                 SelectedTrackCollectionItem = FilteredTrackCollection[randomRowIndex];
-
-                if (SelectedPreparationItem != null)
-                {
-                    ProgressBarMessage = string.Concat("Find mixable track for ", SelectedPreparationItem.FullNameText, " from ", filteredTrackCollectionCount.ToString(), " tracks");
-                }
+                UpdateStatusMessage();
             }
             else if (SelectedPreparationItem != null)
             {
                 var statusMessage = string.Concat("No tracks are mixable with ", SelectedPreparationItem.FullNameText);
                 ProgressBarMessage = statusMessage;
                 MessageBox.Show(string.Concat(statusMessage, "."));
+            }
+        }
+
+        internal void UpdateStatusMessage()
+        {
+            if (SelectedPreparationItem != null)
+            {
+                ProgressBarMessage = string.Concat("Find mixable track for ", SelectedPreparationItem.FullNameText, " from ", FilteredTrackCollection.Count.ToString(), " tracks");
             }
         }
     }

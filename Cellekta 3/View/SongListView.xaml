@@ -93,6 +93,17 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </ComboBox>
+                            <TextBlock Text="Playlist" Margin="5, 3, 0, 3" />
+                            <ComboBox ItemsSource="{Binding PlaylistComboBoxCollection}"  
+                                      SelectedItem="{Binding SelectedPlaylistComboBoxItem}"
+                                      Margin="5, 1, 0, 3"
+                                      MinWidth="75">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <i:InvokeCommandAction Command="{Binding PlaylistComboBoxSelectionChangedCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
                             <Button Command="{Binding ClearButtonCommand}" IsEnabled="{Binding IsClearButtonEnabled}" MinWidth="100" Margin="5, 1, 0, 3">Clear</Button>
                         </StackPanel>
                         <ListView ItemsSource="{Binding FilteredTrackCollection}" 

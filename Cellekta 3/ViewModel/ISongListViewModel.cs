@@ -19,6 +19,7 @@ namespace Cellekta_3.ViewModel
         ICommand RangeOfThreeMenuCommand { get; set; }
         ICommand RangeOfSixMenuCommand { get; set; }
         ICommand RangeOfTwelveMenuCommand { get; set; }
+        ICommand PlaylistComboBoxSelectionChangedCommand { get; set; }
         ObservableCollection<ISong> ImportedTrackCollection { get; set; }
         ObservableCollection<ISong> FilteredTrackCollection { get; set; }
         ObservableCollection<ISong> PreparationCollection { get; set; }
@@ -50,5 +51,7 @@ namespace Cellekta_3.ViewModel
         bool IsRangeOfThreeMenuEnabled { get; set; }
         bool IsRangeOfSixMenuEnabled { get; set; }
         bool IsRangeOfTwelveMenuEnabled { get; set; }
+        ObservableCollection<string> PlaylistComboBoxCollection { get; set; }
+        string SelectedPlaylistComboBoxItem { get; set; }
     }
 }

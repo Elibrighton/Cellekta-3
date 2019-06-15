@@ -32,6 +32,8 @@ namespace Cellekta_3.Model
         bool IsClearButtonEnabled { get; set; }
         ObservableCollection<string> HarmonicKeyComboBoxCollection { get; set; }
         string SelectedHarmonicKeyComboBoxItem { get; set; }
+        ObservableCollection<string> PlaylistComboBoxCollection { get; set; }
+        string SelectedPlaylistComboBoxItem { get; set; }
 
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();
