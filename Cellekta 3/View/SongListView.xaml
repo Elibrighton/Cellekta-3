@@ -104,6 +104,8 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </ComboBox>
+                            <TextBlock Text="Search" Margin="5, 3, 0, 3" />
+                            <TextBox Text="{Binding SearchTextBoxText, UpdateSourceTrigger=PropertyChanged}" MinWidth="300" Margin="5, 1, 0, 3"/>
                             <Button Command="{Binding ClearButtonCommand}" IsEnabled="{Binding IsClearButtonEnabled}" MinWidth="100" Margin="5, 1, 0, 3">Clear</Button>
                         </StackPanel>
                         <ListView ItemsSource="{Binding FilteredTrackCollection}" 

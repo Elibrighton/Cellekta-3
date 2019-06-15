@@ -13,6 +13,8 @@ using TagInterface;
 using TagImplementation;
 using MixableRangeInterface;
 using MixableRangeImplementation;
+using TrackSearchInterface;
+using TrackSearchImplementation;
 
 namespace Cellekta_3
 {
@@ -33,6 +35,7 @@ namespace Cellekta_3
             container.RegisterType<ITag, Tag>();
             container.RegisterType<ITempoRange, TempoRange>();
             container.RegisterType<IHarmonicKeyRange, HarmonicKeyRange>();
+            container.RegisterType<ITrackSearch, TrackSearch>();
 
             var window = container.Resolve<SongListView>();
             window.Show();

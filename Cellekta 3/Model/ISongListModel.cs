@@ -34,6 +34,7 @@ namespace Cellekta_3.Model
         string SelectedHarmonicKeyComboBoxItem { get; set; }
         ObservableCollection<string> PlaylistComboBoxCollection { get; set; }
         string SelectedPlaylistComboBoxItem { get; set; }
+        string SearchTextBoxText { get; set; }
 
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();

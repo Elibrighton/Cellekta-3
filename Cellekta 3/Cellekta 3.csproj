@@ -136,6 +136,14 @@
       <Project>{16DD99E6-2CBA-40F9-969A-E06878698BDC}</Project>
       <Name>TagInterface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TrackSearchImplementation\TrackSearchImplementation.csproj">
+      <Project>{1BBFBD0E-7F73-4E57-A828-4EF1AB5A0568}</Project>
+      <Name>TrackSearchImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TrackSearchInterface\TrackSearchInterface.csproj">
+      <Project>{9D8F3FB5-FF4E-4E80-A37D-64162E655553}</Project>
+      <Name>TrackSearchInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TraktorLibraryInterface\TraktorLibraryInterface.csproj">
       <Project>{cfe99427-a916-471d-8b68-b9dd675476bf}</Project>
       <Name>TraktorLibraryInterface</Name>

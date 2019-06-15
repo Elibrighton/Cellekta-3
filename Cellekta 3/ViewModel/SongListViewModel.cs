@@ -459,6 +459,20 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public string SearchTextBoxText
+        {
+            get { return _songListModel.SearchTextBoxText; }
+            set
+            {
+                if (_songListModel.SearchTextBoxText != value)
+                {
+                    _songListModel.SearchTextBoxText = value;
+                    NotifyPropertyChanged("SearchTextBoxText");
+                    Filter();
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -764,6 +778,8 @@ namespace Cellekta_3.ViewModel
             TempoSliderValue = 0;
             IsMixableRangeCheckboxChecked = false;
             SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
+            SelectedPlaylistComboBoxItem = PlaylistComboBoxCollection[0];
+            SearchTextBoxText = "";
             Filter();
             ProgressBarMessage = "Filters cleared";
         }
@@ -774,7 +790,7 @@ namespace Cellekta_3.ViewModel
             IsAddNextButtonEnabled = FilteredTrackCollection.Count > 0;
             IsDeleteButtonEnabled = PreparationCollection.Count > 0;
             IsAddNextButtonEnabled = PreparationCollection.Count > 0;
-            IsClearButtonEnabled = TempoSliderValue != 0 || IsMixableRangeCheckboxChecked;
+            IsClearButtonEnabled = (TempoSliderValue != 0 || IsMixableRangeCheckboxChecked || !string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem) || !string.IsNullOrEmpty(SelectedPlaylistComboBoxItem) || !string.IsNullOrEmpty(SearchTextBoxText));
         }
 
         internal void SelectRandomTrackCollectionItem()

@@ -3,6 +3,7 @@ using SongInterface;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using TrackSearchInterface;
 using TraktorLibraryInterface;
 using XmlWrapperInterface;
 
@@ -16,6 +17,7 @@ namespace Cellekta_3.Model
 
         private IXmlWrapper _xmlWrapper;
         private IHarmonicKeyRange _harmonicKeyRange;
+        private ITrackSearch _trackSearch;
 
         public ITraktorLibrary TraktorLibrary { get; set; }
         public ObservableCollection<ISong> ImportedTrackCollection { get; set; }
@@ -61,12 +63,14 @@ namespace Cellekta_3.Model
         public bool IsRangeOfTwelveMenuEnabled { get; set; }
         public ObservableCollection<string> PlaylistComboBoxCollection { get; set; }
         public string SelectedPlaylistComboBoxItem { get; set; }
+        public string SearchTextBoxText { get; set; }
 
-        public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange)
+        public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange, ITrackSearch trackSearch)
         {
             TraktorLibrary = traktorLibrary;
             _xmlWrapper = xmlWrapper;
             _harmonicKeyRange = harmonicKeyRange;
+            _trackSearch = trackSearch;
             ImportedTrackCollection = new ObservableCollection<ISong>();
             FilteredTrackCollection = new ObservableCollection<ISong>();
             PreparationCollection = new ObservableCollection<ISong>();
@@ -131,6 +135,7 @@ namespace Cellekta_3.Model
             var slowestTempoSliderValue = Math.Round(Convert.ToDouble(TempoSliderValue), 3);
             var fastestTempoSliderValue = Math.Round(Convert.ToDouble(TempoSliderValue + 1), 3);
 
+            // refactor ito Range project
             var tempoRange = GetTempoRange();
 
             var slowestTempoSliderRangeValue = Math.Round((slowestTempoSliderValue - tempoRange), 3);
@@ -138,24 +143,23 @@ namespace Cellekta_3.Model
 
             _harmonicKeyRange.Load(SelectedHarmonicKeyComboBoxItem);
 
-
+            _trackSearch.Reset();
+            _trackSearch.Text = SearchTextBoxText;
+            _trackSearch.Load();
 
             return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t =>
                                                                                     // not in preparation list
                                                                                     (!PreparationCollection.Contains(t)
                                                                                     // and (cleared filter
                                                                                     && ((TempoSliderValue == 0
-                                                                                    && string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
-                                                                                    && string.IsNullOrEmpty(SelectedPlaylistComboBoxItem))
+                                                                                    && string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem))
                                                                                     // or exact filter match
                                                                                     || (!IsMixableRangeCheckboxChecked
                                                                                     && (TempoSliderValue == 0
                                                                                     || (t.LeadingTempo >= slowestTempoSliderValue
                                                                                     && t.LeadingTempo <= fastestTempoSliderValue))
                                                                                     && (string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
-                                                                                    || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem)
-                                                                                    && (string.IsNullOrEmpty(SelectedPlaylistComboBoxItem)
-                                                                                    || t.Playlist == SelectedPlaylistComboBoxItem))
+                                                                                    || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem))
                                                                                     // or mixable range filter match)
                                                                                     || (IsMixableRangeCheckboxChecked
                                                                                     && ((TempoSliderValue == 0
@@ -165,9 +169,20 @@ namespace Cellekta_3.Model
                                                                                     || (t.LeadingHarmonicKey == _harmonicKeyRange.InnerCircleHarmonicKey
                                                                                     || t.LeadingHarmonicKey == _harmonicKeyRange.OuterCircleHarmonicKey
                                                                                     || t.LeadingHarmonicKey == _harmonicKeyRange.PlusOneHarmonicKey
-                                                                                    || t.LeadingHarmonicKey == _harmonicKeyRange.MinusOneHarmonicKey))))
+                                                                                    || t.LeadingHarmonicKey == _harmonicKeyRange.MinusOneHarmonicKey))))))
+                                                                                    // and matches playlist
                                                                                     && (string.IsNullOrEmpty(SelectedPlaylistComboBoxItem)
-                                                                                    || t.Playlist == SelectedPlaylistComboBoxItem))))));
+                                                                                    || t.Playlist == SelectedPlaylistComboBoxItem)
+                                                                                    // and matches search text
+                                                                                    && (string.IsNullOrEmpty(_trackSearch.Text)
+                                                                                    || t.Artist.ToLower().Contains(_trackSearch.Text.ToLower().Trim())
+                                                                                    || t.Title.ToLower().Contains(_trackSearch.Text.ToLower().Trim()))
+                                                                                    || (!string.IsNullOrEmpty(_trackSearch.Artist)
+                                                                                    && !string.IsNullOrEmpty(_trackSearch.Title)
+                                                                                    && ((t.Artist.ToLower().Contains(_trackSearch.Artist.ToLower())
+                                                                                    && t.Title.ToLower().Contains(_trackSearch.Title.ToLower()))
+                                                                                    || (t.Artist.ToLower().Contains(_trackSearch.Title.ToLower())
+                                                                                    && t.Title.ToLower().Contains(_trackSearch.Artist.ToLower())))))));
         }
 
         internal ObservableCollection<string> GetHarmonicKeyComboBoxCollection()

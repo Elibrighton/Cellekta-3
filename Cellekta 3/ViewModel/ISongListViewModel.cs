@@ -53,5 +53,6 @@ namespace Cellekta_3.ViewModel
         bool IsRangeOfTwelveMenuEnabled { get; set; }
         ObservableCollection<string> PlaylistComboBoxCollection { get; set; }
         string SelectedPlaylistComboBoxItem { get; set; }
+        string SearchTextBoxText { get; set; }
     }
 }
