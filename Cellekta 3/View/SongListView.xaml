@@ -22,7 +22,7 @@
                     <Separator />
                     <MenuItem Header="_Exit" Command="{Binding ExitMenuCommand}" />
                 </MenuItem>
-                <MenuItem Header="_Collection">
+                <MenuItem Header="_Settings">
                     <MenuItem Header="_Tempo range">
                         <MenuItem Header="_3"
                                   IsCheckable="True"

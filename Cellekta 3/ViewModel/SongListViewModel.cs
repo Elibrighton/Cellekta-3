@@ -752,7 +752,7 @@ namespace Cellekta_3.ViewModel
                     ProgressBarMessage = string.Concat("Find mixable track for ", SelectedPreparationItem.FullNameText, " from ", filteredTrackCollectionCount.ToString(), " tracks");
                 }
             }
-            else
+            else if (SelectedPreparationItem != null)
             {
                 var statusMessage = string.Concat("No tracks are mixable with ", SelectedPreparationItem.FullNameText);
                 ProgressBarMessage = statusMessage;
