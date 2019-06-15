@@ -10,6 +10,10 @@ namespace Cellekta_3.Model
 {
     public class SongListModel : ISongListModel
     {
+        private const double TempoRangeThree = 3.0;
+        private const double TempoRangeSix = 6.0;
+        private const double TempoRangeTwelve = 12.0;
+
         private IXmlWrapper _xmlWrapper;
         private IHarmonicKeyRange _harmonicKeyRange;
 
@@ -49,6 +53,12 @@ namespace Cellekta_3.Model
         public bool IsClearButtonEnabled { get; set; }
         public ObservableCollection<string> HarmonicKeyComboBoxCollection { get; set; }
         public string SelectedHarmonicKeyComboBoxItem { get; set; }
+        public bool IsRangeOfThreeMenuChecked { get; set; }
+        public bool IsRangeOfSixMenuChecked { get; set; }
+        public bool IsRangeOfTwelveMenuChecked { get; set; }
+        public bool IsRangeOfThreeMenuEnabled { get; set; }
+        public bool IsRangeOfSixMenuEnabled { get; set; }
+        public bool IsRangeOfTwelveMenuEnabled { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange)
         {
@@ -71,6 +81,12 @@ namespace Cellekta_3.Model
             IsMixableRangeCheckboxChecked = false;
             IsClearButtonEnabled = false;
             HarmonicKeyComboBoxCollection = GetHarmonicKeyComboBoxCollection();
+            IsRangeOfThreeMenuChecked = true;
+            IsRangeOfSixMenuChecked = false;
+            IsRangeOfTwelveMenuChecked = false;
+            IsRangeOfThreeMenuEnabled = false;
+            IsRangeOfSixMenuEnabled = true;
+            IsRangeOfTwelveMenuEnabled = true;
         }
 
         // To be merged into GetFilteredTrackCollection()
@@ -108,32 +124,35 @@ namespace Cellekta_3.Model
             // merge in mixableRange tempo so we get the track tempo as a double rather than the tempo slider value as a int, for when getting next 
             var slowestTempoSliderValue = Math.Round(Convert.ToDouble(TempoSliderValue), 3);
             var fastestTempoSliderValue = Math.Round(Convert.ToDouble(TempoSliderValue + 1), 3);
-            var slowestTempoSliderRangeValue = Math.Round((slowestTempoSliderValue - 3.0), 3); // replace 3 with prop for increasing tempo range from 3 to 6 etc
-            var fastestTempoSliderRangeValue = Math.Round((fastestTempoSliderValue + 3.0), 3); // replace 3 with prop for increasing tempo range from 3 to 6 etc
 
-            _harmonicKeyRange.Load(SelectedHarmonicKeyComboBoxItem); 
-            
+            var tempoRange = GetTempoRange();
+
+            var slowestTempoSliderRangeValue = Math.Round((slowestTempoSliderValue - tempoRange), 3);
+            var fastestTempoSliderRangeValue = Math.Round((fastestTempoSliderValue + tempoRange), 3);
+
+            _harmonicKeyRange.Load(SelectedHarmonicKeyComboBoxItem);
 
 
-            return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => 
+
+            return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t =>
                                                                                     // not in preparation list
                                                                                     (!PreparationCollection.Contains(t)
                                                                                     // and (cleared filter
-                                                                                    && ((TempoSliderValue == 0 
-                                                                                    && string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)) 
+                                                                                    && ((TempoSliderValue == 0
+                                                                                    && string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem))
                                                                                     // or exact filter match
                                                                                     || (!IsMixableRangeCheckboxChecked
-                                                                                    && (TempoSliderValue == 0 
+                                                                                    && (TempoSliderValue == 0
                                                                                     || (t.LeadingTempo >= slowestTempoSliderValue
                                                                                     && t.LeadingTempo <= fastestTempoSliderValue))
-                                                                                    && (string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem) 
+                                                                                    && (string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
                                                                                     || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem))
                                                                                     // or mixable range filter match)
                                                                                     || (IsMixableRangeCheckboxChecked
-                                                                                    && ((TempoSliderValue == 0 
+                                                                                    && ((TempoSliderValue == 0
                                                                                     || (t.LeadingTempo >= slowestTempoSliderRangeValue
-                                                                                    && t.LeadingTempo <= fastestTempoSliderRangeValue)) 
-                                                                                    && ((string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem) 
+                                                                                    && t.LeadingTempo <= fastestTempoSliderRangeValue))
+                                                                                    && ((string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
                                                                                     || (t.LeadingHarmonicKey == _harmonicKeyRange.InnerCircleHarmonicKey
                                                                                     || t.LeadingHarmonicKey == _harmonicKeyRange.OuterCircleHarmonicKey
                                                                                     || t.LeadingHarmonicKey == _harmonicKeyRange.PlusOneHarmonicKey
@@ -170,6 +189,22 @@ namespace Cellekta_3.Model
                 "12A",
                 "12B"
             };
+        }
+
+        internal double GetTempoRange()
+        {
+            var tempoRange = TempoRangeThree;
+
+            if (IsRangeOfSixMenuChecked)
+            {
+                tempoRange = TempoRangeSix;
+            }
+            else if (IsRangeOfTwelveMenuChecked)
+            {
+                tempoRange = TempoRangeTwelve;
+            }
+
+            return tempoRange;
         }
     }
 }

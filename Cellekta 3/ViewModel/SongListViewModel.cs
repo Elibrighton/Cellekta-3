@@ -31,6 +31,9 @@ namespace Cellekta_3.ViewModel
         public ICommand MixableRangeCheckboxCheckedCommand { get; set; }
         public ICommand ClearButtonCommand { get; set; }
         public ICommand HarmonicKeyComboBoxSelectionChangedCommand { get; set; }
+        public ICommand RangeOfThreeMenuCommand { get; set; }
+        public ICommand RangeOfSixMenuCommand { get; set; }
+        public ICommand RangeOfTwelveMenuCommand { get; set; }
 
         public ObservableCollection<ISong> ImportedTrackCollection
         {
@@ -354,6 +357,84 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public bool IsRangeOfThreeMenuChecked
+        {
+            get { return _songListModel.IsRangeOfThreeMenuChecked; }
+            set
+            {
+                if (_songListModel.IsRangeOfThreeMenuChecked != value)
+                {
+                    _songListModel.IsRangeOfThreeMenuChecked = value;
+                    NotifyPropertyChanged("IsRangeOfThreeMenuChecked");
+                }
+            }
+        }
+
+        public bool IsRangeOfSixMenuChecked
+        {
+            get { return _songListModel.IsRangeOfSixMenuChecked; }
+            set
+            {
+                if (_songListModel.IsRangeOfSixMenuChecked != value)
+                {
+                    _songListModel.IsRangeOfSixMenuChecked = value;
+                    NotifyPropertyChanged("IsRangeOfSixMenuChecked");
+                }
+            }
+        }
+
+        public bool IsRangeOfTwelveMenuChecked
+        {
+            get { return _songListModel.IsRangeOfTwelveMenuChecked; }
+            set
+            {
+                if (_songListModel.IsRangeOfTwelveMenuChecked != value)
+                {
+                    _songListModel.IsRangeOfTwelveMenuChecked = value;
+                    NotifyPropertyChanged("IsRangeOfTwelveMenuChecked");
+                }
+            }
+        }
+
+        public bool IsRangeOfThreeMenuEnabled
+        {
+            get { return _songListModel.IsRangeOfThreeMenuEnabled; }
+            set
+            {
+                if (_songListModel.IsRangeOfThreeMenuEnabled != value)
+                {
+                    _songListModel.IsRangeOfThreeMenuEnabled = value;
+                    NotifyPropertyChanged("IsRangeOfThreeMenuEnabled");
+                }
+            }
+        }
+
+        public bool IsRangeOfSixMenuEnabled
+        {
+            get { return _songListModel.IsRangeOfSixMenuEnabled; }
+            set
+            {
+                if (_songListModel.IsRangeOfSixMenuEnabled != value)
+                {
+                    _songListModel.IsRangeOfSixMenuEnabled = value;
+                    NotifyPropertyChanged("IsRangeOfSixMenuEnabled");
+                }
+            }
+        }
+
+        public bool IsRangeOfTwelveMenuEnabled
+        {
+            get { return _songListModel.IsRangeOfTwelveMenuEnabled; }
+            set
+            {
+                if (_songListModel.IsRangeOfTwelveMenuEnabled != value)
+                {
+                    _songListModel.IsRangeOfTwelveMenuEnabled = value;
+                    NotifyPropertyChanged("IsRangeOfTwelveMenuEnabled");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -366,6 +447,9 @@ namespace Cellekta_3.ViewModel
             AddNextButtonCommand = new RelayCommand(OnAddNextButtonCommand);
             TempoSliderValueCommand = new RelayCommand(OnTempoSliderValueCommand);
             MixableRangeCheckboxCheckedCommand = new RelayCommand(OnMixableRangeCheckboxCheckedCommand);
+            RangeOfThreeMenuCommand = new RelayCommand(OnRangeOfThreeMenuCommand);
+            RangeOfSixMenuCommand = new RelayCommand(OnRangeOfSixMenuCommand);
+            RangeOfTwelveMenuCommand = new RelayCommand(OnRangeOfTwelveMenuCommand);
             ClearButtonCommand = new RelayCommand(OnClearButtonCommand);
             HarmonicKeyComboBoxSelectionChangedCommand = new RelayCommand(OnHarmonicKeyComboBoxSelectionChangedCommand);
             ResetProgressBar();
@@ -531,6 +615,69 @@ namespace Cellekta_3.ViewModel
             Filter();
         }
 
+        internal void OnRangeOfThreeMenuCommand(object param)
+        {
+            if (IsRangeOfSixMenuChecked)
+            {
+                IsRangeOfSixMenuChecked = false;
+                IsRangeOfSixMenuEnabled = true;
+            }
+            else if (IsRangeOfTwelveMenuChecked)
+            {
+                IsRangeOfTwelveMenuChecked = false;
+                IsRangeOfTwelveMenuEnabled = true;
+            }
+
+            if (IsRangeOfThreeMenuChecked)
+            {
+                IsRangeOfThreeMenuEnabled = false;
+                Filter();
+                SelectRandomTrackCollectionItem();
+            }
+        }
+
+        internal void OnRangeOfSixMenuCommand(object param)
+        {
+            if (IsRangeOfThreeMenuChecked)
+            {
+                IsRangeOfThreeMenuChecked = false;
+                IsRangeOfThreeMenuEnabled = true;
+            }
+            else if (IsRangeOfTwelveMenuChecked)
+            {
+                IsRangeOfTwelveMenuChecked = false;
+                IsRangeOfTwelveMenuEnabled = true;
+            }
+
+            if (IsRangeOfSixMenuChecked)
+            {
+                IsRangeOfSixMenuEnabled = false;
+                Filter();
+                SelectRandomTrackCollectionItem();
+            }
+        }
+
+        internal void OnRangeOfTwelveMenuCommand(object param)
+        {
+            if (IsRangeOfThreeMenuChecked)
+            {
+                IsRangeOfThreeMenuChecked = false;
+                IsRangeOfThreeMenuEnabled = true;
+            }
+            else if (IsRangeOfSixMenuChecked)
+            {
+                IsRangeOfSixMenuChecked = false;
+                IsRangeOfSixMenuEnabled = true;
+            }
+
+            if (IsRangeOfTwelveMenuChecked)
+            {
+                IsRangeOfTwelveMenuEnabled = false;
+                Filter();
+                SelectRandomTrackCollectionItem();
+            }
+        }
+
         internal void ResetProgressBar(bool isClearingProgressMessage = true)
         {
             ProgressBarValue = InitialProgressBarValue;
@@ -607,8 +754,9 @@ namespace Cellekta_3.ViewModel
             }
             else
             {
-                MessageBox.Show("No tracks are mixable with the loaded track.");
-                ProgressBarMessage = "No tracks are mixable with the loaded track";
+                var statusMessage = string.Concat("No tracks are mixable with ", SelectedPreparationItem.FullNameText);
+                ProgressBarMessage = statusMessage;
+                MessageBox.Show(string.Concat(statusMessage, "."));
             }
         }
     }

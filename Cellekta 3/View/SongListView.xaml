@@ -22,6 +22,25 @@
                     <Separator />
                     <MenuItem Header="_Exit" Command="{Binding ExitMenuCommand}" />
                 </MenuItem>
+                <MenuItem Header="_Collection">
+                    <MenuItem Header="_Tempo range">
+                        <MenuItem Header="_3"
+                                  IsCheckable="True"
+                                  Command="{Binding RangeOfThreeMenuCommand}"
+                                  IsChecked="{Binding IsRangeOfThreeMenuChecked}"
+                                  IsEnabled="{Binding IsRangeOfThreeMenuEnabled}" />
+                        <MenuItem Header="_6"
+                                  IsCheckable="True" 
+                                  Command="{Binding RangeOfSixMenuCommand}"
+                                  IsChecked="{Binding IsRangeOfSixMenuChecked}"
+                                  IsEnabled="{Binding IsRangeOfSixMenuEnabled}" />
+                        <MenuItem Header="_12"
+                                  IsCheckable="True" 
+                                  Command="{Binding RangeOfTwelveMenuCommand}"
+                                  IsChecked="{Binding IsRangeOfTwelveMenuChecked}"
+                                  IsEnabled="{Binding IsRangeOfTwelveMenuEnabled}" />
+                    </MenuItem>
+                </MenuItem>
             </Menu>
         </Grid>
         <StackPanel VerticalAlignment="Top">

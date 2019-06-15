@@ -16,6 +16,9 @@ namespace Cellekta_3.ViewModel
         ICommand MixableRangeCheckboxCheckedCommand { get; set; }
         ICommand ClearButtonCommand { get; set; }
         ICommand HarmonicKeyComboBoxSelectionChangedCommand { get; set; }
+        ICommand RangeOfThreeMenuCommand { get; set; }
+        ICommand RangeOfSixMenuCommand { get; set; }
+        ICommand RangeOfTwelveMenuCommand { get; set; }
         ObservableCollection<ISong> ImportedTrackCollection { get; set; }
         ObservableCollection<ISong> FilteredTrackCollection { get; set; }
         ObservableCollection<ISong> PreparationCollection { get; set; }
@@ -41,5 +44,11 @@ namespace Cellekta_3.ViewModel
         bool IsClearButtonEnabled { get; set; }
         ObservableCollection<string> HarmonicKeyComboBoxCollection { get; set; }
         string SelectedHarmonicKeyComboBoxItem { get; set; }
+        bool IsRangeOfThreeMenuChecked { get; set; }
+        bool IsRangeOfSixMenuChecked { get; set; }
+        bool IsRangeOfTwelveMenuChecked { get; set; }
+        bool IsRangeOfThreeMenuEnabled { get; set; }
+        bool IsRangeOfSixMenuEnabled { get; set; }
+        bool IsRangeOfTwelveMenuEnabled { get; set; }
     }
 }

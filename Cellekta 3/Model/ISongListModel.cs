@@ -35,5 +35,11 @@ namespace Cellekta_3.Model
 
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();
+        bool IsRangeOfThreeMenuChecked { get; set; }
+        bool IsRangeOfSixMenuChecked { get; set; }
+        bool IsRangeOfTwelveMenuChecked { get; set; }
+        bool IsRangeOfThreeMenuEnabled { get; set; }
+        bool IsRangeOfSixMenuEnabled { get; set; }
+        bool IsRangeOfTwelveMenuEnabled { get; set; }
     }
 }
