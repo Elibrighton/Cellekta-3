@@ -447,11 +447,11 @@ namespace Cellekta_3.ViewModel
             AddNextButtonCommand = new RelayCommand(OnAddNextButtonCommand);
             TempoSliderValueCommand = new RelayCommand(OnTempoSliderValueCommand);
             MixableRangeCheckboxCheckedCommand = new RelayCommand(OnMixableRangeCheckboxCheckedCommand);
+            ClearButtonCommand = new RelayCommand(OnClearButtonCommand);
+            HarmonicKeyComboBoxSelectionChangedCommand = new RelayCommand(OnHarmonicKeyComboBoxSelectionChangedCommand);
             RangeOfThreeMenuCommand = new RelayCommand(OnRangeOfThreeMenuCommand);
             RangeOfSixMenuCommand = new RelayCommand(OnRangeOfSixMenuCommand);
             RangeOfTwelveMenuCommand = new RelayCommand(OnRangeOfTwelveMenuCommand);
-            ClearButtonCommand = new RelayCommand(OnClearButtonCommand);
-            HarmonicKeyComboBoxSelectionChangedCommand = new RelayCommand(OnHarmonicKeyComboBoxSelectionChangedCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
             SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
