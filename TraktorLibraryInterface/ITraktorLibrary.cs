@@ -16,5 +16,6 @@ namespace TraktorLibraryInterface
         void LoadWorkingCollection();
         int GetSongCount();
         ISong GetSong(XmlNode entryNode);
+        void SetCollectionPath();
     }
 }

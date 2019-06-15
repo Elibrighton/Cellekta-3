@@ -25,6 +25,7 @@ namespace TraktorLibraryImplementation
         {
             _xmlWrapper = xmlWrapper;
 
+            CollectionPath = GetDefaultCollectionPath();
             WorkingCollectionPath = GetWorkingPath();
         }
 
@@ -33,7 +34,7 @@ namespace TraktorLibraryImplementation
             return Path.Combine(Path.GetTempPath(), CollectionFileName);
         }
 
-        internal void SetCollectionPath()
+        public void SetCollectionPath()
         {
             var openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = ConfigurationManager.AppSettings["LibraryPath"];
@@ -68,8 +69,6 @@ namespace TraktorLibraryImplementation
 
         public bool IsCollectionFound()
         {
-            SetCollectionPath();
-
             return File.Exists(CollectionPath);
         }
 
@@ -103,6 +102,12 @@ namespace TraktorLibraryImplementation
             song.Load();
 
             return song;
+        }
+
+        internal string GetDefaultCollectionPath()
+        {
+            string[] paths = { ConfigurationManager.AppSettings["LibraryPath"].ToString(), CollectionFileName };
+            return Path.Combine(paths);
         }
     }
 }

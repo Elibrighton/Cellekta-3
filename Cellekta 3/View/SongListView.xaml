@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:Cellekta_3"
+        xmlns:vm="clr-namespace:Cellekta_3.ViewModel"
         mc:Ignorable="d"
         Title="Cellekta" 
         Height="{Binding WindowHeight, Mode=TwoWay}"
@@ -12,6 +13,14 @@
         WindowStartupLocation="Manual"
         Left="25"
         Top="321">
+    <Window.DataContext>
+        <vm:SongListViewModel />
+    </Window.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding WindowLoadedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <DockPanel>
         <Grid DockPanel.Dock="Top">
             <Menu>

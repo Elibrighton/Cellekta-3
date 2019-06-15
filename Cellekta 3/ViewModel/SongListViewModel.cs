@@ -34,6 +34,7 @@ namespace Cellekta_3.ViewModel
         public ICommand RangeOfThreeMenuCommand { get; set; }
         public ICommand RangeOfSixMenuCommand { get; set; }
         public ICommand RangeOfTwelveMenuCommand { get; set; }
+        public ICommand WindowLoadedCommand { get; set; }
 
         public ObservableCollection<ISong> ImportedTrackCollection
         {
@@ -435,6 +436,11 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public SongListViewModel()
+        {
+            _songListModel = new SongListModel();
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -452,6 +458,7 @@ namespace Cellekta_3.ViewModel
             RangeOfThreeMenuCommand = new RelayCommand(OnRangeOfThreeMenuCommand);
             RangeOfSixMenuCommand = new RelayCommand(OnRangeOfSixMenuCommand);
             RangeOfTwelveMenuCommand = new RelayCommand(OnRangeOfTwelveMenuCommand);
+            WindowLoadedCommand = new RelayCommand(OnWindowLoadedCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
             SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
@@ -468,55 +475,11 @@ namespace Cellekta_3.ViewModel
             }
         }
 
-        internal async void OnImportMenuCommand(object param)
+        internal void OnImportMenuCommand(object param)
         {
             ClearPlaylists();
-
-            if (_songListModel.TraktorLibrary.IsCollectionFound())
-            {
-                _songListModel.IsProgressBarIndeterminate = true;
-                await Task.Run(() => _songListModel.TraktorLibrary.DeleteWorkingCollection());
-                await Task.Run(() => _songListModel.TraktorLibrary.CreateWorkingCollection());
-                await Task.Run(() => _songListModel.TraktorLibrary.LoadWorkingCollection());
-                ProgressBarMax = await Task.Run(() => _songListModel.TraktorLibrary.GetSongCount());
-                IsProgressBarIndeterminate = false;
-
-                if (!string.IsNullOrEmpty(_songListModel.TraktorLibrary.WorkingCollection))
-                {
-                    _xmlWrapper.XmlPath = _songListModel.TraktorLibrary.WorkingCollectionPath;
-                    _xmlWrapper.Load();
-
-                    foreach (XmlNode collectionNode in _xmlWrapper.XmlDocument.DocumentElement.SelectNodes("/NML/COLLECTION"))
-                    {
-                        foreach (XmlNode entryNode in collectionNode.SelectNodes("ENTRY"))
-                        {
-                            ISong song = await Task.Run(() => GetSong(entryNode));
-                            ImportedTrackCollection.Add(song);
-                            ProgressBarValue++;
-                        }
-                    }
-                }
-
-                Filter();
-
-                if (FilteredTrackCollection.Count > 0)
-                {
-                    SelectedTrackCollectionItem = FilteredTrackCollection[0];
-                }
-
-                EnableControls();
-                var statusMessage = string.Concat(ImportedTrackCollection.Count.ToString(), " tracks imported from Traktor collection");
-                ProgressBarMessage = statusMessage;
-                MessageBox.Show(string.Concat(statusMessage, "."));
-            }
-            else
-            {
-                ProgressBarMessage = "No Traktor collection found";
-                MessageBox.Show("No Traktor collection found.");
-            }
-
-            SelectedTabControlIndex = TrackCollectionTabControlIndex;
-            ResetProgressBar(false);
+            _songListModel.TraktorLibrary.SetCollectionPath();
+            Import();
         }
 
         internal void OnExitMenuCommand(object param)
@@ -678,6 +641,14 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        internal void OnWindowLoadedCommand(object param)
+        {
+            if (MessageBox.Show("Do you want to import the default Traktor collection?", "Cellekta", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                Import();
+            }
+        }
+
         internal void ResetProgressBar(bool isClearingProgressMessage = true)
         {
             ProgressBarValue = InitialProgressBarValue;
@@ -758,6 +729,55 @@ namespace Cellekta_3.ViewModel
                 ProgressBarMessage = statusMessage;
                 MessageBox.Show(string.Concat(statusMessage, "."));
             }
+        }
+
+        internal async void Import()
+        {
+            if (_songListModel.TraktorLibrary.IsCollectionFound())
+            {
+                _songListModel.IsProgressBarIndeterminate = true;
+                await Task.Run(() => _songListModel.TraktorLibrary.DeleteWorkingCollection());
+                await Task.Run(() => _songListModel.TraktorLibrary.CreateWorkingCollection());
+                await Task.Run(() => _songListModel.TraktorLibrary.LoadWorkingCollection());
+                ProgressBarMax = await Task.Run(() => _songListModel.TraktorLibrary.GetSongCount());
+                IsProgressBarIndeterminate = false;
+
+                if (!string.IsNullOrEmpty(_songListModel.TraktorLibrary.WorkingCollection))
+                {
+                    _xmlWrapper.XmlPath = _songListModel.TraktorLibrary.WorkingCollectionPath;
+                    _xmlWrapper.Load();
+
+                    foreach (XmlNode collectionNode in _xmlWrapper.XmlDocument.DocumentElement.SelectNodes("/NML/COLLECTION"))
+                    {
+                        foreach (XmlNode entryNode in collectionNode.SelectNodes("ENTRY"))
+                        {
+                            ISong song = await Task.Run(() => GetSong(entryNode));
+                            ImportedTrackCollection.Add(song);
+                            ProgressBarValue++;
+                        }
+                    }
+                }
+
+                Filter();
+
+                if (FilteredTrackCollection.Count > 0)
+                {
+                    SelectedTrackCollectionItem = FilteredTrackCollection[0];
+                }
+
+                EnableControls();
+                var statusMessage = string.Concat(ImportedTrackCollection.Count.ToString(), " tracks imported from Traktor collection");
+                ProgressBarMessage = statusMessage;
+                MessageBox.Show(string.Concat(statusMessage, "."));
+            }
+            else
+            {
+                ProgressBarMessage = "No Traktor collection found";
+                MessageBox.Show("No Traktor collection found.");
+            }
+
+            SelectedTabControlIndex = TrackCollectionTabControlIndex;
+            ResetProgressBar(false);
         }
     }
 }
