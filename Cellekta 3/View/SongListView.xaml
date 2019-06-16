@@ -191,7 +191,7 @@
                             </ListView.View>
                         </ListView>
                         <StackPanel Orientation="Horizontal">
-                            <Button Command="{Binding MixButtonCommand}" MinWidth="100" Margin="0, 3, 5, 1">Mix</Button>
+                            <Button Command="{Binding MixButtonCommand}" IsEnabled="{Binding IsMixButtonEnabled}" MinWidth="100" Margin="0, 3, 5, 1">Mix</Button>
                         </StackPanel>
                     </StackPanel>
                 </TabItem>

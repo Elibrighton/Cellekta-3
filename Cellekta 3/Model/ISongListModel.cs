@@ -34,20 +34,21 @@ namespace Cellekta_3.Model
         bool IsClearButtonEnabled { get; set; }
         ObservableCollection<string> HarmonicKeyComboBoxCollection { get; set; }
         string SelectedHarmonicKeyComboBoxItem { get; set; }
-        ObservableCollection<string> PlaylistComboBoxCollection { get; set; }
-        string SelectedPlaylistComboBoxItem { get; set; }
-        string SearchTextBoxText { get; set; }
-        ObservableCollection<string> MixDiscPlaylistComboBoxCollection { get; set; }
-        bool IsMixDiscClearButtonEnabled { get; set; }
-        string SelectedMixDiscPlaylistComboBoxItem { get; set; }
-
-        ObservableCollection<ISong> GetFilteredTrackCollection();
-        int GetRandomRowIndex();
         bool IsRangeOfThreeMenuChecked { get; set; }
         bool IsRangeOfSixMenuChecked { get; set; }
         bool IsRangeOfTwelveMenuChecked { get; set; }
         bool IsRangeOfThreeMenuEnabled { get; set; }
         bool IsRangeOfSixMenuEnabled { get; set; }
         bool IsRangeOfTwelveMenuEnabled { get; set; }
+        ObservableCollection<string> PlaylistComboBoxCollection { get; set; }
+        string SelectedPlaylistComboBoxItem { get; set; }
+        string SearchTextBoxText { get; set; }
+        ObservableCollection<string> MixDiscPlaylistComboBoxCollection { get; set; }
+        bool IsMixDiscClearButtonEnabled { get; set; }
+        string SelectedMixDiscPlaylistComboBoxItem { get; set; }
+        bool IsMixButtonEnabled { get; set; }
+
+        ObservableCollection<ISong> GetFilteredTrackCollection();
+        int GetRandomRowIndex();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Cellekta_3.Base;
 using Cellekta_3.Model;
 using SongInterface;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,6 +38,7 @@ namespace Cellekta_3.ViewModel
         public ICommand PlaylistComboBoxSelectionChangedCommand { get; set; }
         public ICommand MixDiscClearButtonCommand { get; set; }
         public ICommand MixDiscPlaylistComboBoxSelectionChangedCommand { get; set; }
+        public ICommand MixButtonCommand { get; set; }
 
         public ObservableCollection<ISong> ImportedTrackCollection
         {
@@ -139,7 +141,7 @@ namespace Cellekta_3.ViewModel
 
                     TrackCollectionListViewHeight = (value - 162);
                     PreparationListViewHeight = (value - 134);
-                    MixDiscListViewHeight = (value - 134);
+                    MixDiscListViewHeight = (value - 162);
                     NotifyPropertyChanged("TrackCollectionListViewHeight");
                     NotifyPropertyChanged("PreparationListViewHeight");
                     NotifyPropertyChanged("MixDiscListViewHeight");
@@ -536,6 +538,19 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public bool IsMixButtonEnabled
+        {
+            get { return _songListModel.IsMixButtonEnabled; }
+            set
+            {
+                if (_songListModel.IsMixButtonEnabled != value)
+                {
+                    _songListModel.IsMixButtonEnabled = value;
+                    NotifyPropertyChanged("IsMixButtonEnabled");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -556,6 +571,7 @@ namespace Cellekta_3.ViewModel
             PlaylistComboBoxSelectionChangedCommand = new RelayCommand(OnPlaylistComboBoxSelectionChangedCommand);
             MixDiscClearButtonCommand = new RelayCommand(OnMixDiscClearButtonCommand);
             MixDiscPlaylistComboBoxSelectionChangedCommand = new RelayCommand(OnMixDiscPlaylistComboBoxSelectionChangedCommand);
+            MixButtonCommand = new RelayCommand(OnMixButtonCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
             SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
@@ -806,6 +822,22 @@ namespace Cellekta_3.ViewModel
             EnableMixDiscControls();
         }
 
+        internal async void OnMixButtonCommand(object param)
+        {
+            var playlistTracks = new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => t.Playlist == SelectedMixDiscPlaylistComboBoxItem)).ToList();
+            ResetProgressBar();
+            ProgressBarMax = playlistTracks.Count();
+            var tasks = new List<Task>(ProgressBarMax);
+
+            foreach (var track1 in playlistTracks)
+            {
+                var task = ProcessMixDiscCombinationAsync(track1, playlistTracks);
+                tasks.Add(task);
+            }
+
+            await Task.WhenAll();
+        }
+
         internal void ResetProgressBar(bool isClearingProgressMessage = true)
         {
             ProgressBarValue = InitialProgressBarValue;
@@ -896,12 +928,33 @@ namespace Cellekta_3.ViewModel
         internal void ClearMixDiscFilter()
         {
             SelectedMixDiscPlaylistComboBoxItem = MixDiscPlaylistComboBoxCollection[0];
+            ResetProgressBar();
             ProgressBarMessage = "Mix disc filters cleared";
         }
 
         internal void EnableMixDiscControls()
         {
-            IsMixDiscClearButtonEnabled = !string.IsNullOrEmpty(SelectedMixDiscPlaylistComboBoxItem);
+            var isEnabled = !string.IsNullOrEmpty(SelectedMixDiscPlaylistComboBoxItem);
+            IsMixDiscClearButtonEnabled = isEnabled;
+            IsMixButtonEnabled = isEnabled;
+        }
+
+        internal async Task ProcessMixDiscCombinationAsync(ISong track1, List<ISong> playlistTracks)
+        {
+            await Task.Run(() => ProcessMixDiscCombination(track1, playlistTracks));
+            ProgressBarValue++;
+            ProgressBarMessage = string.Concat("Populating Mix disc for track ", ProgressBarValue, " of ", ProgressBarMax);
+        }
+
+        internal void ProcessMixDiscCombination(ISong track1, List<ISong> playlistTracks)
+        {
+            foreach (var track2 in playlistTracks)
+            {
+                if (track1 != track2)
+                {
+                    // work requried here
+                }
+            }
         }
     }
 }

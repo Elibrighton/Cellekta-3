@@ -22,6 +22,7 @@ namespace Cellekta_3.ViewModel
         ICommand PlaylistComboBoxSelectionChangedCommand { get; set; }
         ICommand MixDiscClearButtonCommand { get; set; }
         ICommand MixDiscPlaylistComboBoxSelectionChangedCommand { get; set; }
+        ICommand MixButtonCommand { get; set; }
         ObservableCollection<ISong> ImportedTrackCollection { get; set; }
         ObservableCollection<ISong> FilteredTrackCollection { get; set; }
         ObservableCollection<ISong> PreparationCollection { get; set; }
@@ -61,5 +62,6 @@ namespace Cellekta_3.ViewModel
         ObservableCollection<string> MixDiscPlaylistComboBoxCollection { get; set; }
         bool IsMixDiscClearButtonEnabled { get; set; }
         string SelectedMixDiscPlaylistComboBoxItem { get; set; }
+        bool IsMixButtonEnabled { get; set; }
     }
 }

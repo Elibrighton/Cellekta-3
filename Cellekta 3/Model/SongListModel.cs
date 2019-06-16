@@ -69,6 +69,7 @@ namespace Cellekta_3.Model
         public ObservableCollection<string> MixDiscPlaylistComboBoxCollection { get; set; }
         public bool IsMixDiscClearButtonEnabled { get; set; }
         public string SelectedMixDiscPlaylistComboBoxItem { get; set; }
+        public bool IsMixButtonEnabled { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange, ITrackSearch trackSearch)
         {
@@ -84,7 +85,7 @@ namespace Cellekta_3.Model
             WindowWidth = 1316;
             TrackCollectionListViewHeight = 250;
             PreparationListViewHeight = 278;
-            MixDiscListViewHeight = 278;
+            MixDiscListViewHeight = 250;
             ListViewWidth = 1292;
             ProgressBarWidth = 1294;
             IsLoadButtonEnabled = false;
@@ -106,6 +107,7 @@ namespace Cellekta_3.Model
             };
             MixDiscPlaylistComboBoxCollection = new ObservableCollection<string>();
             IsMixDiscClearButtonEnabled = false;
+            IsMixButtonEnabled = false;
         }
 
         // To be merged into GetFilteredTrackCollection()
