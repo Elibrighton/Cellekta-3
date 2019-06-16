@@ -15,6 +15,8 @@ using MixableRangeInterface;
 using MixableRangeImplementation;
 using TrackSearchInterface;
 using TrackSearchImplementation;
+using MixDiscInterface;
+using MixDiscImplementation;
 
 namespace Cellekta_3
 {
@@ -36,6 +38,7 @@ namespace Cellekta_3
             container.RegisterType<ITempoRange, TempoRange>();
             container.RegisterType<IHarmonicKeyRange, HarmonicKeyRange>();
             container.RegisterType<ITrackSearch, TrackSearch>();
+            container.RegisterType<IMixDisc, MixDisc>();
 
             var window = container.Resolve<SongListView>();
             window.Show();

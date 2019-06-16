@@ -120,6 +120,14 @@
       <Project>{402F8F21-9780-477A-A598-95BC64C01AA8}</Project>
       <Name>MixableRangeInterface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MixDiscImplementation\MixDiscImplementation.csproj">
+      <Project>{6D98428B-BF15-47DF-B067-D08CAAA3C558}</Project>
+      <Name>MixDiscImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MixDiscInterface\MixDiscInterface.csproj">
+      <Project>{31A0D157-EEDC-4DAC-BF5F-A933E054755E}</Project>
+      <Name>MixDiscInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SongInterface\SongInterface.csproj">
       <Project>{bff769fd-4a79-41df-bea1-3471f9222428}</Project>
       <Name>SongInterface</Name>

@@ -21,8 +21,9 @@ namespace SongInterface
         bool IsCharting { get; set; }
         string IsChartingText { get; }
         string FullNameText { get; }
-        ITempoRange MixableRange { get; set; }
+        ITempoRange TempoRange { get; set; }
         int RoundedTrailingTempo { get; }
+        IHarmonicKeyRange HarmonicKeyRange { get; set; }
 
         void Load();
     }

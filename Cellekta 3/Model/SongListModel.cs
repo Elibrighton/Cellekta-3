@@ -1,4 +1,5 @@
 ﻿using MixableRangeInterface;
+using MixDiscInterface;
 using SongInterface;
 using System;
 using System.Collections.ObjectModel;
@@ -70,13 +71,15 @@ namespace Cellekta_3.Model
         public bool IsMixDiscClearButtonEnabled { get; set; }
         public string SelectedMixDiscPlaylistComboBoxItem { get; set; }
         public bool IsMixButtonEnabled { get; set; }
+        public IMixDisc MixDisc { get; set; }
 
-        public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange, ITrackSearch trackSearch)
+        public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange, ITrackSearch trackSearch, IMixDisc mixDisc)
         {
             TraktorLibrary = traktorLibrary;
             _xmlWrapper = xmlWrapper;
             _harmonicKeyRange = harmonicKeyRange;
             _trackSearch = trackSearch;
+            MixDisc = mixDisc;
             ImportedTrackCollection = new ObservableCollection<ISong>();
             FilteredTrackCollection = new ObservableCollection<ISong>();
             PreparationCollection = new ObservableCollection<ISong>();

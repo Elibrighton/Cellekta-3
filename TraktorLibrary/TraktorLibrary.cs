@@ -94,8 +94,9 @@ namespace TraktorLibraryImplementation
 
         public ISong GetSong(XmlNode entryNode)
         {
-            ITempoRange mixableRange = new TempoRange();
-            ISong song = new Song(_xmlWrapper, mixableRange)
+            ITempoRange tempoRange = new TempoRange();
+            IHarmonicKeyRange harmonicKeyRange = new HarmonicKeyRange();
+            ISong song = new Song(_xmlWrapper, tempoRange, harmonicKeyRange)
             {
                 EntryNode = entryNode
             };

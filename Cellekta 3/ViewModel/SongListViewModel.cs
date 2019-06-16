@@ -825,13 +825,15 @@ namespace Cellekta_3.ViewModel
         internal async void OnMixButtonCommand(object param)
         {
             var playlistTracks = new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => t.Playlist == SelectedMixDiscPlaylistComboBoxItem)).ToList();
-            ResetProgressBar();
-            ProgressBarMax = playlistTracks.Count();
-            var tasks = new List<Task>(ProgressBarMax);
+            var playlistTrackCount = playlistTracks.Count();
+            var tasks = new List<Task>(playlistTrackCount);
 
-            foreach (var track1 in playlistTracks)
+            ResetProgressBar();
+            ProgressBarMax = playlistTrackCount;
+
+            foreach (var track in playlistTracks)
             {
-                var task = ProcessMixDiscCombinationAsync(track1, playlistTracks);
+                var task = FindMixDiscAsync(track, playlistTracks);
                 tasks.Add(task);
             }
 
@@ -939,22 +941,11 @@ namespace Cellekta_3.ViewModel
             IsMixButtonEnabled = isEnabled;
         }
 
-        internal async Task ProcessMixDiscCombinationAsync(ISong track1, List<ISong> playlistTracks)
+        internal async Task FindMixDiscAsync(ISong firstTrack, List<ISong> playlistTracks)
         {
-            await Task.Run(() => ProcessMixDiscCombination(track1, playlistTracks));
+            await Task.Run(() => _songListModel.MixDisc.Find(firstTrack, playlistTracks));
             ProgressBarValue++;
-            ProgressBarMessage = string.Concat("Populating Mix disc for track ", ProgressBarValue, " of ", ProgressBarMax);
-        }
-
-        internal void ProcessMixDiscCombination(ISong track1, List<ISong> playlistTracks)
-        {
-            foreach (var track2 in playlistTracks)
-            {
-                if (track1 != track2)
-                {
-                    // work requried here
-                }
-            }
+            ProgressBarMessage = string.Concat("Finding Mix disc for track ", ProgressBarValue, " of ", ProgressBarMax);
         }
     }
 }
