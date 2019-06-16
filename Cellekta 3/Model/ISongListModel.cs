@@ -10,6 +10,7 @@ namespace Cellekta_3.Model
         ObservableCollection<ISong> ImportedTrackCollection { get; set; }
         ObservableCollection<ISong> FilteredTrackCollection { get; set; }
         ObservableCollection<ISong> PreparationCollection { get; set; }
+        ObservableCollection<ISong> MixDiscCollection { get; set; }
         int ProgressBarMax { get; set; }
         int ProgressBarValue { get; set; }
         bool IsProgressBarIndeterminate { get; set; }
@@ -18,6 +19,7 @@ namespace Cellekta_3.Model
         int WindowWidth { get; set; }
         int TrackCollectionListViewHeight { get; set; }
         int PreparationListViewHeight { get; set; }
+        int MixDiscListViewHeight { get; set; }
         int ListViewWidth { get; set; }
         int ProgressBarWidth { get; set; }
         bool IsLoadButtonEnabled { get; set; }
@@ -35,6 +37,9 @@ namespace Cellekta_3.Model
         ObservableCollection<string> PlaylistComboBoxCollection { get; set; }
         string SelectedPlaylistComboBoxItem { get; set; }
         string SearchTextBoxText { get; set; }
+        ObservableCollection<string> MixDiscPlaylistComboBoxCollection { get; set; }
+        bool IsMixDiscClearButtonEnabled { get; set; }
+        string SelectedMixDiscPlaylistComboBoxItem { get; set; }
 
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();

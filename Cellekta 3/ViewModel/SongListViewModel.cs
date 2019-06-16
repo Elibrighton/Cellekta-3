@@ -35,6 +35,8 @@ namespace Cellekta_3.ViewModel
         public ICommand RangeOfSixMenuCommand { get; set; }
         public ICommand RangeOfTwelveMenuCommand { get; set; }
         public ICommand PlaylistComboBoxSelectionChangedCommand { get; set; }
+        public ICommand MixDiscClearButtonCommand { get; set; }
+        public ICommand MixDiscPlaylistComboBoxSelectionChangedCommand { get; set; }
 
         public ObservableCollection<ISong> ImportedTrackCollection
         {
@@ -63,6 +65,16 @@ namespace Cellekta_3.ViewModel
             {
                 _songListModel.PreparationCollection = value;
                 NotifyPropertyChanged("PreparationCollection");
+            }
+        }
+
+        public ObservableCollection<ISong> MixDiscCollection
+        {
+            get { return _songListModel.MixDiscCollection; }
+            set
+            {
+                _songListModel.MixDiscCollection = value;
+                NotifyPropertyChanged("MixDiscCollection");
             }
         }
 
@@ -127,8 +139,10 @@ namespace Cellekta_3.ViewModel
 
                     TrackCollectionListViewHeight = (value - 162);
                     PreparationListViewHeight = (value - 134);
+                    MixDiscListViewHeight = (value - 134);
                     NotifyPropertyChanged("TrackCollectionListViewHeight");
                     NotifyPropertyChanged("PreparationListViewHeight");
+                    NotifyPropertyChanged("MixDiscListViewHeight");
                 }
             }
         }
@@ -174,6 +188,19 @@ namespace Cellekta_3.ViewModel
                 {
                     _songListModel.PreparationListViewHeight = value;
                     NotifyPropertyChanged("PreparationListViewHeight");
+                }
+            }
+        }
+
+        public int MixDiscListViewHeight
+        {
+            get { return _songListModel.MixDiscListViewHeight; }
+            set
+            {
+                if (_songListModel.MixDiscListViewHeight != value)
+                {
+                    _songListModel.MixDiscListViewHeight = value;
+                    NotifyPropertyChanged("MixDiscListViewHeight");
                 }
             }
         }
@@ -473,6 +500,42 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public ObservableCollection<string> MixDiscPlaylistComboBoxCollection
+        {
+            get { return _songListModel.MixDiscPlaylistComboBoxCollection; }
+            set
+            {
+                _songListModel.MixDiscPlaylistComboBoxCollection = value;
+                NotifyPropertyChanged("MixDiscPlaylistComboBoxCollection");
+            }
+        }
+
+        public bool IsMixDiscClearButtonEnabled
+        {
+            get { return _songListModel.IsMixDiscClearButtonEnabled; }
+            set
+            {
+                if (_songListModel.IsMixDiscClearButtonEnabled != value)
+                {
+                    _songListModel.IsMixDiscClearButtonEnabled = value;
+                    NotifyPropertyChanged("IsMixDiscClearButtonEnabled");
+                }
+            }
+        }
+
+        public string SelectedMixDiscPlaylistComboBoxItem
+        {
+            get { return _songListModel.SelectedMixDiscPlaylistComboBoxItem; }
+            set
+            {
+                if (_songListModel.SelectedMixDiscPlaylistComboBoxItem != value)
+                {
+                    _songListModel.SelectedMixDiscPlaylistComboBoxItem = value;
+                    NotifyPropertyChanged("SelectedMixDiscPlaylistComboBoxItem");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -491,6 +554,8 @@ namespace Cellekta_3.ViewModel
             RangeOfSixMenuCommand = new RelayCommand(OnRangeOfSixMenuCommand);
             RangeOfTwelveMenuCommand = new RelayCommand(OnRangeOfTwelveMenuCommand);
             PlaylistComboBoxSelectionChangedCommand = new RelayCommand(OnPlaylistComboBoxSelectionChangedCommand);
+            MixDiscClearButtonCommand = new RelayCommand(OnMixDiscClearButtonCommand);
+            MixDiscPlaylistComboBoxSelectionChangedCommand = new RelayCommand(OnMixDiscPlaylistComboBoxSelectionChangedCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
             SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
@@ -544,6 +609,7 @@ namespace Cellekta_3.ViewModel
                 }
 
                 PlaylistComboBoxCollection = new ObservableCollection<string>(PlaylistComboBoxCollection.OrderBy(p => p));
+                MixDiscPlaylistComboBoxCollection = new ObservableCollection<string>(PlaylistComboBoxCollection);
                 Filter();
 
                 if (FilteredTrackCollection.Count > 0)
@@ -730,6 +796,16 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        internal void OnMixDiscClearButtonCommand(object param)
+        {
+            ClearMixDiscFilter();
+        }
+
+        internal void OnMixDiscPlaylistComboBoxSelectionChangedCommand(object param)
+        {
+            EnableMixDiscControls();
+        }
+
         internal void ResetProgressBar(bool isClearingProgressMessage = true)
         {
             ProgressBarValue = InitialProgressBarValue;
@@ -815,6 +891,17 @@ namespace Cellekta_3.ViewModel
             {
                 ProgressBarMessage = string.Concat("Find mixable track for ", SelectedPreparationItem.FullNameText, " from ", FilteredTrackCollection.Count.ToString(), " tracks");
             }
+        }
+
+        internal void ClearMixDiscFilter()
+        {
+            SelectedMixDiscPlaylistComboBoxItem = MixDiscPlaylistComboBoxCollection[0];
+            ProgressBarMessage = "Mix disc filters cleared";
+        }
+
+        internal void EnableMixDiscControls()
+        {
+            IsMixDiscClearButtonEnabled = !string.IsNullOrEmpty(SelectedMixDiscPlaylistComboBoxItem);
         }
     }
 }

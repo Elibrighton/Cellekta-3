@@ -23,6 +23,7 @@ namespace Cellekta_3.Model
         public ObservableCollection<ISong> ImportedTrackCollection { get; set; }
         public ObservableCollection<ISong> FilteredTrackCollection { get; set; }
         public ObservableCollection<ISong> PreparationCollection { get; set; }
+        public ObservableCollection<ISong> MixDiscCollection { get; set; }
         public int ProgressBarMax { get; set; }
         public int ProgressBarValue { get; set; }
         public bool IsProgressBarIndeterminate { get; set; }
@@ -31,6 +32,7 @@ namespace Cellekta_3.Model
         public int WindowWidth { get; set; }
         public int TrackCollectionListViewHeight { get; set; }
         public int PreparationListViewHeight { get; set; }
+        public int MixDiscListViewHeight { get; set; }
         public int ListViewWidth { get; set; }
         public int ProgressBarWidth { get; set; }
         public bool IsLoadButtonEnabled { get; set; }
@@ -64,6 +66,9 @@ namespace Cellekta_3.Model
         public ObservableCollection<string> PlaylistComboBoxCollection { get; set; }
         public string SelectedPlaylistComboBoxItem { get; set; }
         public string SearchTextBoxText { get; set; }
+        public ObservableCollection<string> MixDiscPlaylistComboBoxCollection { get; set; }
+        public bool IsMixDiscClearButtonEnabled { get; set; }
+        public string SelectedMixDiscPlaylistComboBoxItem { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange, ITrackSearch trackSearch)
         {
@@ -74,10 +79,12 @@ namespace Cellekta_3.Model
             ImportedTrackCollection = new ObservableCollection<ISong>();
             FilteredTrackCollection = new ObservableCollection<ISong>();
             PreparationCollection = new ObservableCollection<ISong>();
+            MixDiscCollection = new ObservableCollection<ISong>();
             WindowHeight = 412;
             WindowWidth = 1316;
             TrackCollectionListViewHeight = 250;
             PreparationListViewHeight = 278;
+            MixDiscListViewHeight = 278;
             ListViewWidth = 1292;
             ProgressBarWidth = 1294;
             IsLoadButtonEnabled = false;
@@ -97,6 +104,8 @@ namespace Cellekta_3.Model
             {
                 "",
             };
+            MixDiscPlaylistComboBoxCollection = new ObservableCollection<string>();
+            IsMixDiscClearButtonEnabled = false;
         }
 
         // To be merged into GetFilteredTrackCollection()
@@ -148,41 +157,41 @@ namespace Cellekta_3.Model
             _trackSearch.Load();
 
             return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t =>
-                                                                                    // not in preparation list
-                                                                                    (!PreparationCollection.Contains(t)
-                                                                                    // and (cleared filter
-                                                                                    && ((TempoSliderValue == 0
-                                                                                    && string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem))
-                                                                                    // or exact filter match
-                                                                                    || (!IsMixableRangeCheckboxChecked
-                                                                                    && (TempoSliderValue == 0
-                                                                                    || (t.LeadingTempo >= slowestTempoSliderValue
-                                                                                    && t.LeadingTempo <= fastestTempoSliderValue))
-                                                                                    && (string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
-                                                                                    || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem))
-                                                                                    // or mixable range filter match)
-                                                                                    || (IsMixableRangeCheckboxChecked
-                                                                                    && ((TempoSliderValue == 0
-                                                                                    || (t.LeadingTempo >= slowestTempoSliderRangeValue
-                                                                                    && t.LeadingTempo <= fastestTempoSliderRangeValue))
-                                                                                    && ((string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
-                                                                                    || (t.LeadingHarmonicKey == _harmonicKeyRange.InnerCircleHarmonicKey
-                                                                                    || t.LeadingHarmonicKey == _harmonicKeyRange.OuterCircleHarmonicKey
-                                                                                    || t.LeadingHarmonicKey == _harmonicKeyRange.PlusOneHarmonicKey
-                                                                                    || t.LeadingHarmonicKey == _harmonicKeyRange.MinusOneHarmonicKey))))))
-                                                                                    // and matches playlist
-                                                                                    && (string.IsNullOrEmpty(SelectedPlaylistComboBoxItem)
-                                                                                    || t.Playlist == SelectedPlaylistComboBoxItem)
-                                                                                    // and matches search text
-                                                                                    && (string.IsNullOrEmpty(_trackSearch.Text)
-                                                                                    || t.Artist.ToLower().Contains(_trackSearch.Text.ToLower().Trim())
-                                                                                    || t.Title.ToLower().Contains(_trackSearch.Text.ToLower().Trim()))
-                                                                                    || (!string.IsNullOrEmpty(_trackSearch.Artist)
-                                                                                    && !string.IsNullOrEmpty(_trackSearch.Title)
-                                                                                    && ((t.Artist.ToLower().Contains(_trackSearch.Artist.ToLower())
-                                                                                    && t.Title.ToLower().Contains(_trackSearch.Title.ToLower()))
-                                                                                    || (t.Artist.ToLower().Contains(_trackSearch.Title.ToLower())
-                                                                                    && t.Title.ToLower().Contains(_trackSearch.Artist.ToLower())))))));
+                // not in preparation list
+                (!PreparationCollection.Contains(t)
+                // and (cleared filter
+                && ((TempoSliderValue == 0
+                && string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem))
+                // or exact filter match
+                || (!IsMixableRangeCheckboxChecked
+                && (TempoSliderValue == 0
+                || (t.LeadingTempo >= slowestTempoSliderValue
+                && t.LeadingTempo <= fastestTempoSliderValue))
+                && (string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
+                || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem))
+                // or mixable range filter match)
+                || (IsMixableRangeCheckboxChecked
+                && ((TempoSliderValue == 0
+                || (t.LeadingTempo >= slowestTempoSliderRangeValue
+                && t.LeadingTempo <= fastestTempoSliderRangeValue))
+                && ((string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
+                || (t.LeadingHarmonicKey == _harmonicKeyRange.InnerCircleHarmonicKey
+                || t.LeadingHarmonicKey == _harmonicKeyRange.OuterCircleHarmonicKey
+                || t.LeadingHarmonicKey == _harmonicKeyRange.PlusOneHarmonicKey
+                || t.LeadingHarmonicKey == _harmonicKeyRange.MinusOneHarmonicKey))))))
+                // and matches playlist
+                && (string.IsNullOrEmpty(SelectedPlaylistComboBoxItem)
+                || t.Playlist == SelectedPlaylistComboBoxItem)
+                // and matches search text
+                && (string.IsNullOrEmpty(_trackSearch.Text)
+                || t.Artist.ToLower().Contains(_trackSearch.Text.ToLower().Trim())
+                || t.Title.ToLower().Contains(_trackSearch.Text.ToLower().Trim()))
+                || (!string.IsNullOrEmpty(_trackSearch.Artist)
+                && !string.IsNullOrEmpty(_trackSearch.Title)
+                && ((t.Artist.ToLower().Contains(_trackSearch.Artist.ToLower())
+                && t.Title.ToLower().Contains(_trackSearch.Title.ToLower()))
+                || (t.Artist.ToLower().Contains(_trackSearch.Title.ToLower())
+                && t.Title.ToLower().Contains(_trackSearch.Artist.ToLower())))))));
         }
 
         internal ObservableCollection<string> GetHarmonicKeyComboBoxCollection()

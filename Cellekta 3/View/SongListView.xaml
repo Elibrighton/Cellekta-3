@@ -157,6 +157,44 @@
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
+                <TabItem Header="Mix disc">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Playlist" Margin="5, 3, 0, 3" />
+                            <ComboBox ItemsSource="{Binding MixDiscPlaylistComboBoxCollection}"  
+                                      SelectedItem="{Binding SelectedMixDiscPlaylistComboBoxItem}"
+                                      Margin="5, 1, 0, 3"
+                                      MinWidth="75">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <i:InvokeCommandAction Command="{Binding MixDiscPlaylistComboBoxSelectionChangedCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
+                            <Button Command="{Binding MixDiscClearButtonCommand}" IsEnabled="{Binding IsMixDiscClearButtonEnabled}" MinWidth="100" Margin="5, 1, 0, 3">Clear</Button>
+                        </StackPanel>
+                        <ListView ItemsSource="{Binding MixDiscCollection}" 
+                                  SelectionMode="Single"
+                                  Height="{Binding MixDiscListViewHeight, Mode=TwoWay}"
+                                  Width="{Binding ListViewWidth, Mode=TwoWay}">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
+                                    <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="200"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Title}" Header="Title" Width="400"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding TempoText}" Header="Tempo" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding HarmonicKeyText}" Header="Key" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Intensity}" Header="Intensity" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Playlist}" Header="Playlist" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding IsChartingText}" Header="Charting" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Rating}" Header="Rating" Width="100"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Command="{Binding MixButtonCommand}" MinWidth="100" Margin="0, 3, 5, 1">Mix</Button>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
             </TabControl>
             <StatusBar VerticalAlignment="Bottom">
                 <StatusBar.ItemsPanel>
