@@ -41,6 +41,7 @@ namespace Cellekta_3.ViewModel
         public ICommand MixDiscClearButtonCommand { get; set; }
         public ICommand MixDiscPlaylistComboBoxSelectionChangedCommand { get; set; }
         public ICommand MixButtonCommand { get; set; }
+        public ICommand IntensityComboBoxSelectionChangedCommand { get; set; }
 
         public ObservableCollection<ISong> ImportedTrackCollection
         {
@@ -567,6 +568,29 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public ObservableCollection<string> IntensityComboBoxCollection
+        {
+            get { return _songListModel.IntensityComboBoxCollection; }
+            set
+            {
+                _songListModel.IntensityComboBoxCollection = value;
+                NotifyPropertyChanged("IntensityComboBoxCollection");
+            }
+        }
+
+        public string SelectedIntensityComboBoxItem
+        {
+            get { return _songListModel.SelectedIntensityComboBoxItem; }
+            set
+            {
+                if (_songListModel.SelectedIntensityComboBoxItem != value)
+                {
+                    _songListModel.SelectedIntensityComboBoxItem = value;
+                    NotifyPropertyChanged("SelectedIntensityComboBoxItem");
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -588,6 +612,7 @@ namespace Cellekta_3.ViewModel
             MixDiscClearButtonCommand = new RelayCommand(OnMixDiscClearButtonCommand);
             MixDiscPlaylistComboBoxSelectionChangedCommand = new RelayCommand(OnMixDiscPlaylistComboBoxSelectionChangedCommand);
             MixButtonCommand = new RelayCommand(OnMixButtonCommand);
+            IntensityComboBoxSelectionChangedCommand = new RelayCommand(OnIntensityComboBoxSelectionChangedCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
             SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
@@ -850,6 +875,7 @@ namespace Cellekta_3.ViewModel
                 ResetProgressBar();
                 ProgressBarMax = playlistTrackCount;
                 _songListModel.MixDisc.MinPlaytime = (Convert.ToInt32(PlaytimeTextBoxText) * 60);
+                _songListModel.MixDisc.IntensityStyle = SelectedIntensityComboBoxItem;
 
                 foreach (var track in playlistTracks)
                 {
@@ -876,6 +902,11 @@ namespace Cellekta_3.ViewModel
                     ProgressBarMessage = "No combination of tracks could be found for a Mix disc.";
                 }
             }
+        }
+
+        internal void OnIntensityComboBoxSelectionChangedCommand(object param)
+        {
+            EnableMixDiscControls();
         }
 
         internal void ResetProgressBar(bool isClearingProgressMessage = true)
@@ -981,6 +1012,11 @@ namespace Cellekta_3.ViewModel
                 SelectedMixDiscPlaylistComboBoxItem = MixDiscPlaylistComboBoxCollection[0];
             }
 
+            if (IntensityComboBoxCollection.Count > 0)
+            {
+                SelectedIntensityComboBoxItem = IntensityComboBoxCollection[0];
+            }
+
             PlaytimeTextBoxText = "";
             ResetProgressBar();
             ProgressBarMessage = "Mix disc filters cleared";
@@ -988,7 +1024,7 @@ namespace Cellekta_3.ViewModel
 
         internal void EnableMixDiscControls()
         {
-            var isEnabled = (!string.IsNullOrEmpty(SelectedMixDiscPlaylistComboBoxItem) || !string.IsNullOrEmpty(PlaytimeTextBoxText));
+            var isEnabled = (!string.IsNullOrEmpty(SelectedMixDiscPlaylistComboBoxItem) || !string.IsNullOrEmpty(PlaytimeTextBoxText) || !string.IsNullOrEmpty(SelectedIntensityComboBoxItem));
             IsMixDiscClearButtonEnabled = isEnabled;
             IsMixButtonEnabled = isEnabled;
         }

@@ -10,6 +10,7 @@ namespace MixDiscImplementation
     {
         public int MinPlaytime { get; set; }
         public List<List<ISong>> Matches { get; set; }
+        public string IntensityStyle { get; set; }
 
 
         public void Find(ISong firstTrack, List<ISong> playlistTracks)
@@ -76,7 +77,8 @@ namespace MixDiscImplementation
         internal List<ISong> GetTracksInMixableRange(ISong track1, List<ISong> playlistTracks, List<ISong> mixableTrackCombination)
         {
             return playlistTracks.Where(t =>
-                (mixableTrackCombination == null
+                t != track1
+                && (mixableTrackCombination == null
                 || !mixableTrackCombination.Contains(t))
                 && (((t.LeadingTempo <= track1.TempoRange.FastestTempo
                 && t.LeadingTempo >= track1.TempoRange.SlowestTempo)
@@ -87,7 +89,10 @@ namespace MixDiscImplementation
                 && (t.LeadingHarmonicKey == track1.HarmonicKeyRange.InnerCircleHarmonicKey
                 || t.LeadingHarmonicKey == track1.HarmonicKeyRange.OuterCircleHarmonicKey
                 || t.LeadingHarmonicKey == track1.HarmonicKeyRange.PlusOneHarmonicKey
-                || t.LeadingHarmonicKey == track1.HarmonicKeyRange.MinusOneHarmonicKey))).ToList();
+                || t.LeadingHarmonicKey == track1.HarmonicKeyRange.MinusOneHarmonicKey)
+                && (string.IsNullOrEmpty(IntensityStyle)
+                || (t.Intensity <= track1.IntensityRange.PlusOneIntensity
+                && t.Intensity >= track1.IntensityRange.MinusOneIntensity)))).ToList();
         }
 
         internal int GetCombinationPlayTime(List<ISong> mixableTrackCombination)

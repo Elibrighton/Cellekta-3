@@ -31,14 +31,16 @@ namespace SongImplementation
         public ITempoRange TempoRange { get; set; }
         public int RoundedTrailingTempo { get; private set; }
         public IHarmonicKeyRange HarmonicKeyRange { get; set; }
+        public IIntensityRange IntensityRange { get; set; }
 
         private IXmlWrapper _xmlWrapper;
 
-        public Song(IXmlWrapper xmlWrapper, ITempoRange tempoRange, IHarmonicKeyRange harmonicKeyRange)
+        public Song(IXmlWrapper xmlWrapper, ITempoRange tempoRange, IHarmonicKeyRange harmonicKeyRange, IIntensityRange intensityRange)
         {
             _xmlWrapper = xmlWrapper;
             TempoRange = tempoRange;
             HarmonicKeyRange = harmonicKeyRange;
+            IntensityRange = intensityRange;
         }
 
         public void Load()
@@ -64,6 +66,7 @@ namespace SongImplementation
             FullNameText = GetFullNameText(Artist, Title, TempoText, HarmonicKeyText, Intensity, Playlist);
             TempoRange.Load(TrailingTempo, 3); // menu item control the range value to be added later
             HarmonicKeyRange.Load(TrailingHarmonicKey);
+            IntensityRange.Load(Intensity);
         }
 
         internal double GetTempo(XmlNode tempoNode, string path, bool isLeadingTempo = true)

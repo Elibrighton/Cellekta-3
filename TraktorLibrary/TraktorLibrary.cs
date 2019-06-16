@@ -96,7 +96,8 @@ namespace TraktorLibraryImplementation
         {
             ITempoRange tempoRange = new TempoRange();
             IHarmonicKeyRange harmonicKeyRange = new HarmonicKeyRange();
-            ISong song = new Song(_xmlWrapper, tempoRange, harmonicKeyRange)
+            IIntensityRange intensityRange = new IntensityRange();
+            ISong song = new Song(_xmlWrapper, tempoRange, harmonicKeyRange, intensityRange)
             {
                 EntryNode = entryNode
             };

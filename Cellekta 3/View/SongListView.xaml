@@ -171,6 +171,17 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </ComboBox>
+                            <TextBlock Text="Intensity" Margin="5, 3, 0, 3" />
+                            <ComboBox ItemsSource="{Binding IntensityComboBoxCollection}"  
+                                      SelectedItem="{Binding SelectedIntensityComboBoxItem}"
+                                      Margin="5, 1, 0, 3"
+                                      MinWidth="75">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <i:InvokeCommandAction Command="{Binding IntensityComboBoxSelectionChangedCommand}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
                             <TextBlock Text="Playtime" Margin="5, 3, 0, 3" />
                             <TextBox Text="{Binding PlaytimeTextBoxText, UpdateSourceTrigger=PropertyChanged}" MinWidth="75" Margin="5, 1, 0, 3"/>
                             <Button Command="{Binding MixDiscClearButtonCommand}" IsEnabled="{Binding IsMixDiscClearButtonEnabled}" MinWidth="100" Margin="5, 1, 0, 3">Clear</Button>

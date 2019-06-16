@@ -73,6 +73,8 @@ namespace Cellekta_3.Model
         public bool IsMixButtonEnabled { get; set; }
         public IMixDisc MixDisc { get; set; }
         public string PlaytimeTextBoxText { get; set; }
+        public ObservableCollection<string> IntensityComboBoxCollection { get; set; }
+        public string SelectedIntensityComboBoxItem { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange, ITrackSearch trackSearch, IMixDisc mixDisc)
         {
@@ -112,6 +114,7 @@ namespace Cellekta_3.Model
             MixDiscPlaylistComboBoxCollection = new ObservableCollection<string>();
             IsMixDiscClearButtonEnabled = false;
             IsMixButtonEnabled = false;
+            IntensityComboBoxCollection = GetIntensityComboBoxCollection();
         }
 
         // To be merged into GetFilteredTrackCollection()
@@ -246,6 +249,17 @@ namespace Cellekta_3.Model
             }
 
             return tempoRange;
+        }
+
+        internal ObservableCollection<string> GetIntensityComboBoxCollection()
+        {
+            return new ObservableCollection<string>()
+            {
+                "",
+                "Highest",
+                "Lowest",
+                "Random"
+            };
         }
     }
 }

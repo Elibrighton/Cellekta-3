@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HarmonicKeyRange.cs" />
+    <Compile Include="IntensityRange.cs" />
     <Compile Include="TempoRange.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -24,6 +24,7 @@ namespace SongInterface
         ITempoRange TempoRange { get; set; }
         int RoundedTrailingTempo { get; }
         IHarmonicKeyRange HarmonicKeyRange { get; set; }
+        IIntensityRange IntensityRange { get; set; }
 
         void Load();
     }

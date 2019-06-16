@@ -7,6 +7,7 @@ namespace MixDiscInterface
     {
         int MinPlaytime { get; set; }
         List<List<ISong>> Matches { get; set; }
+        string IntensityStyle { get; set; }
 
         void Find(ISong firstTrack, List<ISong> playlistTracks);
     }
