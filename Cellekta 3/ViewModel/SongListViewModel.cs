@@ -879,7 +879,7 @@ namespace Cellekta_3.ViewModel
 
                 foreach (var track in playlistTracks)
                 {
-                    var task = FindMixDiscMatchesAsync(track, playlistTracks);
+                    var task = SetMixDiscMatchesAsync(track, playlistTracks);
                     tasks.Add(task);
                 }
 
@@ -887,11 +887,11 @@ namespace Cellekta_3.ViewModel
 
                 if (_mixDiscMatches.Count > 0)
                 {
-                    // temporarially display the first Mix disc match
-                    // add code to match by intensity and intensity style
-                    var mixDiscMatch = _mixDiscMatches[0];
+                    _songListModel.MixDisc.Matches = _mixDiscMatches;
+                    _songListModel.MixDisc.SetIntensityMatch();
+                    var mixDiscIntensityMatch = _songListModel.MixDisc.IntensityMatch;
 
-                    foreach (var track in mixDiscMatch)
+                    foreach (var track in mixDiscIntensityMatch)
                     {
                         MixDiscCollection.Add(track);
                     }
@@ -899,6 +899,7 @@ namespace Cellekta_3.ViewModel
                 else
                 {
                     ResetProgressBar();
+                    // why is this broken?
                     ProgressBarMessage = "No combination of tracks could be found for a Mix disc.";
                 }
             }
@@ -1029,7 +1030,7 @@ namespace Cellekta_3.ViewModel
             IsMixButtonEnabled = isEnabled;
         }
 
-        internal async Task FindMixDiscMatchesAsync(ISong firstTrack, List<ISong> playlistTracks)
+        internal async Task SetMixDiscMatchesAsync(ISong firstTrack, List<ISong> playlistTracks)
         {
             await Task.Run(() => SetMixDiscMatches(firstTrack, playlistTracks));
             ProgressBarValue++;
@@ -1038,7 +1039,7 @@ namespace Cellekta_3.ViewModel
 
         internal void SetMixDiscMatches(ISong firstTrack, List<ISong> playlistTracks)
         {
-            _songListModel.MixDisc.Find(firstTrack, playlistTracks);
+            _songListModel.MixDisc.SetMatches(firstTrack, playlistTracks);
             var mixDiscMatches = _songListModel.MixDisc.Matches;
 
             foreach (var mixDiscMatch in mixDiscMatches)

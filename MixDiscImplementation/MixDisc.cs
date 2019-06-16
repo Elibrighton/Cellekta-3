@@ -11,12 +11,141 @@ namespace MixDiscImplementation
         public int MinPlaytime { get; set; }
         public List<List<ISong>> Matches { get; set; }
         public string IntensityStyle { get; set; }
+        public List<ISong> IntensityMatch { get; set; }
 
 
-        public void Find(ISong firstTrack, List<ISong> playlistTracks)
+        public void SetMatches(ISong firstTrack, List<ISong> playlistTracks)
         {
             var initialTrackCombinations = GetInitialTrackCombinations(firstTrack, playlistTracks);
             Matches = GetCombinationMatches(initialTrackCombinations, playlistTracks);
+        }
+
+        public void SetIntensityMatch()
+        {
+            switch (IntensityStyle)
+            {
+                case "Lowest":
+                case "Highest":
+                    IntensityMatch = GetBestIntensityMatch();
+                    break;
+                case "Random":
+                default:
+                    IntensityMatch = GetRandomMatch();
+                    break;
+            }
+        }
+
+        internal List<ISong> GetBestIntensityMatch()
+        {
+            var intensityMatch = new List<ISong>();
+            var bestIntensityCombinationMatches = GetBestIntensityCombinationMatches(Matches);
+
+            if (bestIntensityCombinationMatches.Count == 1)
+            {
+                intensityMatch = bestIntensityCombinationMatches[0];
+            }
+            else
+            {
+                var bestWeightedIntensityCombinationMatches = GetBestIntensityCombinationMatches(bestIntensityCombinationMatches, true);
+
+                if (bestWeightedIntensityCombinationMatches.Count == 1)
+                {
+                    intensityMatch = bestWeightedIntensityCombinationMatches[0];
+                }
+                else
+                {
+                    var randomIndex = GetRandomIndex(bestWeightedIntensityCombinationMatches);
+                    intensityMatch = bestWeightedIntensityCombinationMatches[randomIndex];
+                }
+            }
+
+            return intensityMatch;
+        }
+
+        internal int GetRandomIndex(List<List<ISong>> combinationMatches)
+        {
+            var randomIndex = 0;
+
+            if (combinationMatches.Count > 1)
+            {
+                var random = new Random();
+                randomIndex = random.Next(combinationMatches.Count);
+            }
+
+            return randomIndex;
+        }
+
+        internal List<ISong> GetRandomMatch()
+        {
+            var randomMatch = new List<ISong>();
+
+            var randomIndex = GetRandomIndex(Matches);
+            randomMatch = Matches[randomIndex];
+
+            return randomMatch;
+        }
+
+        internal List<List<ISong>> GetBestIntensityCombinationMatches(List<List<ISong>> matches, bool isWeighted = false)
+        {
+            var bestIntensityAverage = 0.0;
+            var bestIntensityCombinationMatches = new List<List<ISong>>();
+
+            foreach (var combinationMatch in matches)
+            {
+                var intensityCount = isWeighted ? GetWeightedIntensityCount(combinationMatch) : GetIntensityCount(combinationMatch);
+                var intensityAverage = GetIntensityAverage(intensityCount, combinationMatch.Count());
+
+                if (intensityAverage == bestIntensityAverage || bestIntensityAverage == 0.0)
+                {
+                    if (bestIntensityAverage == 0.0)
+                    {
+                        bestIntensityAverage = intensityAverage;
+                    }
+
+                    bestIntensityCombinationMatches.Add(combinationMatch);
+                }
+                else if ((isWeighted && intensityAverage > bestIntensityAverage)
+                    || (IntensityStyle == "Lowest" && !isWeighted && intensityAverage < bestIntensityAverage))
+                {
+                    bestIntensityAverage = intensityAverage;
+                    bestIntensityCombinationMatches = new List<List<ISong>>
+                    {
+                        combinationMatch
+                    };
+                }
+            }
+
+            return bestIntensityCombinationMatches;
+        }
+
+        internal double GetIntensityAverage(int intensityCount, int combinationMatchCount)
+        {
+            return ((double)intensityCount / combinationMatchCount);
+        }
+
+        internal int GetWeightedIntensityCount(List<ISong> combinationMatch)
+        {
+            var weightedIntensityCount = 0;
+
+            for (int i = 0; i < combinationMatch.Count; i++)
+            {
+                var track = combinationMatch[i];
+                weightedIntensityCount += ((i + 1) * track.Intensity);
+            }
+
+            return weightedIntensityCount;
+        }
+
+        internal int GetIntensityCount(List<ISong> combinationMatch)
+        {
+            var intensityCount = 0;
+
+            foreach (var track in combinationMatch)
+            {
+                intensityCount += track.Intensity;
+            }
+
+            return intensityCount;
         }
 
         internal List<List<ISong>> GetCombinationMatches(List<List<ISong>> initialTrackCombinations, List<ISong> playlistTracks)
