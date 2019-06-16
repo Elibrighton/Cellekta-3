@@ -72,6 +72,7 @@ namespace Cellekta_3.Model
         public string SelectedMixDiscPlaylistComboBoxItem { get; set; }
         public bool IsMixButtonEnabled { get; set; }
         public IMixDisc MixDisc { get; set; }
+        public string PlaytimeTextBoxText { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange, ITrackSearch trackSearch, IMixDisc mixDisc)
         {

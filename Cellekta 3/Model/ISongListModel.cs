@@ -49,6 +49,7 @@ namespace Cellekta_3.Model
         string SelectedMixDiscPlaylistComboBoxItem { get; set; }
         bool IsMixButtonEnabled { get; set; }
         IMixDisc MixDisc { get; set; }
+        string PlaytimeTextBoxText { get; set; }
 
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();

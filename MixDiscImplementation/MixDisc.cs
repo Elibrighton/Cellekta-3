@@ -8,17 +8,20 @@ namespace MixDiscImplementation
 {
     public class MixDisc : IMixDisc
     {
+        public int MinPlaytime { get; set; }
+        public List<List<ISong>> Matches { get; set; }
+
+
         public void Find(ISong firstTrack, List<ISong> playlistTracks)
         {
             var initialTrackCombinations = GetInitialTrackCombinations(firstTrack, playlistTracks);
-            var combinationMatches = GetCombinationMatches(initialTrackCombinations, playlistTracks);
+            Matches = GetCombinationMatches(initialTrackCombinations, playlistTracks);
         }
 
         internal List<List<ISong>> GetCombinationMatches(List<List<ISong>> initialTrackCombinations, List<ISong> playlistTracks)
         {
             var newTrackAdded = true;
             var iterator = 1; // start at second track of initial combination
-            var totalPlaytime = 3600; // replace with UI control for Mix disc length
             var combinationMatches = new List<List<ISong>>();
 
             while (newTrackAdded || iterator < initialTrackCombinations.Count)
@@ -27,7 +30,7 @@ namespace MixDiscImplementation
 
                 foreach (var trackCombination in initialTrackCombinations)
                 {
-                    if (GetCombinationPlayTime(trackCombination) > totalPlaytime)
+                    if (GetCombinationPlayTime(trackCombination) > MinPlaytime)
                     {
                         combinationMatches.Add(trackCombination);
                     }

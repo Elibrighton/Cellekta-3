@@ -63,5 +63,6 @@ namespace Cellekta_3.ViewModel
         bool IsMixDiscClearButtonEnabled { get; set; }
         string SelectedMixDiscPlaylistComboBoxItem { get; set; }
         bool IsMixButtonEnabled { get; set; }
+        string PlaytimeTextBoxText { get; set; }
     }
 }
