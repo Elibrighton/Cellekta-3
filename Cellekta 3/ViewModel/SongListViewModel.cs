@@ -864,7 +864,7 @@ namespace Cellekta_3.ViewModel
             EnableMixDiscControls();
         }
 
-        internal void OnMixButtonCommand(object param)
+        internal async void OnMixButtonCommand(object param)
         {
             if (IsMixDiscFilterValid())
             {
@@ -879,12 +879,11 @@ namespace Cellekta_3.ViewModel
 
                 foreach (var track in playlistTracks)
                 {
-                    //var task = SetMixDiscMatchesAsync(track, playlistTracks);
-                    SetMixDiscMatches(track, playlistTracks);
-                    //tasks.Add(task);
+                    var task = SetMixDiscMatchesAsync(track, playlistTracks);
+                    tasks.Add(task);
                 }
 
-                //await Task.WhenAll();
+                await Task.WhenAll();
 
                 if (_mixDiscMatches.Count > 0)
                 {
@@ -899,9 +898,10 @@ namespace Cellekta_3.ViewModel
                 }
                 else
                 {
-                    //ResetProgressBar();
+                    MessageBox.Show("No combination of tracks could be found for a Mix disc.");
+                    ResetProgressBar();
                     // why is this broken?
-                    ProgressBarMessage = "No combination of tracks could be found for a Mix disc.";
+                    //ProgressBarMessage = "No combination of tracks could be found for a Mix disc";
                 }
             }
         }
@@ -1035,12 +1035,12 @@ namespace Cellekta_3.ViewModel
             IsMixButtonEnabled = isEnabled;
         }
 
-        //internal async Task SetMixDiscMatchesAsync(ISong firstTrack, List<ISong> playlistTracks)
-        //{
-        //    await Task.Run(() => SetMixDiscMatches(firstTrack, playlistTracks));
-        //    ProgressBarValue++;
-        //    ProgressBarMessage = string.Concat("Finding Mix disc for track ", ProgressBarValue, " of ", ProgressBarMax);
-        //}
+        internal async Task SetMixDiscMatchesAsync(ISong firstTrack, List<ISong> playlistTracks)
+        {
+            await Task.Run(() => SetMixDiscMatches(firstTrack, playlistTracks));
+            ProgressBarValue++;
+            ProgressBarMessage = string.Concat("Finding Mix disc for track ", ProgressBarValue, " of ", ProgressBarMax);
+        }
 
         internal void SetMixDiscMatches(ISong firstTrack, List<ISong> playlistTracks)
         {
