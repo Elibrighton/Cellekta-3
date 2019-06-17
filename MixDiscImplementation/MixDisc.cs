@@ -22,16 +22,24 @@ namespace MixDiscImplementation
 
         public void SetIntensityMatch()
         {
-            switch (IntensityStyle)
+
+            if (Matches.Count > 1)
             {
-                case "Lowest":
-                case "Highest":
-                    IntensityMatch = GetBestIntensityMatch();
-                    break;
-                case "Random":
-                default:
-                    IntensityMatch = GetRandomMatch();
-                    break;
+                switch (IntensityStyle)
+                {
+                    case "Lowest":
+                    case "Highest":
+                        IntensityMatch = GetBestIntensityMatch();
+                        break;
+                    case "Random":
+                    default:
+                        IntensityMatch = GetRandomMatch();
+                        break;
+                }
+            }
+            else
+            {
+                IntensityMatch = Matches[0];
             }
         }
 
@@ -104,7 +112,7 @@ namespace MixDiscImplementation
 
                     bestIntensityCombinationMatches.Add(combinationMatch);
                 }
-                else if ((isWeighted && intensityAverage > bestIntensityAverage)
+                else if (((IntensityStyle == "Highest" || isWeighted) && intensityAverage > bestIntensityAverage)
                     || (IntensityStyle == "Lowest" && !isWeighted && intensityAverage < bestIntensityAverage))
                 {
                     bestIntensityAverage = intensityAverage;
@@ -160,7 +168,9 @@ namespace MixDiscImplementation
 
                 foreach (var trackCombination in initialTrackCombinations)
                 {
-                    if (GetCombinationPlayTime(trackCombination) > MinPlaytime)
+                    var combinationPlaytime = GetCombinationPlayTime(trackCombination);
+
+                    if (combinationPlaytime >= MinPlaytime)
                     {
                         combinationMatches.Add(trackCombination);
                     }
@@ -209,12 +219,12 @@ namespace MixDiscImplementation
                 t != track1
                 && (mixableTrackCombination == null
                 || !mixableTrackCombination.Contains(t))
-                && (((t.LeadingTempo <= track1.TempoRange.FastestTempo
-                && t.LeadingTempo >= track1.TempoRange.SlowestTempo)
-                || (t.LeadingTempo <= track1.TempoRange.FastestHalfTempo
-                && t.LeadingTempo >= track1.TempoRange.SlowestHalfTempo)
-                || (t.LeadingTempo <= track1.TempoRange.FastestDoubleTempo
-                && t.LeadingTempo >= track1.TempoRange.SlowestDoubleTempo))
+                && (((Math.Round(t.LeadingTempo, 3) <= track1.TempoRange.FastestTempo
+                && Math.Round(t.LeadingTempo, 3) >= track1.TempoRange.SlowestTempo)
+                || (Math.Round(t.LeadingTempo, 3) <= track1.TempoRange.FastestHalfTempo
+                && Math.Round(t.LeadingTempo, 3) >= track1.TempoRange.SlowestHalfTempo)
+                || (Math.Round(t.LeadingTempo, 3) <= track1.TempoRange.FastestDoubleTempo
+                && Math.Round(t.LeadingTempo, 3) >= track1.TempoRange.SlowestDoubleTempo))
                 && (t.LeadingHarmonicKey == track1.HarmonicKeyRange.InnerCircleHarmonicKey
                 || t.LeadingHarmonicKey == track1.HarmonicKeyRange.OuterCircleHarmonicKey
                 || t.LeadingHarmonicKey == track1.HarmonicKeyRange.PlusOneHarmonicKey

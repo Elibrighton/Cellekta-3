@@ -752,7 +752,7 @@ namespace Cellekta_3.ViewModel
 
                 TempoSliderValue = SelectedPreparationItem.RoundedTrailingTempo;
                 SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[(HarmonicKeyComboBoxCollection.IndexOf(SelectedPreparationItem.TrailingHarmonicKey))];
-
+                Filter();
                 SelectRandomTrackCollectionItem();
 
                 if (FilteredTrackCollection.Count() > 0)
@@ -864,7 +864,7 @@ namespace Cellekta_3.ViewModel
             EnableMixDiscControls();
         }
 
-        internal async void OnMixButtonCommand(object param)
+        internal void OnMixButtonCommand(object param)
         {
             if (IsMixDiscFilterValid())
             {
@@ -879,11 +879,12 @@ namespace Cellekta_3.ViewModel
 
                 foreach (var track in playlistTracks)
                 {
-                    var task = SetMixDiscMatchesAsync(track, playlistTracks);
-                    tasks.Add(task);
+                    //var task = SetMixDiscMatchesAsync(track, playlistTracks);
+                    SetMixDiscMatches(track, playlistTracks);
+                    //tasks.Add(task);
                 }
 
-                await Task.WhenAll();
+                //await Task.WhenAll();
 
                 if (_mixDiscMatches.Count > 0)
                 {
@@ -898,7 +899,7 @@ namespace Cellekta_3.ViewModel
                 }
                 else
                 {
-                    ResetProgressBar();
+                    //ResetProgressBar();
                     // why is this broken?
                     ProgressBarMessage = "No combination of tracks could be found for a Mix disc.";
                 }
@@ -934,8 +935,12 @@ namespace Cellekta_3.ViewModel
             FilteredTrackCollection.Clear();
             ImportedTrackCollection.Clear();
             PreparationCollection.Clear();
+            MixDiscCollection.Clear();
             ClearFilter();
+            ClearMixDiscFilter();
+            _mixDiscMatches = new List<List<ISong>>();
             EnableControls();
+            EnableMixDiscControls();
             ProgressBarMessage = "Ready to import";
         }
 
@@ -1030,12 +1035,12 @@ namespace Cellekta_3.ViewModel
             IsMixButtonEnabled = isEnabled;
         }
 
-        internal async Task SetMixDiscMatchesAsync(ISong firstTrack, List<ISong> playlistTracks)
-        {
-            await Task.Run(() => SetMixDiscMatches(firstTrack, playlistTracks));
-            ProgressBarValue++;
-            ProgressBarMessage = string.Concat("Finding Mix disc for track ", ProgressBarValue, " of ", ProgressBarMax);
-        }
+        //internal async Task SetMixDiscMatchesAsync(ISong firstTrack, List<ISong> playlistTracks)
+        //{
+        //    await Task.Run(() => SetMixDiscMatches(firstTrack, playlistTracks));
+        //    ProgressBarValue++;
+        //    ProgressBarMessage = string.Concat("Finding Mix disc for track ", ProgressBarValue, " of ", ProgressBarMax);
+        //}
 
         internal void SetMixDiscMatches(ISong firstTrack, List<ISong> playlistTracks)
         {

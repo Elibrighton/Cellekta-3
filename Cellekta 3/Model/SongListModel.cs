@@ -154,10 +154,10 @@ namespace Cellekta_3.Model
             var fastestTempoSliderValue = Math.Round(Convert.ToDouble(TempoSliderValue + 1), 3);
 
             // refactor ito Range project
-            var tempoRange = GetTempoRange();
+            var tempoRangeValue = GetTempoRangeValue();
 
-            var slowestTempoSliderRangeValue = Math.Round((slowestTempoSliderValue - tempoRange), 3);
-            var fastestTempoSliderRangeValue = Math.Round((fastestTempoSliderValue + tempoRange), 3);
+            var slowestTempoSliderRangeValue = Math.Round((slowestTempoSliderValue - tempoRangeValue), 3);
+            var fastestTempoSliderRangeValue = Math.Round((fastestTempoSliderValue + tempoRangeValue), 3);
 
             _harmonicKeyRange.Load(SelectedHarmonicKeyComboBoxItem);
 
@@ -166,41 +166,39 @@ namespace Cellekta_3.Model
             _trackSearch.Load();
 
             return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t =>
-                // not in preparation list
-                (!PreparationCollection.Contains(t)
-                // and (cleared filter
-                && ((TempoSliderValue == 0
-                && string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem))
-                // or exact filter match
-                || (!IsMixableRangeCheckboxChecked
-                && (TempoSliderValue == 0
-                || (t.LeadingTempo >= slowestTempoSliderValue
-                && t.LeadingTempo <= fastestTempoSliderValue))
-                && (string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
-                || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem))
-                // or mixable range filter match)
-                || (IsMixableRangeCheckboxChecked
-                && ((TempoSliderValue == 0
-                || (t.LeadingTempo >= slowestTempoSliderRangeValue
-                && t.LeadingTempo <= fastestTempoSliderRangeValue))
-                && ((string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
-                || (t.LeadingHarmonicKey == _harmonicKeyRange.InnerCircleHarmonicKey
-                || t.LeadingHarmonicKey == _harmonicKeyRange.OuterCircleHarmonicKey
-                || t.LeadingHarmonicKey == _harmonicKeyRange.PlusOneHarmonicKey
-                || t.LeadingHarmonicKey == _harmonicKeyRange.MinusOneHarmonicKey))))))
-                // and matches playlist
-                && (string.IsNullOrEmpty(SelectedPlaylistComboBoxItem)
-                || t.Playlist == SelectedPlaylistComboBoxItem)
-                // and matches search text
-                && (string.IsNullOrEmpty(_trackSearch.Text)
-                || t.Artist.ToLower().Contains(_trackSearch.Text.ToLower().Trim())
-                || t.Title.ToLower().Contains(_trackSearch.Text.ToLower().Trim()))
-                || (!string.IsNullOrEmpty(_trackSearch.Artist)
-                && !string.IsNullOrEmpty(_trackSearch.Title)
-                && ((t.Artist.ToLower().Contains(_trackSearch.Artist.ToLower())
-                && t.Title.ToLower().Contains(_trackSearch.Title.ToLower()))
-                || (t.Artist.ToLower().Contains(_trackSearch.Title.ToLower())
-                && t.Title.ToLower().Contains(_trackSearch.Artist.ToLower())))))));
+                    // not in preparation list
+                    (!PreparationCollection.Contains(t) 
+                    // and (exact filter match
+                    && ((!IsMixableRangeCheckboxChecked 
+                    && (TempoSliderValue == 0 
+                    || (Math.Round(t.LeadingTempo, 3) >= slowestTempoSliderValue 
+                    && Math.Round(t.LeadingTempo, 3) <= fastestTempoSliderValue)) 
+                    && (string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
+                    || t.LeadingHarmonicKey == SelectedHarmonicKeyComboBoxItem))
+                    // or mixable range filter match)
+                    || (IsMixableRangeCheckboxChecked 
+                    && ((TempoSliderValue == 0
+                    || (Math.Round(t.LeadingTempo, 3) >= slowestTempoSliderRangeValue
+                    && Math.Round(t.LeadingTempo, 3) <= fastestTempoSliderRangeValue))
+                    && ((string.IsNullOrEmpty(SelectedHarmonicKeyComboBoxItem)
+                    || (t.LeadingHarmonicKey == _harmonicKeyRange.InnerCircleHarmonicKey
+                    || t.LeadingHarmonicKey == _harmonicKeyRange.OuterCircleHarmonicKey
+                    || t.LeadingHarmonicKey == _harmonicKeyRange.PlusOneHarmonicKey
+                    || t.LeadingHarmonicKey == _harmonicKeyRange.MinusOneHarmonicKey))))))
+                    // and matches playlist
+                    && (string.IsNullOrEmpty(SelectedPlaylistComboBoxItem)
+                    || t.Playlist == SelectedPlaylistComboBoxItem)
+                    // and matches search text
+                    && (string.IsNullOrEmpty(_trackSearch.Text)
+                    || t.Artist.ToLower().Contains(_trackSearch.Text.ToLower().Trim())
+                    || t.Title.ToLower().Contains(_trackSearch.Text.ToLower().Trim()))
+                    || (!string.IsNullOrEmpty(_trackSearch.Artist)
+                    && !string.IsNullOrEmpty(_trackSearch.Title)
+                    && ((t.Artist.ToLower().Contains(_trackSearch.Artist.ToLower())
+                    && t.Title.ToLower().Contains(_trackSearch.Title.ToLower()))
+                    || (t.Artist.ToLower().Contains(_trackSearch.Title.ToLower())
+                    && t.Title.ToLower().Contains(_trackSearch.Artist.ToLower()))))
+                )));
         }
 
         internal ObservableCollection<string> GetHarmonicKeyComboBoxCollection()
@@ -235,7 +233,7 @@ namespace Cellekta_3.Model
             };
         }
 
-        internal double GetTempoRange()
+        internal double GetTempoRangeValue()
         {
             var tempoRange = TempoRangeThree;
 
