@@ -12,6 +12,7 @@ namespace MixDiscImplementation
         public List<List<ISong>> Matches { get; set; }
         public string IntensityStyle { get; set; }
         public List<ISong> IntensityMatch { get; set; }
+        public int MixLength { get; set; }
 
 
         public void SetMatches(ISong firstTrack, List<ISong> playlistTracks)
@@ -22,8 +23,11 @@ namespace MixDiscImplementation
 
         public void SetIntensityMatch()
         {
-
-            if (Matches.Count > 1)
+            if (Matches.Count == 1)
+            {
+                IntensityMatch = Matches[0];
+            }
+            else if (Matches.Count > 1)
             {
                 switch (IntensityStyle)
                 {
@@ -36,10 +40,6 @@ namespace MixDiscImplementation
                         IntensityMatch = GetRandomMatch();
                         break;
                 }
-            }
-            else
-            {
-                IntensityMatch = Matches[0];
             }
         }
 
@@ -184,7 +184,7 @@ namespace MixDiscImplementation
                             trackCombination.Add(nextTrack);
                             newTrackAdded = true;
 
-                            break;
+                            continue;
                         }
                     }
                 }
@@ -243,7 +243,15 @@ namespace MixDiscImplementation
                 combinationPlayTime += track.PlayTime;
             }
 
+            var combinationMixTime = GetCombinationMixTime(mixableTrackCombination.Count() - 1);
+            combinationPlayTime -= combinationMixTime;
+
             return combinationPlayTime;
+        }
+
+        internal int GetCombinationMixTime(int mixableTrackCombinationCount)
+        {
+            return (mixableTrackCombinationCount * MixLength);
         }
     }
 }

@@ -52,6 +52,7 @@ namespace Cellekta_3.Model
         string PlaytimeTextBoxText { get; set; }
         ObservableCollection<string> IntensityComboBoxCollection { get; set; }
         string SelectedIntensityComboBoxItem { get; set; }
+        string MixLengthTextBoxText { get; set; }
 
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();

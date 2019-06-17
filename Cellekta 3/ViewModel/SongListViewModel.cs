@@ -591,6 +591,20 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public string MixLengthTextBoxText
+        {
+            get { return _songListModel.MixLengthTextBoxText; }
+            set
+            {
+                if (_songListModel.MixLengthTextBoxText != value)
+                {
+                    _songListModel.MixLengthTextBoxText = value;
+                    NotifyPropertyChanged("MixLengthTextBoxText");
+                    EnableMixDiscControls();
+                }
+            }
+        }
+
         public SongListViewModel(ISongListModel songListModel, IXmlWrapper xmlWrapper)
         {
             _songListModel = songListModel;
@@ -874,8 +888,9 @@ namespace Cellekta_3.ViewModel
 
                 ResetProgressBar();
                 ProgressBarMax = playlistTrackCount;
-                _songListModel.MixDisc.MinPlaytime = (Convert.ToInt32(PlaytimeTextBoxText) * 60);
                 _songListModel.MixDisc.IntensityStyle = SelectedIntensityComboBoxItem;
+                _songListModel.MixDisc.MinPlaytime = (Convert.ToInt32(PlaytimeTextBoxText) * 60);
+                _songListModel.MixDisc.MixLength = Convert.ToInt32(MixLengthTextBoxText);
 
                 foreach (var track in playlistTracks)
                 {
@@ -884,26 +899,33 @@ namespace Cellekta_3.ViewModel
                 }
 
                 await Task.WhenAll();
+            }
+        }
 
-                if (_mixDiscMatches.Count > 0)
-                {
-                    _songListModel.MixDisc.Matches = _mixDiscMatches;
-                    _songListModel.MixDisc.SetIntensityMatch();
-                    var mixDiscIntensityMatch = _songListModel.MixDisc.IntensityMatch;
+        internal List<ISong> GetBestMixDiscCombination()
+        {
+            var bestMixDiscCombination = new List<ISong>();
 
-                    foreach (var track in mixDiscIntensityMatch)
-                    {
-                        MixDiscCollection.Add(track);
-                    }
-                }
-                else
+            if (_mixDiscMatches.Count > 0)
+            {
+                _songListModel.MixDisc.Matches = _mixDiscMatches;
+                _songListModel.MixDisc.SetIntensityMatch();
+                bestMixDiscCombination = _songListModel.MixDisc.IntensityMatch;
+
+                foreach (var track in bestMixDiscCombination)
                 {
-                    MessageBox.Show("No combination of tracks could be found for a Mix disc.");
-                    ResetProgressBar();
-                    // why is this broken?
-                    //ProgressBarMessage = "No combination of tracks could be found for a Mix disc";
+                    MixDiscCollection.Add(track);
                 }
             }
+            else
+            {
+                MessageBox.Show("No combination of tracks could be found for a Mix disc.");
+                ResetProgressBar();
+                // why is this broken?
+                //ProgressBarMessage = "No combination of tracks could be found for a Mix disc";
+            }
+
+            return bestMixDiscCombination;
         }
 
         internal void OnIntensityComboBoxSelectionChangedCommand(object param)
@@ -1024,13 +1046,14 @@ namespace Cellekta_3.ViewModel
             }
 
             PlaytimeTextBoxText = "";
+            MixLengthTextBoxText = "";
             ResetProgressBar();
             ProgressBarMessage = "Mix disc filters cleared";
         }
 
         internal void EnableMixDiscControls()
         {
-            var isEnabled = (!string.IsNullOrEmpty(SelectedMixDiscPlaylistComboBoxItem) || !string.IsNullOrEmpty(PlaytimeTextBoxText) || !string.IsNullOrEmpty(SelectedIntensityComboBoxItem));
+            var isEnabled = (!string.IsNullOrEmpty(SelectedMixDiscPlaylistComboBoxItem) || !string.IsNullOrEmpty(PlaytimeTextBoxText) || !string.IsNullOrEmpty(SelectedIntensityComboBoxItem) || !string.IsNullOrEmpty(MixLengthTextBoxText));
             IsMixDiscClearButtonEnabled = isEnabled;
             IsMixButtonEnabled = isEnabled;
         }
@@ -1038,8 +1061,14 @@ namespace Cellekta_3.ViewModel
         internal async Task SetMixDiscMatchesAsync(ISong firstTrack, List<ISong> playlistTracks)
         {
             await Task.Run(() => SetMixDiscMatches(firstTrack, playlistTracks));
+
             ProgressBarValue++;
             ProgressBarMessage = string.Concat("Finding Mix disc for track ", ProgressBarValue, " of ", ProgressBarMax);
+
+            if (ProgressBarValue == ProgressBarMax)
+            {
+                GetBestMixDiscCombination();
+            }
         }
 
         internal void SetMixDiscMatches(ISong firstTrack, List<ISong> playlistTracks)
@@ -1065,6 +1094,10 @@ namespace Cellekta_3.ViewModel
             else if (string.IsNullOrEmpty(PlaytimeTextBoxText))
             {
                 validationMessage = "You must enter a playtime.";
+            }
+            else if (string.IsNullOrEmpty(MixLengthTextBoxText))
+            {
+                validationMessage = "You must enter a mix length.";
             }
 
             if (!string.IsNullOrEmpty(validationMessage))

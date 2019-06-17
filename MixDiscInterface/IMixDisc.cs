@@ -9,6 +9,7 @@ namespace MixDiscInterface
         List<List<ISong>> Matches { get; set; }
         string IntensityStyle { get; set; }
         List<ISong> IntensityMatch { get; set; }
+        int MixLength { get; set; }
 
         void SetMatches(ISong firstTrack, List<ISong> playlistTracks);
         void SetIntensityMatch();

@@ -75,6 +75,7 @@ namespace Cellekta_3.Model
         public string PlaytimeTextBoxText { get; set; }
         public ObservableCollection<string> IntensityComboBoxCollection { get; set; }
         public string SelectedIntensityComboBoxItem { get; set; }
+        public string MixLengthTextBoxText { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange, ITrackSearch trackSearch, IMixDisc mixDisc)
         {

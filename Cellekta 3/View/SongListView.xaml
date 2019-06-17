@@ -182,8 +182,10 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </ComboBox>
-                            <TextBlock Text="Playtime" Margin="5, 3, 0, 3" />
+                            <TextBlock Text="Playtime (mins)" Margin="5, 3, 0, 3" />
                             <TextBox Text="{Binding PlaytimeTextBoxText, UpdateSourceTrigger=PropertyChanged}" MinWidth="75" Margin="5, 1, 0, 3"/>
+                            <TextBlock Text="Mix length (secs)" Margin="5, 3, 0, 3" />
+                            <TextBox Text="{Binding MixLengthTextBoxText, UpdateSourceTrigger=PropertyChanged}" MinWidth="75" Margin="5, 1, 0, 3"/>
                             <Button Command="{Binding MixDiscClearButtonCommand}" IsEnabled="{Binding IsMixDiscClearButtonEnabled}" MinWidth="100" Margin="5, 1, 0, 3">Clear</Button>
                         </StackPanel>
                         <ListView ItemsSource="{Binding MixDiscCollection}" 

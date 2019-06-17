@@ -67,5 +67,6 @@ namespace Cellekta_3.ViewModel
         string PlaytimeTextBoxText { get; set; }
         ObservableCollection<string> IntensityComboBoxCollection { get; set; }
         string SelectedIntensityComboBoxItem { get; set; }
+        string MixLengthTextBoxText { get; set; }
     }
 }
