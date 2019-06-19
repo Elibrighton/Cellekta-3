@@ -8,45 +8,159 @@ namespace MixDiscImplementation
 {
     public class MixDisc : IMixDisc
     {
+        public ISong BaseTrack { get; set; }
+        public List<ISong> PlaylistTracks { get; set; }
         public int MinPlaytime { get; set; }
-        public List<List<ISong>> Matches { get; set; }
         public string IntensityStyle { get; set; }
-        public List<ISong> IntensityMatch { get; set; }
         public int MixLength { get; set; }
+        public List<List<ISong>> MixDiscTracksList { get; set; }
 
+        private List<List<ISong>> _matchingCombinations;
 
-        public void SetMatches(ISong firstTrack, List<ISong> playlistTracks)
+        public MixDisc()
         {
-            var initialTrackCombinations = GetInitialTrackCombinations(firstTrack, playlistTracks);
-            Matches = GetCombinationMatches(initialTrackCombinations, playlistTracks);
+            _matchingCombinations = new List<List<ISong>>();
+            MixDiscTracksList = new List<List<ISong>>();
         }
 
-        public void SetIntensityMatch()
+        public List<ISong> GetBestMatch()
         {
-            if (Matches.Count == 1)
+            var bestMatch = new List<ISong>();
+
+            if (BaseTrack != null)
             {
-                IntensityMatch = Matches[0];
+                var baseTrackList = new List<ISong>
+                {
+                    BaseTrack
+                };
+
+                CombineTracks(baseTrackList, PlaylistTracks, MinPlaytime);
+                bestMatch = GetFinalBestMatch();
             }
-            else if (Matches.Count > 1)
+
+            return bestMatch;
+        }
+
+        public List<ISong> GetFinalBestMatch()
+        {
+            var bestMatch = new List<ISong>();
+
+            if (MixDiscTracksList.Count > 0)
+            {
+                _matchingCombinations = MixDiscTracksList;
+            }
+
+            if (_matchingCombinations.Count == 1)
+            {
+                bestMatch = _matchingCombinations[0];
+            }
+            else if (_matchingCombinations.Count > 1)
             {
                 switch (IntensityStyle)
                 {
                     case "Lowest":
                     case "Highest":
-                        IntensityMatch = GetBestIntensityMatch();
+                        bestMatch = GetBestIntensityMatch();
                         break;
                     case "Random":
                     default:
-                        IntensityMatch = GetRandomMatch();
+                        bestMatch = GetRandomMatch();
                         break;
                 }
             }
+
+            return bestMatch;
+        }
+
+        internal void CombineTracks(List<ISong> trackCombination, List<ISong> playlistTracks, int minPlaytime)
+        {
+            var trailingTrack = GetTrailingTrack(trackCombination);
+            var mixableTracks = GetMixableTracks(trailingTrack, playlistTracks, trackCombination);
+
+            if (mixableTracks.Count > 0)
+            {
+                var newTrackCombinations = new List<List<ISong>>();
+
+                foreach (var mixableTrack in mixableTracks)
+                {
+                    var newTrackCombination = GetNewTrackCombination(mixableTrack, trackCombination);
+                    newTrackCombinations.Add(newTrackCombination);
+                }
+
+                if (newTrackCombinations.Count() > 0)
+                {
+                    foreach (var newTrackCombination in newTrackCombinations)
+                    {
+                        if (IsPlaytimeReached(newTrackCombination, minPlaytime))
+                        {
+                            _matchingCombinations.Add(newTrackCombination);
+                        }
+                        else
+                        {
+                            CombineTracks(newTrackCombination, playlistTracks, minPlaytime);
+                        }
+                    }
+                }
+            }
+        }
+
+        internal List<ISong> GetNewTrackCombination(ISong mixableTrack, List<ISong> trackCombination)
+        {
+            var newTrackCombination = new List<ISong>();
+
+            foreach (var track in trackCombination)
+            {
+                newTrackCombination.Add(track);
+            }
+
+            newTrackCombination.Add(mixableTrack);
+
+            return newTrackCombination;
+        }
+
+        internal ISong GetTrailingTrack(List<ISong> trackCombination)
+        {
+            return trackCombination[trackCombination.Count() - 1];
+        }
+
+        internal bool IsPlaytimeReached(List<ISong> trackCombination, int minPlaytime)
+        {
+            var isPlaytimeReached = false;
+            var totalCombinationPlaytime = GetTotalCombinationPlayTime(trackCombination);
+
+            if (totalCombinationPlaytime >= minPlaytime)
+            {
+                isPlaytimeReached = true;
+            }
+
+            return isPlaytimeReached;
+        }
+
+        internal List<ISong> GetMixableTracks(ISong trailingTrack, List<ISong> playlistTracks, List<ISong> mixableTrackCombination)
+        {
+            return playlistTracks.Where(t =>
+                t != trailingTrack
+                && (mixableTrackCombination == null
+                || !mixableTrackCombination.Contains(t))
+                && (((Math.Round(t.LeadingTempo, 3) <= trailingTrack.TempoRange.FastestTempo
+                && Math.Round(t.LeadingTempo, 3) >= trailingTrack.TempoRange.SlowestTempo)
+                || (Math.Round(t.LeadingTempo, 3) <= trailingTrack.TempoRange.FastestHalfTempo
+                && Math.Round(t.LeadingTempo, 3) >= trailingTrack.TempoRange.SlowestHalfTempo)
+                || (Math.Round(t.LeadingTempo, 3) <= trailingTrack.TempoRange.FastestDoubleTempo
+                && Math.Round(t.LeadingTempo, 3) >= trailingTrack.TempoRange.SlowestDoubleTempo))
+                && (t.LeadingHarmonicKey == trailingTrack.HarmonicKeyRange.InnerCircleHarmonicKey
+                || t.LeadingHarmonicKey == trailingTrack.HarmonicKeyRange.OuterCircleHarmonicKey
+                || t.LeadingHarmonicKey == trailingTrack.HarmonicKeyRange.PlusOneHarmonicKey
+                || t.LeadingHarmonicKey == trailingTrack.HarmonicKeyRange.MinusOneHarmonicKey)
+                && (string.IsNullOrEmpty(IntensityStyle)
+                || (t.Intensity <= trailingTrack.IntensityRange.PlusOneIntensity
+                && t.Intensity >= trailingTrack.IntensityRange.MinusOneIntensity)))).ToList();
         }
 
         internal List<ISong> GetBestIntensityMatch()
         {
             var intensityMatch = new List<ISong>();
-            var bestIntensityCombinationMatches = GetBestIntensityCombinationMatches(Matches);
+            var bestIntensityCombinationMatches = GetBestIntensityCombinationMatches(_matchingCombinations);
 
             if (bestIntensityCombinationMatches.Count == 1)
             {
@@ -87,8 +201,8 @@ namespace MixDiscImplementation
         {
             var randomMatch = new List<ISong>();
 
-            var randomIndex = GetRandomIndex(Matches);
-            randomMatch = Matches[randomIndex];
+            var randomIndex = GetRandomIndex(_matchingCombinations);
+            randomMatch = _matchingCombinations[randomIndex];
 
             return randomMatch;
         }
@@ -156,85 +270,7 @@ namespace MixDiscImplementation
             return intensityCount;
         }
 
-        internal List<List<ISong>> GetCombinationMatches(List<List<ISong>> initialTrackCombinations, List<ISong> playlistTracks)
-        {
-            var newTrackAdded = true;
-            var iterator = 1; // start at second track of initial combination
-            var combinationMatches = new List<List<ISong>>();
-
-            while (newTrackAdded || iterator < initialTrackCombinations.Count)
-            {
-                newTrackAdded = false;
-
-                foreach (var trackCombination in initialTrackCombinations)
-                {
-                    var combinationPlaytime = GetCombinationPlayTime(trackCombination);
-
-                    if (combinationPlaytime >= MinPlaytime)
-                    {
-                        combinationMatches.Add(trackCombination);
-                    }
-                    else if (iterator < trackCombination.Count)
-                    {
-                        var trailingTrack = trackCombination[iterator];
-                        var nextTrack = GetTracksInMixableRange(trailingTrack, playlistTracks, trackCombination).FirstOrDefault();
-
-                        if (nextTrack != null)
-                        {
-                            trackCombination.Add(nextTrack);
-                            newTrackAdded = true;
-
-                            continue;
-                        }
-                    }
-                }
-
-                iterator++;
-            }
-
-            return combinationMatches;
-        }
-
-        internal List<List<ISong>> GetInitialTrackCombinations(ISong firstTrack, List<ISong> playlistTracks)
-        {
-            var tracksInMixableRange = GetTracksInMixableRange(firstTrack, playlistTracks, null);
-            var initialTrackCombinations = new List<List<ISong>>();
-
-            foreach (var nextTrack in tracksInMixableRange)
-            {
-                var mixableTrackCombination = new List<ISong>
-                {
-                        firstTrack,
-                        nextTrack
-                };
-                initialTrackCombinations.Add(mixableTrackCombination);
-            }
-
-            return initialTrackCombinations;
-        }
-
-        internal List<ISong> GetTracksInMixableRange(ISong track1, List<ISong> playlistTracks, List<ISong> mixableTrackCombination)
-        {
-            return playlistTracks.Where(t =>
-                t != track1
-                && (mixableTrackCombination == null
-                || !mixableTrackCombination.Contains(t))
-                && (((Math.Round(t.LeadingTempo, 3) <= track1.TempoRange.FastestTempo
-                && Math.Round(t.LeadingTempo, 3) >= track1.TempoRange.SlowestTempo)
-                || (Math.Round(t.LeadingTempo, 3) <= track1.TempoRange.FastestHalfTempo
-                && Math.Round(t.LeadingTempo, 3) >= track1.TempoRange.SlowestHalfTempo)
-                || (Math.Round(t.LeadingTempo, 3) <= track1.TempoRange.FastestDoubleTempo
-                && Math.Round(t.LeadingTempo, 3) >= track1.TempoRange.SlowestDoubleTempo))
-                && (t.LeadingHarmonicKey == track1.HarmonicKeyRange.InnerCircleHarmonicKey
-                || t.LeadingHarmonicKey == track1.HarmonicKeyRange.OuterCircleHarmonicKey
-                || t.LeadingHarmonicKey == track1.HarmonicKeyRange.PlusOneHarmonicKey
-                || t.LeadingHarmonicKey == track1.HarmonicKeyRange.MinusOneHarmonicKey)
-                && (string.IsNullOrEmpty(IntensityStyle)
-                || (t.Intensity <= track1.IntensityRange.PlusOneIntensity
-                && t.Intensity >= track1.IntensityRange.MinusOneIntensity)))).ToList();
-        }
-
-        internal int GetCombinationPlayTime(List<ISong> mixableTrackCombination)
+        internal int GetTotalCombinationPlayTime(List<ISong> mixableTrackCombination)
         {
             var combinationPlayTime = 0;
 

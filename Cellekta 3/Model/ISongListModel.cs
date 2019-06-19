@@ -1,5 +1,5 @@
-﻿using MixDiscInterface;
-using SongInterface;
+﻿using SongInterface;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using TraktorLibraryInterface;
 
@@ -48,7 +48,6 @@ namespace Cellekta_3.Model
         bool IsMixDiscClearButtonEnabled { get; set; }
         string SelectedMixDiscPlaylistComboBoxItem { get; set; }
         bool IsMixButtonEnabled { get; set; }
-        IMixDisc MixDisc { get; set; }
         string PlaytimeTextBoxText { get; set; }
         ObservableCollection<string> IntensityComboBoxCollection { get; set; }
         string SelectedIntensityComboBoxItem { get; set; }
@@ -56,5 +55,7 @@ namespace Cellekta_3.Model
 
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();
+        List<ISong> GetMixDiscTracks(ISong track, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength);
+        List<ISong> GetBestMixDiscTracks(List<List<ISong>> mixDiscTracksList, string intensityStyle);
     }
 }

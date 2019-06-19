@@ -5,14 +5,15 @@ namespace MixDiscInterface
 {
     public interface IMixDisc
     {
-        int MinPlaytime { get; set; }
-        List<List<ISong>> Matches { get; set; }
+        ISong BaseTrack { get; set; }
+        List<ISong> PlaylistTracks { get; set; }
         string IntensityStyle { get; set; }
-        List<ISong> IntensityMatch { get; set; }
+        int MinPlaytime { get; set; }
         int MixLength { get; set; }
+        List<List<ISong>> MixDiscTracksList { get; set; }
 
-        void SetMatches(ISong firstTrack, List<ISong> playlistTracks);
-        void SetIntensityMatch();
+        List<ISong> GetBestMatch();
+        List<ISong> GetFinalBestMatch();
 
     }
 }

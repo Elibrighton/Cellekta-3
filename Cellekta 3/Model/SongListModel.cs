@@ -1,7 +1,9 @@
 ﻿using MixableRangeInterface;
+using MixDiscImplementation;
 using MixDiscInterface;
 using SongInterface;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TrackSearchInterface;
@@ -71,19 +73,17 @@ namespace Cellekta_3.Model
         public bool IsMixDiscClearButtonEnabled { get; set; }
         public string SelectedMixDiscPlaylistComboBoxItem { get; set; }
         public bool IsMixButtonEnabled { get; set; }
-        public IMixDisc MixDisc { get; set; }
         public string PlaytimeTextBoxText { get; set; }
         public ObservableCollection<string> IntensityComboBoxCollection { get; set; }
         public string SelectedIntensityComboBoxItem { get; set; }
         public string MixLengthTextBoxText { get; set; }
 
-        public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange, ITrackSearch trackSearch, IMixDisc mixDisc)
+        public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange, ITrackSearch trackSearch)
         {
             TraktorLibrary = traktorLibrary;
             _xmlWrapper = xmlWrapper;
             _harmonicKeyRange = harmonicKeyRange;
             _trackSearch = trackSearch;
-            MixDisc = mixDisc;
             ImportedTrackCollection = new ObservableCollection<ISong>();
             FilteredTrackCollection = new ObservableCollection<ISong>();
             PreparationCollection = new ObservableCollection<ISong>();
@@ -200,6 +200,32 @@ namespace Cellekta_3.Model
                     || (t.Artist.ToLower().Contains(_trackSearch.Title.ToLower())
                     && t.Title.ToLower().Contains(_trackSearch.Artist.ToLower()))))
                 )));
+        }
+
+        public List<ISong> GetMixDiscTracks(ISong track, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength)
+        {
+            IMixDisc mixDisc = new MixDisc
+            {
+                BaseTrack = track,
+                PlaylistTracks = playlistTracks,
+                IntensityStyle = intensityStyle,
+                MinPlaytime = minPlaytime,
+                MixLength = mixLength
+            };
+
+            return mixDisc.GetBestMatch();
+        }
+
+        public List<ISong> GetBestMixDiscTracks(List<List<ISong>> mixDiscTracksList, string intensityStyle)
+        {
+
+            IMixDisc mixDisc = new MixDisc
+            {
+                IntensityStyle = intensityStyle,
+                MixDiscTracksList = mixDiscTracksList
+            };
+
+            return mixDisc.GetFinalBestMatch();
         }
 
         internal ObservableCollection<string> GetHarmonicKeyComboBoxCollection()
