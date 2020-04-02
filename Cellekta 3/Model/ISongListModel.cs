@@ -55,7 +55,7 @@ namespace Cellekta_3.Model
 
         ObservableCollection<ISong> GetFilteredTrackCollection();
         int GetRandomRowIndex();
-        List<ISong> GetMixDiscTracks(ISong track, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength);
-        List<ISong> GetBestMixDiscTracks(List<List<ISong>> mixDiscTracksList, string intensityStyle);
+        List<ISong> GetMixDiscTracks(List<ISong> baseTrackList, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength);
+        List<ISong> GetBestMixDiscTracks(List<ISong> baseTrackList, List<List<ISong>> mixDiscTracksList, string intensityStyle);
     }
 }

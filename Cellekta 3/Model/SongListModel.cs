@@ -202,11 +202,11 @@ namespace Cellekta_3.Model
                 )));
         }
 
-        public List<ISong> GetMixDiscTracks(ISong track, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength)
+        public List<ISong> GetMixDiscTracks(List<ISong> baseTrackList, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength)
         {
             IMixDisc mixDisc = new MixDisc
             {
-                BaseTrack = track,
+                BaseTrackList = baseTrackList,
                 PlaylistTracks = playlistTracks,
                 IntensityStyle = intensityStyle,
                 MinPlaytime = minPlaytime,
@@ -216,13 +216,14 @@ namespace Cellekta_3.Model
             return mixDisc.GetBestMatch();
         }
 
-        public List<ISong> GetBestMixDiscTracks(List<List<ISong>> mixDiscTracksList, string intensityStyle)
+        public List<ISong> GetBestMixDiscTracks(List<ISong> baseTrackList, List<List<ISong>> mixDiscTracksList, string intensityStyle)
         {
 
             IMixDisc mixDisc = new MixDisc
             {
+                BaseTrackList = baseTrackList,
                 IntensityStyle = intensityStyle,
-                MixDiscTracksList = mixDiscTracksList
+                MatchingTrackCombinationList = mixDiscTracksList
             };
 
             return mixDisc.GetFinalBestMatch();

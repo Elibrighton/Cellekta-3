@@ -8,35 +8,32 @@ namespace MixDiscImplementation
 {
     public class MixDisc : IMixDisc
     {
-        public ISong BaseTrack { get; set; }
         public List<ISong> PlaylistTracks { get; set; }
         public int MinPlaytime { get; set; }
         public string IntensityStyle { get; set; }
         public int MixLength { get; set; }
-        public List<List<ISong>> MixDiscTracksList { get; set; }
-
-        private List<List<ISong>> _matchingCombinations;
+        public List<List<ISong>> MatchingTrackCombinationList { get; set; }
+        public List<ISong> BaseTrackList { get; set; }
 
         public MixDisc()
         {
-            _matchingCombinations = new List<List<ISong>>();
-            MixDiscTracksList = new List<List<ISong>>();
+            MatchingTrackCombinationList = new List<List<ISong>>();
         }
 
         public List<ISong> GetBestMatch()
         {
             var bestMatch = new List<ISong>();
 
-            if (BaseTrack != null)
+            if (IsPlaytimeReached(BaseTrackList, MinPlaytime))
             {
-                var baseTrackList = new List<ISong>
-                {
-                    BaseTrack
-                };
-
-                CombineTracks(baseTrackList, PlaylistTracks, MinPlaytime);
-                bestMatch = GetFinalBestMatch();
+                MatchingTrackCombinationList.Add(BaseTrackList);
             }
+            else
+            {
+                CombineTracks(BaseTrackList, PlaylistTracks, MinPlaytime);
+            }
+
+            bestMatch = GetFinalBestMatch();
 
             return bestMatch;
         }
@@ -45,16 +42,11 @@ namespace MixDiscImplementation
         {
             var bestMatch = new List<ISong>();
 
-            if (MixDiscTracksList.Count > 0)
+            if (MatchingTrackCombinationList.Count == 1)
             {
-                _matchingCombinations = MixDiscTracksList;
+                bestMatch = MatchingTrackCombinationList[0];
             }
-
-            if (_matchingCombinations.Count == 1)
-            {
-                bestMatch = _matchingCombinations[0];
-            }
-            else if (_matchingCombinations.Count > 1)
+            else if (MatchingTrackCombinationList.Count > 1)
             {
                 switch (IntensityStyle)
                 {
@@ -93,7 +85,7 @@ namespace MixDiscImplementation
                     {
                         if (IsPlaytimeReached(newTrackCombination, minPlaytime))
                         {
-                            _matchingCombinations.Add(newTrackCombination);
+                            MatchingTrackCombinationList.Add(newTrackCombination);
                         }
                         else
                         {
@@ -160,7 +152,7 @@ namespace MixDiscImplementation
         internal List<ISong> GetBestIntensityMatch()
         {
             var intensityMatch = new List<ISong>();
-            var bestIntensityCombinationMatches = GetBestIntensityCombinationMatches(_matchingCombinations);
+            var bestIntensityCombinationMatches = GetBestIntensityCombinationMatches(MatchingTrackCombinationList);
 
             if (bestIntensityCombinationMatches.Count == 1)
             {
@@ -201,8 +193,8 @@ namespace MixDiscImplementation
         {
             var randomMatch = new List<ISong>();
 
-            var randomIndex = GetRandomIndex(_matchingCombinations);
-            randomMatch = _matchingCombinations[randomIndex];
+            var randomIndex = GetRandomIndex(MatchingTrackCombinationList);
+            randomMatch = MatchingTrackCombinationList[randomIndex];
 
             return randomMatch;
         }

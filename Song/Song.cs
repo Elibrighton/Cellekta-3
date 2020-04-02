@@ -56,7 +56,7 @@ namespace SongImplementation
             TrailingTempo = GetTempo(EntryNode.SelectSingleNode("TEMPO"), Path, false);
             TempoText = GetTempoText(LeadingTempo, TrailingTempo);
             RoundedTrailingTempo = GetRoundedTrailingTempo(TrailingTempo);
-            var comment = _xmlWrapper.GetAttribute(infoNode.Attributes["COMMENT"]);
+            var comment = _xmlWrapper.GetAttribute(infoNode.Attributes["COMMENT"]).Trim();
             Intensity = GetIntensity(comment);
             LeadingHarmonicKey = GetLeadingHarmonicKey(comment);
             TrailingHarmonicKey = GetTrailingHarmonicKey(comment, LeadingHarmonicKey);
