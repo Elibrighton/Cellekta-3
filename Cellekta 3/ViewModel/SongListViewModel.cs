@@ -765,6 +765,7 @@ namespace Cellekta_3.ViewModel
 
                 TempoSliderValue = SelectedPreparationItem.RoundedTrailingTempo;
                 SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[(HarmonicKeyComboBoxCollection.IndexOf(SelectedPreparationItem.TrailingHarmonicKey))];
+                SearchTextBoxText = "";
                 Filter();
                 SelectRandomTrackCollectionItem();
 
