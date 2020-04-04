@@ -72,6 +72,7 @@
     <Compile Include="Model\SongListModel.cs" />
     <Compile Include="ViewModel\ISongListViewModel.cs" />
     <Compile Include="ViewModel\SongListViewModel.cs" />
+    <Compile Include="View\Behaviour\ListBoxScrollSelectionIntoViewBehavior.cs" />
     <Compile Include="View\SongListView.xaml.cs">
       <DependentUpon>SongListView.xaml</DependentUpon>
     </Compile>

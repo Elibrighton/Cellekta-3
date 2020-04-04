@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:Cellekta_3"
-        xmlns:vm="clr-namespace:Cellekta_3.ViewModel"
+        xmlns:vm="clr-namespace:Cellekta_3.ViewModel" 
+        xmlns:b="clr-namespace:Cellekta_3.View.Behavior" 
         mc:Ignorable="d"
         Title="Cellekta" 
         Height="{Binding WindowHeight, Mode=TwoWay}"
@@ -113,6 +114,9 @@
                                   Height="{Binding TrackCollectionListViewHeight, Mode=TwoWay}"
                                   Width="{Binding ListViewWidth, Mode=TwoWay}"
                                   SelectedItem="{Binding SelectedTrackCollectionItem, Mode=TwoWay}">
+                            <i:Interaction.Behaviors>
+                                <b:ListBoxScrollSelecionIntoViewBehavior />
+                            </i:Interaction.Behaviors>
                             <ListView.View>
                                 <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Song information">
                                     <GridViewColumn DisplayMemberBinding="{Binding Artist}" Header="Artist" Width="200"/>
