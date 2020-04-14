@@ -252,5 +252,55 @@ namespace SongTests
             // Assert
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void IsInIntensityRange_BelowMinusOne_Test()
+        {
+            // Arrange
+            IXmlWrapper xmlWrapper = new XmlWrapper();
+            ITempoRange tempoRange = new TempoRange();
+            IHarmonicKeyRange harmonicKeyRange = new HarmonicKeyRange();
+            IIntensityRange intensityRange = new IntensityRange();
+            intensityRange.Load(5);
+            ISong song = new Song(xmlWrapper, tempoRange, harmonicKeyRange, intensityRange)
+            {
+                Artist = "Song 1",
+                Intensity = 5
+
+            };
+
+            var trailingIntensity = 7;
+
+            // Act
+            var result = song.IsInIntensityRange(trailingIntensity);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsInIntensityRange_AbovePlusOne_Test()
+        {
+            // Arrange
+            IXmlWrapper xmlWrapper = new XmlWrapper();
+            ITempoRange tempoRange = new TempoRange();
+            IHarmonicKeyRange harmonicKeyRange = new HarmonicKeyRange();
+            IIntensityRange intensityRange = new IntensityRange();
+            intensityRange.Load(9);
+            ISong song = new Song(xmlWrapper, tempoRange, harmonicKeyRange, intensityRange)
+            {
+                Artist = "Song 1",
+                Intensity = 9
+
+            };
+
+            var trailingIntensity = 7;
+
+            // Act
+            var result = song.IsInIntensityRange(trailingIntensity);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
     }
 }

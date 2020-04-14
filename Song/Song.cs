@@ -349,5 +349,25 @@ namespace SongImplementation
 
             return isInHarmonicKeyRange;
         }
+
+        public bool IsInIntensityRange(int trailingIntensity)
+        {
+            var isInIntensityRange = false;
+
+            if (trailingIntensity == Intensity)
+            {
+                isInIntensityRange = true;
+            }
+            else if (trailingIntensity == IntensityRange.PlusOneIntensity)
+            {
+                isInIntensityRange = true;
+            }
+            else if (trailingIntensity == IntensityRange.MinusOneIntensity)
+            {
+                isInIntensityRange = true;
+            }
+
+            return isInIntensityRange;
+        }
     }
 }

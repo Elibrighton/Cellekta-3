@@ -29,5 +29,6 @@ namespace SongInterface
         void Load();
         bool IsInTempoRange(double trailingTempo);
         bool IsInHarmonicKeyRange(string trailingHarmonicKey);
+        bool IsInIntensityRange(int trailingIntensity);
     }
 }

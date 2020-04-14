@@ -136,26 +136,9 @@ namespace MixDiscImplementation
                     || !mixableTrackCombination.Contains(t))
                 && t.IsInTempoRange(trailingTrack.TrailingTempo)
                 && t.IsInHarmonicKeyRange(trailingTrack.TrailingHarmonicKey)
+                && (string.IsNullOrEmpty(IntensityStyle)
+                    || t.IsInIntensityRange(trailingTrack.Intensity))
                 ).ToList();
-
-            //return playlistTracks.Where(t =>
-            //    t != trailingTrack
-            //    && (mixableTrackCombination == null
-            //    || !mixableTrackCombination.Contains(t))
-            //    && (((Math.Round(t.LeadingTempo, 3) <= trailingTrack.TempoRange.FastestTempo
-            //    && Math.Round(t.LeadingTempo, 3) >= trailingTrack.TempoRange.SlowestTempo)
-            //    || (Math.Round(t.LeadingTempo, 3) <= trailingTrack.TempoRange.FastestHalfTempo
-            //    && Math.Round(t.LeadingTempo, 3) >= trailingTrack.TempoRange.SlowestHalfTempo)
-            //    || (Math.Round(t.LeadingTempo, 3) <= trailingTrack.TempoRange.FastestDoubleTempo
-            //    && Math.Round(t.LeadingTempo, 3) >= trailingTrack.TempoRange.SlowestDoubleTempo))
-            //    && (t.LeadingHarmonicKey == trailingTrack.HarmonicKeyRange.InnerCircleHarmonicKey
-            //    || t.LeadingHarmonicKey == trailingTrack.HarmonicKeyRange.OuterCircleHarmonicKey
-            //    || t.LeadingHarmonicKey == trailingTrack.HarmonicKeyRange.PlusOneHarmonicKey
-            //    || t.LeadingHarmonicKey == trailingTrack.HarmonicKeyRange.MinusOneHarmonicKey)
-            //    && (string.IsNullOrEmpty(IntensityStyle)
-            //    || IntensityStyle == "Random"
-            //    || (t.Intensity <= trailingTrack.IntensityRange.PlusOneIntensity
-            //    && t.Intensity >= trailingTrack.IntensityRange.MinusOneIntensity)))).ToList();
         }
 
         internal List<ISong> GetBestIntensityMatch()
