@@ -19,40 +19,40 @@ namespace MixableRangeImplementation
 
             FastestTempo = GetFastestTempo(tempo, tempoRange);
             SlowestTempo = GetSlowestTempo(tempo, tempoRange);
-            FastestDoubleTempo = GetFastestDoubleTempo(FastestTempo);
-            SlowestDoubleTempo = GetSlowestDoubleTempo(SlowestTempo);
-            FastestHalfTempo = GetFastestHalfTempo(FastestTempo);
-            SlowestHalfTempo = GetSlowestHalfTempo(SlowestTempo);
+            FastestDoubleTempo = GetFastestDoubleTempo(tempo, tempoRange);
+            SlowestDoubleTempo = GetSlowestDoubleTempo(tempo, tempoRange);
+            FastestHalfTempo = GetFastestHalfTempo(tempo, tempoRange);
+            SlowestHalfTempo = GetSlowestHalfTempo(tempo, tempoRange);
         }
 
         internal double GetFastestTempo(double tempo, int tempoRange)
         {
-            return (tempo + tempoRange);
+            return Math.Round(tempo + tempoRange, 3);
         }
 
         internal double GetSlowestTempo(double tempo, int tempoRange)
         {
-            return (tempo - tempoRange);
+            return Math.Round(tempo - tempoRange, 3);
         }
 
-        internal double GetFastestDoubleTempo(double fastestTempo)
+        internal double GetFastestDoubleTempo(double tempo, int tempoRange)
         {
-            return (fastestTempo * 2);
+            return Math.Round((tempo * 2) + tempoRange, 3);
         }
 
-        internal double GetSlowestDoubleTempo(double slowestTempo)
+        internal double GetSlowestDoubleTempo(double tempo, int tempoRange)
         {
-            return (slowestTempo * 2);
+            return Math.Round((tempo * 2) - tempoRange, 3);
         }
 
-        internal double GetFastestHalfTempo(double fastestTempo)
+        internal double GetFastestHalfTempo(double tempo, int tempoRange)
         {
-            return (fastestTempo / 2);
+            return Math.Round((tempo / 2) + tempoRange, 3);
         }
 
-        internal double GetSlowestHalfTempo(double slowestTempo)
+        internal double GetSlowestHalfTempo(double tempo, int tempoRange)
         {
-            return (slowestTempo / 2);
+            return Math.Round((tempo / 2) - tempoRange, 3);
         }
     }
 }

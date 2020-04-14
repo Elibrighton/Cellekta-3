@@ -1069,8 +1069,8 @@ namespace Cellekta_3.ViewModel
 
         internal void FindMixDiscTracksAsync(List<ISong> baseTrackList, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength)
         {
-            //var mixDiscTracks = await Task.Run(() => GetMixDiscTracks(baseTrackList, playlistTracks, intensityStyle, minPlaytime, mixLength));
-            var mixDiscTracks = GetMixDiscTracks(baseTrackList, playlistTracks, intensityStyle, minPlaytime, mixLength);
+            //var mixDiscTracks = await Task.Run(() => _songListModel.GetMixDiscTracks(baseTrackList, playlistTracks, intensityStyle, minPlaytime, mixLength));
+            var mixDiscTracks = _songListModel.GetMixDiscTracks(baseTrackList, playlistTracks, intensityStyle, minPlaytime, mixLength);
 
             ProgressBarValue++;
             ProgressBarMessage = string.Concat("Finding Mix disc for track ", ProgressBarValue, " of ", ProgressBarMax);
@@ -1088,11 +1088,6 @@ namespace Cellekta_3.ViewModel
             }
 
             UpdateMixDiscProgressBar(bestMixDisc);
-        }
-
-        internal List<ISong> GetMixDiscTracks(List<ISong> baseTrackList, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength)
-        {
-            return _songListModel.GetMixDiscTracks(baseTrackList, playlistTracks, intensityStyle, minPlaytime, mixLength);
         }
 
         internal List<ISong> GetBestMixDiscTracks()

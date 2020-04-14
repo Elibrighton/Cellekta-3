@@ -300,5 +300,30 @@ namespace SongImplementation
         {
             return Convert.ToInt32(Math.Round(trailingTempo));
         }
+
+        public bool IsInTempoRange(double trailingTempo)
+        {
+            var isInRange = false;
+
+            trailingTempo = Math.Round(trailingTempo, 3);
+
+            if (trailingTempo <= TempoRange.FastestTempo &&
+                trailingTempo >= TempoRange.SlowestTempo)
+            {
+                isInRange = true;
+            }
+            else if (trailingTempo <= TempoRange.FastestHalfTempo &&
+                    trailingTempo >= TempoRange.SlowestHalfTempo)
+            {
+                isInRange = true;
+            }
+            else if (trailingTempo <= TempoRange.FastestDoubleTempo &&
+                    trailingTempo >= TempoRange.SlowestDoubleTempo)
+            {
+                isInRange = true;
+            }
+
+            return isInRange;
+        }
     }
 }

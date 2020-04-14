@@ -27,5 +27,6 @@ namespace SongInterface
         IIntensityRange IntensityRange { get; set; }
 
         void Load();
+        bool IsInTempoRange(double trailingTempo);
     }
 }

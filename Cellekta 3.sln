@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cellekta 3", "Cellekta 3\Cellekta 3.csproj", "{08751C52-B224-42AC-B19A-FC247FC0E7A7}"
 EndProject
@@ -32,6 +32,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixDiscImplementation", "MixDiscImplementation\MixDiscImplementation.csproj", "{6D98428B-BF15-47DF-B067-D08CAAA3C558}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixDiscInterface", "MixDiscInterface\MixDiscInterface.csproj", "{31A0D157-EEDC-4DAC-BF5F-A933E054755E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixDiscTests", "MixDiscTests\MixDiscTests.csproj", "{D689E013-ED00-48A2-A614-AAFBAA90B5F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SongTests", "SongTests\SongTests.csproj", "{08602499-59E7-43B2-AB9C-E98D67D912BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixableRangeTests", "MixableRangeTests\MixableRangeTests.csproj", "{967C599C-D78F-4833-964D-512BBA7329D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +105,18 @@ Global
 		{31A0D157-EEDC-4DAC-BF5F-A933E054755E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31A0D157-EEDC-4DAC-BF5F-A933E054755E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31A0D157-EEDC-4DAC-BF5F-A933E054755E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D689E013-ED00-48A2-A614-AAFBAA90B5F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D689E013-ED00-48A2-A614-AAFBAA90B5F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D689E013-ED00-48A2-A614-AAFBAA90B5F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D689E013-ED00-48A2-A614-AAFBAA90B5F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08602499-59E7-43B2-AB9C-E98D67D912BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08602499-59E7-43B2-AB9C-E98D67D912BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08602499-59E7-43B2-AB9C-E98D67D912BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08602499-59E7-43B2-AB9C-E98D67D912BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{967C599C-D78F-4833-964D-512BBA7329D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{967C599C-D78F-4833-964D-512BBA7329D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{967C599C-D78F-4833-964D-512BBA7329D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{967C599C-D78F-4833-964D-512BBA7329D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
