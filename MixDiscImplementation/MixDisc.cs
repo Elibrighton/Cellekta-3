@@ -135,6 +135,7 @@ namespace MixDiscImplementation
                 && (mixableTrackCombination == null
                     || !mixableTrackCombination.Contains(t))
                 && t.IsInTempoRange(trailingTrack.TrailingTempo)
+                && t.IsInHarmonicKeyRange(trailingTrack.TrailingHarmonicKey)
                 ).ToList();
 
             //return playlistTracks.Where(t =>

@@ -325,5 +325,29 @@ namespace SongImplementation
 
             return isInRange;
         }
+
+        public bool IsInHarmonicKeyRange(string trailingHarmonicKey)
+        {
+            var isInHarmonicKeyRange = false;
+
+            if (trailingHarmonicKey == HarmonicKeyRange.InnerCircleHarmonicKey)
+            {
+                isInHarmonicKeyRange = true;
+            }
+            else if (TrailingHarmonicKey == HarmonicKeyRange.OuterCircleHarmonicKey)
+            {
+                isInHarmonicKeyRange = true;
+            }
+            else if (TrailingHarmonicKey == HarmonicKeyRange.PlusOneHarmonicKey)
+            {
+                isInHarmonicKeyRange = true;
+            }
+            else if (TrailingHarmonicKey == HarmonicKeyRange.MinusOneHarmonicKey)
+            {
+                isInHarmonicKeyRange = true;
+            }
+
+            return isInHarmonicKeyRange;
+        }
     }
 }

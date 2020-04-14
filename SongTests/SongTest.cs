@@ -156,5 +156,101 @@ namespace SongTests
             // Assert
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void IsInHarmonicKeyRange_PlusOneAndOppositeCircle_Test()
+        {
+            // Arrange
+            IXmlWrapper xmlWrapper = new XmlWrapper();
+            ITempoRange tempoRange = new TempoRange();
+            IHarmonicKeyRange harmonicKeyRange = new HarmonicKeyRange();
+            harmonicKeyRange.Load("9B");
+            IIntensityRange intensityRange = new IntensityRange();
+            ISong song = new Song(xmlWrapper, tempoRange, harmonicKeyRange, intensityRange)
+            {
+                Artist = "Song 1",
+
+            };
+
+            var trailingHarmonicKey = "8A";
+
+            // Act
+            var result = song.IsInHarmonicKeyRange(trailingHarmonicKey);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsInHarmonicKeyRange_PlusTwo_Test()
+        {
+            // Arrange
+            IXmlWrapper xmlWrapper = new XmlWrapper();
+            ITempoRange tempoRange = new TempoRange();
+            IHarmonicKeyRange harmonicKeyRange = new HarmonicKeyRange();
+            harmonicKeyRange.Load("10A");
+            IIntensityRange intensityRange = new IntensityRange();
+            ISong song = new Song(xmlWrapper, tempoRange, harmonicKeyRange, intensityRange)
+            {
+                Artist = "Song 1",
+
+            };
+
+            var trailingHarmonicKey = "8A";
+
+            // Act
+            var result = song.IsInHarmonicKeyRange(trailingHarmonicKey);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsInHarmonicKeyRange_MinusTwo_Test()
+        {
+            // Arrange
+            IXmlWrapper xmlWrapper = new XmlWrapper();
+            ITempoRange tempoRange = new TempoRange();
+            IHarmonicKeyRange harmonicKeyRange = new HarmonicKeyRange();
+            harmonicKeyRange.Load("6B");
+            IIntensityRange intensityRange = new IntensityRange();
+            ISong song = new Song(xmlWrapper, tempoRange, harmonicKeyRange, intensityRange)
+            {
+                Artist = "Song 1",
+
+            };
+
+            var trailingHarmonicKey = "8B";
+
+            // Act
+            var result = song.IsInHarmonicKeyRange(trailingHarmonicKey);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsInHarmonicKeyRange_MinusOneAndOppositeCircle_Test()
+        {
+            // Arrange
+            IXmlWrapper xmlWrapper = new XmlWrapper();
+            ITempoRange tempoRange = new TempoRange();
+            IHarmonicKeyRange harmonicKeyRange = new HarmonicKeyRange();
+            harmonicKeyRange.Load("7B");
+            IIntensityRange intensityRange = new IntensityRange();
+            ISong song = new Song(xmlWrapper, tempoRange, harmonicKeyRange, intensityRange)
+            {
+                Artist = "Song 1",
+
+            };
+
+            var trailingHarmonicKey = "8A";
+
+            // Act
+            var result = song.IsInHarmonicKeyRange(trailingHarmonicKey);
+
+            // Assert
+            Assert.IsFalse(result);
+        }
     }
 }

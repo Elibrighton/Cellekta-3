@@ -6,10 +6,10 @@ using MixableRangeInterface;
 namespace MixableRangeTests
 {
     [TestClass]
-    public class MixableTest
+    public class TempoRangeTest
     {
         [TestMethod]
-        public void TempoRange_Load_Test()
+        public void Load_Test()
         {
             // Arrange
             ITempoRange tempoRange = new TempoRange();
