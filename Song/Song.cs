@@ -334,15 +334,15 @@ namespace SongImplementation
             {
                 isInHarmonicKeyRange = true;
             }
-            else if (TrailingHarmonicKey == HarmonicKeyRange.OuterCircleHarmonicKey)
+            else if (trailingHarmonicKey == HarmonicKeyRange.OuterCircleHarmonicKey)
             {
                 isInHarmonicKeyRange = true;
             }
-            else if (TrailingHarmonicKey == HarmonicKeyRange.PlusOneHarmonicKey)
+            else if (trailingHarmonicKey == HarmonicKeyRange.PlusOneHarmonicKey)
             {
                 isInHarmonicKeyRange = true;
             }
-            else if (TrailingHarmonicKey == HarmonicKeyRange.MinusOneHarmonicKey)
+            else if (trailingHarmonicKey == HarmonicKeyRange.MinusOneHarmonicKey)
             {
                 isInHarmonicKeyRange = true;
             }
