@@ -11,9 +11,11 @@ namespace MixDiscInterface
         int MixLength { get; set; }
         List<List<ISong>> MatchingTrackCombinationList { get; set; }
         List<ISong> BaseTrackList { get; set; }
+        List<ISong> LongestTrackCombinationList { get; set; }
 
         List<ISong> GetBestMatch();
         List<ISong> GetFinalBestMatch();
-
+        bool IsPlaytimeReached(List<ISong> trackCombination, int minPlaytime);
+        List<ISong> GetMixableTracks(ISong trailingTrack, List<ISong> playlistTracks, List<ISong> mixableTrackCombination);
     }
 }

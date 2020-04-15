@@ -23,6 +23,7 @@ namespace Cellekta_3.ViewModel
         private ISongListModel _songListModel;
         private IXmlWrapper _xmlWrapper;
         private List<List<ISong>> _mixDiscTracks;
+        private List<ISong> _longestTrackCombinationList;
 
         public ICommand ClearMenuCommand { get; set; }
         public ICommand ImportMenuCommand { get; set; }
@@ -631,6 +632,7 @@ namespace Cellekta_3.ViewModel
             ProgressBarMessage = "Ready to import";
             SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
             _mixDiscTracks = new List<List<ISong>>();
+            _longestTrackCombinationList = new List<ISong>();
         }
 
         internal void OnClearMenuCommand(object param)
@@ -883,7 +885,7 @@ namespace Cellekta_3.ViewModel
             if (IsMixDiscFilterValid())
             {
                 _mixDiscTracks.Clear();
-                   var playlistTracks = new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => t.Playlist == SelectedMixDiscPlaylistComboBoxItem)).ToList();
+                var playlistTracks = new ObservableCollection<ISong>(ImportedTrackCollection.Where(t => t.Playlist == SelectedMixDiscPlaylistComboBoxItem)).ToList();
                 var playlistTrackCount = playlistTracks.Count();
                 var tasks = new List<Task>(playlistTrackCount);
 
@@ -899,15 +901,54 @@ namespace Cellekta_3.ViewModel
 
                     if (!baseTrackList.Contains(track))
                     {
-                        baseTrackList.Add(track);
-                        //var task = FindMixDiscTracksAsync(baseTrackList, playlistTracks, SelectedIntensityComboBoxItem, minPlaytime, mixLength);
-                        //tasks.Add(task);
-                        FindMixDiscTracksAsync(baseTrackList, playlistTracks, SelectedIntensityComboBoxItem, minPlaytime, mixLength);
+                        var isAddingTrackToBaseList = false;
+
+                        if (!_songListModel.MixDisc.IsPlaytimeReached(baseTrackList, minPlaytime))
+                        {
+                            if (baseTrackList.Count > 0)
+                            {
+                                var trailingTrack = GetTrailingTrack(baseTrackList);
+                                var singleTrackList = new List<ISong>
+                                {
+                                    track
+                                };
+
+                                var mixableTracks = _songListModel.MixDisc.GetMixableTracks(trailingTrack, singleTrackList, baseTrackList);
+
+                                if (mixableTracks.Count > 0)
+                                {
+                                    isAddingTrackToBaseList = true;
+                                }
+                            }
+                            else
+                            {
+                                isAddingTrackToBaseList = true;
+                            }
+                        }
+
+                        if (isAddingTrackToBaseList)
+                        {
+                            baseTrackList.Add(track);
+                            //var task = FindMixDiscTracksAsync(baseTrackList, playlistTracks, SelectedIntensityComboBoxItem, minPlaytime, mixLength);
+                            //tasks.Add(task);
+                            FindMixDiscTracksAsync(baseTrackList, playlistTracks, SelectedIntensityComboBoxItem, minPlaytime, mixLength);
+                            _longestTrackCombinationList = _songListModel.MixDisc.LongestTrackCombinationList;
+                        }
                     }
+
+                    ProgressBarValue++;
+                    ProgressBarMessage = string.Concat("Finding Mix disc for track ", ProgressBarValue, " of ", ProgressBarMax);
+
+                    UpdateMixDiscProgressBar();
                 }
 
                 //await Task.WhenAll(tasks);
             }
+        }
+
+        internal ISong GetTrailingTrack(List<ISong> trackCombination)
+        {
+            return trackCombination[trackCombination.Count() - 1];
         }
 
         internal void OnIntensityComboBoxSelectionChangedCommand(object param)
@@ -1070,24 +1111,12 @@ namespace Cellekta_3.ViewModel
         internal void FindMixDiscTracksAsync(List<ISong> baseTrackList, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength)
         {
             //var mixDiscTracks = await Task.Run(() => _songListModel.GetMixDiscTracks(baseTrackList, playlistTracks, intensityStyle, minPlaytime, mixLength));
-            var mixDiscTracks = _songListModel.GetMixDiscTracks(baseTrackList, playlistTracks, intensityStyle, minPlaytime, mixLength);
-
-            ProgressBarValue++;
-            ProgressBarMessage = string.Concat("Finding Mix disc for track ", ProgressBarValue, " of ", ProgressBarMax);
-            var bestMixDisc = new List<ISong>();
+            var mixDiscTracks = _songListModel.GetMixDiscTracks(baseTrackList, playlistTracks, intensityStyle, minPlaytime, mixLength, _longestTrackCombinationList);
 
             if (mixDiscTracks.Count > 0)
             {
                 _mixDiscTracks.Add(mixDiscTracks);
-                bestMixDisc = GetBestMixDiscTracks();
-
-                foreach (var track in bestMixDisc)
-                {
-                    MixDiscCollection.Add(track);
-                }
             }
-
-            UpdateMixDiscProgressBar(bestMixDisc);
         }
 
         internal List<ISong> GetBestMixDiscTracks()
@@ -1098,23 +1127,46 @@ namespace Cellekta_3.ViewModel
             return _songListModel.GetBestMixDiscTracks(baseTrackList, _mixDiscTracks, SelectedIntensityComboBoxItem);
         }
 
-        internal void UpdateMixDiscProgressBar(List<ISong> bestMixDisc)
+        internal void UpdateMixDiscProgressBar()
         {
             if (ProgressBarValue == ProgressBarMax)
             {
                 var statusMessage = string.Empty;
 
-                if (bestMixDisc.Count > 0)
+                if (_mixDiscTracks.Count > 0)
                 {
-                    statusMessage = string.Concat("Mix disc match is found");
+                    var bestMixDisc = GetBestMixDiscTracks();
+
+                    foreach (var track in bestMixDisc)
+                    {
+                        MixDiscCollection.Add(track);
+                    }
+
+                    statusMessage = string.Concat("A new Mix disc is found");
+                }
+                else if (MixDiscCollection.Count == 0)
+                {
+                    DisplayLongestTrackCombinationList();
+                    statusMessage = string.Concat("No new Mix disc is found. The longest track combination is displayed");
                 }
                 else
                 {
-                    statusMessage = string.Concat("No Mix disc match is found");
+                    statusMessage = string.Concat("No new Mix disc is found");
                 }
 
                 ProgressBarMessage = statusMessage;
                 MessageBox.Show(string.Concat(statusMessage, "."));
+            }
+        }
+
+        private void DisplayLongestTrackCombinationList()
+        {
+            if (MixDiscCollection.Count == 0)
+            {
+                foreach (var track in _longestTrackCombinationList)
+                {
+                    MixDiscCollection.Add(track);
+                }
             }
         }
     }

@@ -13,11 +13,13 @@ namespace MixDiscImplementation
         public string IntensityStyle { get; set; }
         public int MixLength { get; set; }
         public List<List<ISong>> MatchingTrackCombinationList { get; set; }
+        public List<ISong> LongestTrackCombinationList { get; set; }
         public List<ISong> BaseTrackList { get; set; }
 
         public MixDisc()
         {
             MatchingTrackCombinationList = new List<List<ISong>>();
+            LongestTrackCombinationList = new List<ISong>();
         }
 
         public List<ISong> GetBestMatch()
@@ -89,10 +91,22 @@ namespace MixDiscImplementation
                         }
                         else
                         {
+                            UpdateLongestTrackCombinationList(newTrackCombination);
                             CombineTracks(newTrackCombination, playlistTracks, minPlaytime);
                         }
                     }
                 }
+            }
+        }
+
+        internal void UpdateLongestTrackCombinationList(List<ISong> newTrackCombination)
+        {
+            var newTrackCombinationPlaytime = GetTotalCombinationPlayTime(newTrackCombination);
+            var longestTrackCombinationPlaytime = GetTotalCombinationPlayTime(LongestTrackCombinationList);
+
+            if (newTrackCombinationPlaytime > longestTrackCombinationPlaytime)
+            {
+                LongestTrackCombinationList = newTrackCombination;
             }
         }
 
@@ -115,7 +129,7 @@ namespace MixDiscImplementation
             return trackCombination[trackCombination.Count() - 1];
         }
 
-        internal bool IsPlaytimeReached(List<ISong> trackCombination, int minPlaytime)
+        public bool IsPlaytimeReached(List<ISong> trackCombination, int minPlaytime)
         {
             var isPlaytimeReached = false;
             var totalCombinationPlaytime = GetTotalCombinationPlayTime(trackCombination);
@@ -128,7 +142,7 @@ namespace MixDiscImplementation
             return isPlaytimeReached;
         }
 
-        internal List<ISong> GetMixableTracks(ISong trailingTrack, List<ISong> playlistTracks, List<ISong> mixableTrackCombination)
+        public List<ISong> GetMixableTracks(ISong trailingTrack, List<ISong> playlistTracks, List<ISong> mixableTrackCombination)
         {
             return playlistTracks.Where(t =>
                 t != trailingTrack

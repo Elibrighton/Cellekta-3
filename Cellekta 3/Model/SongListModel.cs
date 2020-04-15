@@ -77,6 +77,7 @@ namespace Cellekta_3.Model
         public ObservableCollection<string> IntensityComboBoxCollection { get; set; }
         public string SelectedIntensityComboBoxItem { get; set; }
         public string MixLengthTextBoxText { get; set; }
+        public IMixDisc MixDisc { get; set; }
 
         public SongListModel(ITraktorLibrary traktorLibrary, IXmlWrapper xmlWrapper, IHarmonicKeyRange harmonicKeyRange, ITrackSearch trackSearch)
         {
@@ -116,6 +117,7 @@ namespace Cellekta_3.Model
             IsMixDiscClearButtonEnabled = false;
             IsMixButtonEnabled = false;
             IntensityComboBoxCollection = GetIntensityComboBoxCollection();
+            MixDisc = new MixDisc();
         }
 
         // To be merged into GetFilteredTrackCollection()
@@ -202,9 +204,9 @@ namespace Cellekta_3.Model
                 )));
         }
 
-        public List<ISong> GetMixDiscTracks(List<ISong> baseTrackList, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength)
+        public List<ISong> GetMixDiscTracks(List<ISong> baseTrackList, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength, List<ISong> longestTrackCombinationList)
         {
-            IMixDisc mixDisc = new MixDisc
+            MixDisc = new MixDisc
             {
                 BaseTrackList = baseTrackList,
                 PlaylistTracks = playlistTracks,
@@ -213,7 +215,9 @@ namespace Cellekta_3.Model
                 MixLength = mixLength
             };
 
-            return mixDisc.GetBestMatch();
+            MixDisc.LongestTrackCombinationList = longestTrackCombinationList;
+
+            return MixDisc.GetBestMatch();
         }
 
         public List<ISong> GetBestMixDiscTracks(List<ISong> baseTrackList, List<List<ISong>> mixDiscTracksList, string intensityStyle)
