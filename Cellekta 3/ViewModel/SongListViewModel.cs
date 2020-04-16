@@ -24,6 +24,7 @@ namespace Cellekta_3.ViewModel
         private IXmlWrapper _xmlWrapper;
         private List<List<ISong>> _mixDiscTracks;
         private List<ISong> _longestTrackCombinationList;
+        private List<List<ISong>> _culledMatchingTrackCombinationList;
 
         public ICommand ClearMenuCommand { get; set; }
         public ICommand ImportMenuCommand { get; set; }
@@ -633,6 +634,8 @@ namespace Cellekta_3.ViewModel
             SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
             _mixDiscTracks = new List<List<ISong>>();
             _longestTrackCombinationList = new List<ISong>();
+            SelectedHarmonicKeyComboBoxItem = HarmonicKeyComboBoxCollection[0];
+            _culledMatchingTrackCombinationList = new List<List<ISong>>();
         }
 
         internal void OnClearMenuCommand(object param)
@@ -933,6 +936,7 @@ namespace Cellekta_3.ViewModel
                             //tasks.Add(task);
                             FindMixDiscTracksAsync(baseTrackList, playlistTracks, SelectedIntensityComboBoxItem, minPlaytime, mixLength);
                             _longestTrackCombinationList = _songListModel.MixDisc.LongestTrackCombinationList;
+                            _culledMatchingTrackCombinationList = _songListModel.MixDisc.CulledMatchingTrackCombinationList;
                         }
                     }
 
@@ -1111,7 +1115,7 @@ namespace Cellekta_3.ViewModel
         internal void FindMixDiscTracksAsync(List<ISong> baseTrackList, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength)
         {
             //var mixDiscTracks = await Task.Run(() => _songListModel.GetMixDiscTracks(baseTrackList, playlistTracks, intensityStyle, minPlaytime, mixLength));
-            var mixDiscTracks = _songListModel.GetMixDiscTracks(baseTrackList, playlistTracks, intensityStyle, minPlaytime, mixLength, _longestTrackCombinationList);
+            var mixDiscTracks = _songListModel.GetMixDiscTracks(baseTrackList, playlistTracks, intensityStyle, minPlaytime, mixLength, _longestTrackCombinationList, _culledMatchingTrackCombinationList);
 
             if (mixDiscTracks.Count > 0)
             {
@@ -1124,7 +1128,7 @@ namespace Cellekta_3.ViewModel
             var baseTrackList = MixDiscCollection.ToList();
             MixDiscCollection.Clear();
 
-            return _songListModel.GetBestMixDiscTracks(baseTrackList, _mixDiscTracks, SelectedIntensityComboBoxItem);
+            return _songListModel.GetBestMixDiscTracks(baseTrackList, _mixDiscTracks, SelectedIntensityComboBoxItem, _culledMatchingTrackCombinationList);
         }
 
         internal void UpdateMixDiscProgressBar()

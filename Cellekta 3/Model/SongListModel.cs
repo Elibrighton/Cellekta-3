@@ -204,7 +204,7 @@ namespace Cellekta_3.Model
                 )));
         }
 
-        public List<ISong> GetMixDiscTracks(List<ISong> baseTrackList, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength, List<ISong> longestTrackCombinationList)
+        public List<ISong> GetMixDiscTracks(List<ISong> baseTrackList, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength, List<ISong> longestTrackCombinationList, List<List<ISong>> culledMatchingTrackCombinationList)
         {
             MixDisc = new MixDisc
             {
@@ -216,11 +216,12 @@ namespace Cellekta_3.Model
             };
 
             MixDisc.LongestTrackCombinationList = longestTrackCombinationList;
+            MixDisc.CulledMatchingTrackCombinationList = culledMatchingTrackCombinationList;
 
             return MixDisc.GetBestMatch();
         }
 
-        public List<ISong> GetBestMixDiscTracks(List<ISong> baseTrackList, List<List<ISong>> mixDiscTracksList, string intensityStyle)
+        public List<ISong> GetBestMixDiscTracks(List<ISong> baseTrackList, List<List<ISong>> mixDiscTracksList, string intensityStyle, List<List<ISong>> culledMatchingTrackCombinationList)
         {
 
             IMixDisc mixDisc = new MixDisc
@@ -230,7 +231,7 @@ namespace Cellekta_3.Model
                 MatchingTrackCombinationList = mixDiscTracksList
             };
 
-            return mixDisc.GetFinalBestMatch();
+            return mixDisc.GetFinalBestMatch(culledMatchingTrackCombinationList);
         }
 
         internal ObservableCollection<string> GetHarmonicKeyComboBoxCollection()

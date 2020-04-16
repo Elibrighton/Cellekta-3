@@ -13,12 +13,14 @@ namespace MixDiscImplementation
         public string IntensityStyle { get; set; }
         public int MixLength { get; set; }
         public List<List<ISong>> MatchingTrackCombinationList { get; set; }
+        public List<List<ISong>> CulledMatchingTrackCombinationList { get; set; }
         public List<ISong> LongestTrackCombinationList { get; set; }
         public List<ISong> BaseTrackList { get; set; }
 
         public MixDisc()
         {
             MatchingTrackCombinationList = new List<List<ISong>>();
+            CulledMatchingTrackCombinationList = new List<List<ISong>>();
             LongestTrackCombinationList = new List<ISong>();
         }
 
@@ -35,30 +37,36 @@ namespace MixDiscImplementation
                 CombineTracks(BaseTrackList, PlaylistTracks, MinPlaytime);
             }
 
-            bestMatch = GetFinalBestMatch();
+            bestMatch = GetFinalBestMatch(MatchingTrackCombinationList);
+
+            if (bestMatch.Count > 0)
+            {
+                CulledMatchingTrackCombinationList.Add(bestMatch);
+                bestMatch = GetFinalBestMatch(CulledMatchingTrackCombinationList);
+            }
 
             return bestMatch;
         }
 
-        public List<ISong> GetFinalBestMatch()
+        public List<ISong> GetFinalBestMatch(List<List<ISong>> matchingTrackCombinationList)
         {
             var bestMatch = new List<ISong>();
 
-            if (MatchingTrackCombinationList.Count == 1)
+            if (matchingTrackCombinationList.Count == 1)
             {
-                bestMatch = MatchingTrackCombinationList[0];
+                bestMatch = matchingTrackCombinationList[0];
             }
-            else if (MatchingTrackCombinationList.Count > 1)
+            else if (matchingTrackCombinationList.Count > 1)
             {
                 switch (IntensityStyle)
                 {
                     case "Lowest":
                     case "Highest":
-                        bestMatch = GetBestIntensityMatch();
+                        bestMatch = GetBestIntensityMatch(matchingTrackCombinationList);
                         break;
                     case "Random":
                     default:
-                        bestMatch = GetRandomMatch();
+                        bestMatch = GetRandomMatch(matchingTrackCombinationList);
                         break;
                 }
             }
@@ -87,6 +95,13 @@ namespace MixDiscImplementation
                     {
                         if (IsPlaytimeReached(newTrackCombination, minPlaytime))
                         {
+                            if (MatchingTrackCombinationList.Count >= 16777215)
+                            {
+                                var bestMatch = GetFinalBestMatch(MatchingTrackCombinationList);
+                                CulledMatchingTrackCombinationList.Add(bestMatch);
+                                MatchingTrackCombinationList = new List<List<ISong>>();
+                            }
+
                             MatchingTrackCombinationList.Add(newTrackCombination);
                         }
                         else
@@ -155,10 +170,10 @@ namespace MixDiscImplementation
                 ).ToList();
         }
 
-        internal List<ISong> GetBestIntensityMatch()
+        internal List<ISong> GetBestIntensityMatch(List<List<ISong>> matchingTrackCombinationList)
         {
             var intensityMatch = new List<ISong>();
-            var bestIntensityCombinationMatches = GetBestIntensityCombinationMatches(MatchingTrackCombinationList);
+            var bestIntensityCombinationMatches = GetBestIntensityCombinationMatches(matchingTrackCombinationList);
 
             if (bestIntensityCombinationMatches.Count == 1)
             {
@@ -195,12 +210,12 @@ namespace MixDiscImplementation
             return randomIndex;
         }
 
-        internal List<ISong> GetRandomMatch()
+        internal List<ISong> GetRandomMatch(List<List<ISong>> matchingTrackCombinationList)
         {
             var randomMatch = new List<ISong>();
 
-            var randomIndex = GetRandomIndex(MatchingTrackCombinationList);
-            randomMatch = MatchingTrackCombinationList[randomIndex];
+            var randomIndex = GetRandomIndex(matchingTrackCombinationList);
+            randomMatch = matchingTrackCombinationList[randomIndex];
 
             return randomMatch;
         }

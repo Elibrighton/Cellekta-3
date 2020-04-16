@@ -65,7 +65,7 @@ namespace SongImplementation
             IsChartingText = GetIsChartingText(IsCharting);
             FullNameText = GetFullNameText(Artist, Title, TempoText, HarmonicKeyText, Intensity, Playlist);
             TempoRange.Load(TrailingTempo, 3); // menu item control the range value to be added later
-            HarmonicKeyRange.Load(TrailingHarmonicKey);
+            HarmonicKeyRange.Load(LeadingHarmonicKey);
             IntensityRange.Load(Intensity);
         }
 
