@@ -214,6 +214,40 @@
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
+                <TabItem Header="Playlists">
+                    <StackPanel>
+                        <ListView ItemsSource="{Binding PlaylistCollection}" 
+                                  SelectionMode="Single"
+                                  Height="{Binding PlaylistListViewHeight, Mode=TwoWay}"
+                                  Width="{Binding ListViewWidth, Mode=TwoWay}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Selected">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox Margin="5, 0" IsChecked="{Binding Selected}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Name">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Margin="5, 0" Text="{Binding Name}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Path">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Margin="5, 0" Text="{Binding Path}" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                </TabItem>
             </TabControl>
             <StatusBar VerticalAlignment="Bottom">
                 <StatusBar.ItemsPanel>

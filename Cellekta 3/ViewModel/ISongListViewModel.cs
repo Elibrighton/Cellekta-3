@@ -1,4 +1,5 @@
-﻿using SongInterface;
+﻿using PlaylistInterface;
+using SongInterface;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -28,6 +29,7 @@ namespace Cellekta_3.ViewModel
         ObservableCollection<ISong> FilteredTrackCollection { get; set; }
         ObservableCollection<ISong> PreparationCollection { get; set; }
         ObservableCollection<ISong> MixDiscCollection { get; set; }
+        ObservableCollection<IPlaylist> PlaylistCollection { get; set; }
         int ProgressBarMax { get; set; }
         int ProgressBarValue { get; set; }
         bool IsProgressBarIndeterminate { get; set; }
@@ -37,6 +39,7 @@ namespace Cellekta_3.ViewModel
         int TrackCollectionListViewHeight { get; set; }
         int PreparationListViewHeight { get; set; }
         int MixDiscListViewHeight { get; set; }
+        int PlaylistListViewHeight { get; set; }
         int ListViewWidth { get; set; }
         int ProgressBarWidth { get; set; }
         bool IsLoadButtonEnabled { get; set; }

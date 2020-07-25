@@ -129,6 +129,14 @@
       <Project>{31A0D157-EEDC-4DAC-BF5F-A933E054755E}</Project>
       <Name>MixDiscInterface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PlaylistImplementation\PlaylistImplementation.csproj">
+      <Project>{4B3BF4AD-72C2-401B-9B32-128C8C768642}</Project>
+      <Name>PlaylistImplementation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PlaylistInterface\PlaylistInterface.csproj">
+      <Project>{795B3213-DD1A-443B-BA40-0AEFA816CD68}</Project>
+      <Name>PlaylistInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SongInterface\SongInterface.csproj">
       <Project>{bff769fd-4a79-41df-bea1-3471f9222428}</Project>
       <Name>SongInterface</Name>

@@ -1,9 +1,12 @@
 ﻿using Cellekta_3.Base;
 using Cellekta_3.Model;
+using PlaylistImplementation;
+using PlaylistInterface;
 using SongInterface;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -85,6 +88,16 @@ namespace Cellekta_3.ViewModel
             }
         }
 
+        public ObservableCollection<IPlaylist> PlaylistCollection
+        {
+            get { return _songListModel.PlaylistCollection; }
+            set
+            {
+                _songListModel.PlaylistCollection = value;
+                NotifyPropertyChanged("PlaylistCollection");
+            }
+        }
+
         public int ProgressBarMax
         {
             get { return _songListModel.ProgressBarMax; }
@@ -147,9 +160,11 @@ namespace Cellekta_3.ViewModel
                     TrackCollectionListViewHeight = (value - 162);
                     PreparationListViewHeight = (value - 134);
                     MixDiscListViewHeight = (value - 162);
+                    PlaylistListViewHeight = (value - 112);
                     NotifyPropertyChanged("TrackCollectionListViewHeight");
                     NotifyPropertyChanged("PreparationListViewHeight");
                     NotifyPropertyChanged("MixDiscListViewHeight");
+                    NotifyPropertyChanged("PlaylistListViewHeight");
                 }
             }
         }
@@ -208,6 +223,19 @@ namespace Cellekta_3.ViewModel
                 {
                     _songListModel.MixDiscListViewHeight = value;
                     NotifyPropertyChanged("MixDiscListViewHeight");
+                }
+            }
+        }
+
+        public int PlaylistListViewHeight
+        {
+            get { return _songListModel.PlaylistListViewHeight; }
+            set
+            {
+                if (_songListModel.PlaylistListViewHeight != value)
+                {
+                    _songListModel.PlaylistListViewHeight = value;
+                    NotifyPropertyChanged("PlaylistListViewHeight");
                 }
             }
         }
@@ -680,6 +708,13 @@ namespace Cellekta_3.ViewModel
                                 PlaylistComboBoxCollection.Add(song.Playlist);
                             }
 
+                            var playlist = new Playlist { Name = song.Playlist, Path = Path.GetDirectoryName(song.Path), Selected = true};
+
+                            if (PlaylistCollection.FirstOrDefault(p => p.Path == playlist.Path) == null)
+                            {
+                                PlaylistCollection.Add(playlist);
+                            }
+
                             ProgressBarValue++;
                         }
                     }
@@ -687,6 +722,7 @@ namespace Cellekta_3.ViewModel
 
                 PlaylistComboBoxCollection = new ObservableCollection<string>(PlaylistComboBoxCollection.OrderBy(p => p));
                 MixDiscPlaylistComboBoxCollection = new ObservableCollection<string>(PlaylistComboBoxCollection);
+                PlaylistCollection = new ObservableCollection<IPlaylist>(PlaylistCollection.OrderBy(p => p.Path));
                 Filter();
 
                 if (FilteredTrackCollection.Count > 0)

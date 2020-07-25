@@ -1,10 +1,12 @@
 ﻿using MixableRangeInterface;
 using MixDiscImplementation;
 using MixDiscInterface;
+using PlaylistInterface;
 using SongInterface;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using TrackSearchInterface;
 using TraktorLibraryInterface;
@@ -27,6 +29,7 @@ namespace Cellekta_3.Model
         public ObservableCollection<ISong> FilteredTrackCollection { get; set; }
         public ObservableCollection<ISong> PreparationCollection { get; set; }
         public ObservableCollection<ISong> MixDiscCollection { get; set; }
+        public ObservableCollection<IPlaylist> PlaylistCollection { get; set; }
         public int ProgressBarMax { get; set; }
         public int ProgressBarValue { get; set; }
         public bool IsProgressBarIndeterminate { get; set; }
@@ -36,6 +39,7 @@ namespace Cellekta_3.Model
         public int TrackCollectionListViewHeight { get; set; }
         public int PreparationListViewHeight { get; set; }
         public int MixDiscListViewHeight { get; set; }
+        public int PlaylistListViewHeight { get; set; }
         public int ListViewWidth { get; set; }
         public int ProgressBarWidth { get; set; }
         public bool IsLoadButtonEnabled { get; set; }
@@ -89,11 +93,13 @@ namespace Cellekta_3.Model
             FilteredTrackCollection = new ObservableCollection<ISong>();
             PreparationCollection = new ObservableCollection<ISong>();
             MixDiscCollection = new ObservableCollection<ISong>();
+            PlaylistCollection = new ObservableCollection<IPlaylist>();
             WindowHeight = 412;
             WindowWidth = 1316;
             TrackCollectionListViewHeight = 250;
             PreparationListViewHeight = 278;
             MixDiscListViewHeight = 250;
+            PlaylistListViewHeight = 300;
             ListViewWidth = 1292;
             ProgressBarWidth = 1294;
             IsLoadButtonEnabled = false;
@@ -168,9 +174,13 @@ namespace Cellekta_3.Model
             _trackSearch.Text = SearchTextBoxText;
             _trackSearch.Load();
 
+            var selectedPlaylists = PlaylistCollection.Where(p => p.Selected);
+
             return new ObservableCollection<ISong>(ImportedTrackCollection.Where(t =>
                     // not in preparation list
-                    (!PreparationCollection.Contains(t) 
+                    (!PreparationCollection.Contains(t)
+                    // and playlist is selected
+                    && (selectedPlaylists.FirstOrDefault(p => p.Path == Path.GetDirectoryName(t.Path)) != null)
                     // and (exact filter match
                     && ((!IsMixableRangeCheckboxChecked 
                     && (TempoSliderValue == 0 
