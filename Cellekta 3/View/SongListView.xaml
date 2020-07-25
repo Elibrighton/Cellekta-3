@@ -225,27 +225,34 @@
                                     <GridViewColumn Header="Selected">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <CheckBox Margin="5, 0" IsChecked="{Binding Selected}"/>
+                                                <CheckBox IsChecked="{Binding Selected}"
+                                                          VerticalAlignment="Center"
+                                                          MinWidth="50" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Name">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Margin="5, 0" Text="{Binding Name}" />
+                                                <TextBlock Text="{Binding Name}"
+                                                          MinWidth="200" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                     <GridViewColumn Header="Path">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Margin="5, 0" Text="{Binding Path}" />
+                                                <TextBlock Text="{Binding Path}"
+                                                          MinWidth="400"  />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                 </GridView>
                             </ListView.View>
                         </ListView>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Command="{Binding UpdateButtonCommand}" MinWidth="100" Margin="0, 3, 5, 1">Update</Button>
+                        </StackPanel>
                     </StackPanel>
                 </TabItem>
             </TabControl>

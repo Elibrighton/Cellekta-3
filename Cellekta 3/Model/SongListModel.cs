@@ -99,7 +99,7 @@ namespace Cellekta_3.Model
             TrackCollectionListViewHeight = 250;
             PreparationListViewHeight = 278;
             MixDiscListViewHeight = 250;
-            PlaylistListViewHeight = 300;
+            PlaylistListViewHeight = 278;
             ListViewWidth = 1292;
             ProgressBarWidth = 1294;
             IsLoadButtonEnabled = false;

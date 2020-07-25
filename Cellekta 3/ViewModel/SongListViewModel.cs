@@ -46,6 +46,7 @@ namespace Cellekta_3.ViewModel
         public ICommand MixDiscClearButtonCommand { get; set; }
         public ICommand MixDiscPlaylistComboBoxSelectionChangedCommand { get; set; }
         public ICommand MixButtonCommand { get; set; }
+        public ICommand UpdateButtonCommand { get; set; }
         public ICommand IntensityComboBoxSelectionChangedCommand { get; set; }
 
         public ObservableCollection<ISong> ImportedTrackCollection
@@ -160,7 +161,7 @@ namespace Cellekta_3.ViewModel
                     TrackCollectionListViewHeight = (value - 162);
                     PreparationListViewHeight = (value - 134);
                     MixDiscListViewHeight = (value - 162);
-                    PlaylistListViewHeight = (value - 112);
+                    PlaylistListViewHeight = (value - 134);
                     NotifyPropertyChanged("TrackCollectionListViewHeight");
                     NotifyPropertyChanged("PreparationListViewHeight");
                     NotifyPropertyChanged("MixDiscListViewHeight");
@@ -656,6 +657,7 @@ namespace Cellekta_3.ViewModel
             MixDiscClearButtonCommand = new RelayCommand(OnMixDiscClearButtonCommand);
             MixDiscPlaylistComboBoxSelectionChangedCommand = new RelayCommand(OnMixDiscPlaylistComboBoxSelectionChangedCommand);
             MixButtonCommand = new RelayCommand(OnMixButtonCommand);
+            UpdateButtonCommand = new RelayCommand(OnUpdateButtonCommand);
             IntensityComboBoxSelectionChangedCommand = new RelayCommand(OnIntensityComboBoxSelectionChangedCommand);
             ResetProgressBar();
             ProgressBarMessage = "Ready to import";
@@ -943,6 +945,12 @@ namespace Cellekta_3.ViewModel
 
                 await Task.WhenAll(tasks);
             }
+        }
+
+        internal void OnUpdateButtonCommand(object param)
+        {
+            Filter();
+            SelectedTabControlIndex = TrackCollectionTabControlIndex;
         }
 
         internal async Task FindMixDiscTracksAsync(ISong track, List<ISong> baseTrackList, List<ISong> playlistTracks, string intensityStyle, int minPlaytime, int mixLength)
